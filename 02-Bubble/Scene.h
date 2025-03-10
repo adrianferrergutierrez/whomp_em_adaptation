@@ -27,11 +27,12 @@ private:
 	void initShaders();
 
 private:
-	TileMap *map;
-	Player *player;
+	TileMap* map;
+	Player* player;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
+	glm::ivec2 posPlayer;
 
 };
 
