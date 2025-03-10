@@ -52,6 +52,7 @@ bool TileMap::loadLevel(const string &levelFile)
 	stringstream sstream;
 	char tile;
 	
+	
 	fin.open(levelFile.c_str());
 	if(!fin.is_open())
 		return false;
@@ -83,10 +84,11 @@ bool TileMap::loadLevel(const string &levelFile)
 		for(int i=0; i<mapSize.x; i++)
 		{
 			fin.get(tile);
-			if(tile == ' ')
+			if(tile == ' ') 
 				map[j*mapSize.x+i] = 0;
 			else
-				map[j*mapSize.x+i] = tile - int('0');
+				//if (tile >-1  && tile <60) map[j * mapSize.x + i] = tile;
+				map[j * mapSize.x + i] = tile - int('0');
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -111,7 +113,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 		for(int i=0; i<mapSize.x; i++)
 		{
 			tile = map[j * mapSize.x + i];
-			if(tile != 0)
+			if(tile != -1)
 			{
 				// Non-empty tile
 				nTiles++;
