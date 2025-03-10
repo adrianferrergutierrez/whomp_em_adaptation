@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include "Game.h"
 
-//game asdfgh
+//game asdfgh CAMBIOS !!
 void Game::init()
 {
 	bPlay = true;
