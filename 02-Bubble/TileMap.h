@@ -36,6 +36,8 @@ public:
 	
 private:
 	bool loadLevel(const string &levelFile);
+	glm::vec2 get_texture_coord_x_given_tile(int tile);
+	glm::vec2 get_texture_coord_y_given_tile(int tile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 
 private:
