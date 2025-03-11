@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-﻿  TileMap.cpp
-  02-Bubble.vcxproj -> C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\Debug\02-Bubble.exe
-=======
 ﻿  Game.cpp
-  main.cpp
   Player.cpp
   Scene.cpp
+  TileMap.cpp
+  main.cpp
   Generando código...
-  02-Bubble.vcxproj -> C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\Debug\02-Bubble.exe
->>>>>>> 68bd0b75491da2284d7b9aa53c10f296fcbeec09
+  02-Bubble.vcxproj -> C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\Debug\02-Bubble.exe
