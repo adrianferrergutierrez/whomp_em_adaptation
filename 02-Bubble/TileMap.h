@@ -33,11 +33,9 @@ public:
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
-	
+	glm::vec2 getMapSize() const;
 private:
 	bool loadLevel(const string &levelFile);
-	glm::vec2 get_texture_coord_x_given_tile(int tile);
-	glm::vec2 get_texture_coord_y_given_tile(int tile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 
 private:

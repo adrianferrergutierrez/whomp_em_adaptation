@@ -9,7 +9,7 @@
 #define SCREEN_Y 16
 
 #define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 25
+#define INIT_PLAYER_Y_TILES 10
 
 
 Scene::Scene()
@@ -20,9 +20,9 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	if (map != NULL)
+	if(map != NULL)
 		delete map;
-	if (player != NULL)
+	if(player != NULL)
 		delete player;
 }
 
@@ -36,7 +36,7 @@ void Scene::init()
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	player->setTileMap(map);
 	posPlayer = player->getPosition();
-	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT), 0.f);
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT), 0.f );
 	currentTime = 0.0f;
 }
 
@@ -53,32 +53,50 @@ void Scene::render()
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+
+	// Posición del personaje
 	posPlayer = player->getPosition();
 
-	glm::vec3 target = glm::vec3(float(posPlayer.x), float(posPlayer.y), 0.f);
-	glm::vec3 camera = glm::vec3(float(posPlayer.x), float(posPlayer.y), 1.f);
-	glm::vec3 up = glm::vec3(0.f, 1.f, 0.f);
+	// Definir los límites del mapa para evitar que la cámara se salga
+	int mapWidth = map->getMapSize().x * map->getTileSize();
+	int mapHeight = map->getMapSize().y * map->getTileSize();
 
-	modelview = glm::lookAt(camera, target, up);
-	//modelview = glm::mat4(1.f);
+	float playerSpeed = 8.0f;
+	float currentSpeed;
+	
+	// Centrar la cámara en el personaje
+	float camX = posPlayer.x - SCREEN_WIDTH / 2;
+	float camY = posPlayer.y - SCREEN_HEIGHT / 2;
+
+	// Evitar que la cámara se salga de los bordes del mapa
+	camX = glm::clamp(camX, 0.0f, float(mapWidth - SCREEN_WIDTH));
+	camY = glm::clamp(camY, 0.0f, float(mapHeight - SCREEN_HEIGHT));
+	
+
+	// Aplicar la transformación de la cámara
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(-camX, -camY, 0.0f));
+
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+
+	// Renderizar mapa y personaje
 	map->render();
 	player->render();
 }
+
 
 void Scene::initShaders()
 {
 	Shader vShader, fShader;
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if (!vShader.isCompiled())
+	if(!vShader.isCompiled())
 	{
 		cout << "Vertex Shader Error" << endl;
 		cout << "" << vShader.log() << endl << endl;
 	}
 	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if (!fShader.isCompiled())
+	if(!fShader.isCompiled())
 	{
 		cout << "Fragment Shader Error" << endl;
 		cout << "" << fShader.log() << endl << endl;
@@ -87,7 +105,7 @@ void Scene::initShaders()
 	texProgram.addShader(vShader);
 	texProgram.addShader(fShader);
 	texProgram.link();
-	if (!texProgram.isLinked())
+	if(!texProgram.isLinked())
 	{
 		cout << "Shader Linking Error" << endl;
 		cout << "" << texProgram.log() << endl << endl;

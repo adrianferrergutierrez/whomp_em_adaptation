@@ -45,19 +45,18 @@ void TileMap::free()
 	glDeleteBuffers(1, &vbo);
 }
 
-bool TileMap::loadLevel(const string &levelFile)
+bool TileMap::loadLevel(const string& levelFile)
 {
 	ifstream fin;
 	string line, tilesheetFile;
 	stringstream sstream;
 	int tile;
-	
-	
+
 	fin.open(levelFile.c_str());
-	if(!fin.is_open())
+	if (!fin.is_open())
 		return false;
 	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0)
+	if (line.compare(0, 7, "TILEMAP") != 0)
 		return false;
 	getline(fin, line);
 	sstream.str(line);
@@ -77,35 +76,27 @@ bool TileMap::loadLevel(const string &levelFile)
 	sstream.str(line);
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
-	
+
 	map = new int[mapSize.x * mapSize.y];
-	for(int j=0; j<mapSize.y; j++)
+	for (int j = 0; j < mapSize.y; j++)
 	{
-		for(int i=0; i<mapSize.x; i++)
+		for (int i = 0; i < mapSize.x; i++)
 		{
-			fin>>tile;
+			fin >> tile;
 			map[j * mapSize.x + i] = tile;
-				
 		}
-		fin>>tile;
-#ifndef _WIN32
-		fin>>tile;
-#endif
+		//fin.ignore(numeric_limits<streamsize>::max(), '\n'); // Evita caracteres extraños
+		//fin >> tile;
 	}
 	fin.close();
-	
+
 	return true;
 }
-glm::vec2 TileMap::get_texture_coord_x_given_tile(int tile) {
-	glm::vec2 sol;
-	sol = glm::vec2(float((tile%16)*16) / tilesheetSize.x, float((tile / 16) * 16) / tilesheetSize.y);
-	return sol;
+glm::vec2 TileMap::getMapSize() const
+{
+	return mapSize;
 }
-glm::vec2 TileMap::get_texture_coord_y_given_tile(int tile) {
-	glm::vec2 sol;
-	sol = glm::vec2(float((tile % 16) * 16 + 16) / tilesheetSize.x, float((tile / 16) * 16 + 16) / tilesheetSize.y);
-	return sol;
-}
+
 void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 {
 	int tile;
@@ -119,17 +110,17 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 		for(int i=0; i<mapSize.x; i++)
 		{
 			tile = map[j * mapSize.x + i];
-			if(tile != -1)
+			if(tile != 0)
 			{
 				// Non-empty tile
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileSize, minCoords.y + j * tileSize);
-			
-				//texCoordTile[0] = get_texture_coord_x_given_tile(tile);
-				texCoordTile[0] =glm::vec2(float((tile-1)%tilesheetSize.x) / tilesheetSize.x, float((tile-1)/tilesheetSize.x) / tilesheetSize.y);
-				//texCoordTile[1] = get_texture_coord_y_given_tile(tile);
+
+				//funció rara per decidir quin tile agafo del tilemap -> recomanació  fer una funció donada una tile,que ens digui les coordenades de textura
+				//assignar quin numero correspon del mapa y quina posició te de la textura (enum o algo)
+				texCoordTile[0] = glm::vec2(float((tile-1)%tilesheetSize.x) / tilesheetSize.x, float((tile-1)/tilesheetSize.x) / tilesheetSize.y);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
-				texCoordTile[0] += halfTexel;
+				//texCoordTile[0] += halfTexel;
 				texCoordTile[1] -= halfTexel;
 				// First triangle
 				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
@@ -171,8 +162,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		if(map[y*mapSize.x+x] != -1)
-			return true;
+		//if(map[y*mapSize.x+x] != 0)
+			//return true;
 	}
 	
 	return false;
@@ -187,8 +178,8 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		if(map[y*mapSize.x+x] != -1)
-			return true;
+		//if(map[y*mapSize.x+x] != 0 )
+			//return true;
 	}
 	
 	return false;
@@ -203,7 +194,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	y = (pos.y + size.y - 1) / tileSize;
 	for(int x=x0; x<=x1; x++)
 	{
-		if(map[y*mapSize.x+x] != -1)
+		if(map[y*mapSize.x+x] != 0)
 		{
 			if(*posY - tileSize * y + size.y <= 4)
 			{
