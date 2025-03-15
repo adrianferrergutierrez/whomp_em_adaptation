@@ -40,6 +40,8 @@ public:
 
 	bool getKey(int key) const;
 
+	void setCameraPosition(const glm::vec2& pos);
+
 private:
 	bool bPlay; // Continue to play game?
 	bool keys[GLFW_KEY_LAST+1]; // Store key states so that 

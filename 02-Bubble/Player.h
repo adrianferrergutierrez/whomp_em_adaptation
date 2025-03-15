@@ -15,13 +15,15 @@ class Player
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
+	void updateCamera();
 	void update(int deltaTime);
-	void render();
+	void render(const glm::mat4& view);
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
-	glm::ivec2 getPosition();
+	glm::ivec2 getPosition() const;
+
 	
 private:
 	bool bJumping;

@@ -61,7 +61,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
 		//mira que si hem moc en una posició si puc pasar o no.
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -118,9 +118,9 @@ void Player::update(int deltaTime)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-void Player::render()
+void Player::render(const glm::mat4& view)
 {
-	sprite->render();
+	sprite->render(view);
 }
 
 void Player::setTileMap(TileMap *tileMap)
@@ -134,7 +134,7 @@ void Player::setPosition(const glm::vec2 &pos)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
-glm::ivec2 Player::getPosition()
+glm::ivec2 Player::getPosition() const
 {
 	return posPlayer;
 }

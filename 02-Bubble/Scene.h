@@ -32,8 +32,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	glm::ivec2 posPlayer;
-
+	glm::vec2 posP;
 };
 
 
