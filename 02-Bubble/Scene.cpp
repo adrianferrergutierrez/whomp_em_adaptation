@@ -4,14 +4,12 @@
 #include "Scene.h"
 #include "Game.h"
 
-#define SCREEN_X 32
-#define SCREEN_Y 16
 
 #define INIT_PLAYER_X_TILES 4
-#define INIT_PLAYER_Y_TILES 10
+#define INIT_PLAYER_Y_TILES 5
+#define TILESIZE 16
 
-// FACTOR DE ZOOM: Reduce la vista para acercar la cámara al personaje
-#define CAMERA_ZOOM 4.0f  // Aumenta este valor para acercar más la cámara
+
 
 Scene::Scene()
 {
@@ -29,58 +27,78 @@ Scene::~Scene()
 
 void Scene::init()
 {
-    initShaders();
-    map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-    player = new Player();
-    player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-    player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-    player->setTileMap(map);
-    posP = player->getPosition();
-
-    // Aplicar el zoom en la proyección ortográfica
-    projection = glm::ortho(0.f, float(SCREEN_WIDTH) / CAMERA_ZOOM, float(SCREEN_HEIGHT) / CAMERA_ZOOM, 0.f);
-
-    currentTime = 0.0f;
+	initShaders();
+	map = TileMap::createTileMap("levels/level02.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	player->setTileMap(map);
+	posPlayer = player->getPosition();
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT), 0.f );
+	currentTime = 0.0f;
 }
+
+    // Limitar la cÃ¡mara a los bordes del mapa
+	//if sector 11
+    cameraPosition.x = glm::max(0.0f, cameraPosition.x);
+    cameraPosition.y = glm::max(0.0f, cameraPosition.y);
+
+	//if sector 2 
+
+	//if sector 3
+    float maxX = float(map->getMapWidth() * map->getTileSize() - CAMERA_WIDTH);
+    float maxY = float(map->getMapHeight() * map->getTileSize() - CAMERA_HEIGHT);
+
+    cameraPosition.x = glm::min(cameraPosition.x, maxX);
+    cameraPosition.y = glm::min(cameraPosition.y, maxY);
+}
+
+
+
 
 void Scene::update(int deltaTime)
 {
-    currentTime += deltaTime;
-    player->update(deltaTime);
-    
+	currentTime += deltaTime;
+	player->update(deltaTime);
 }
-
 void Scene::render()
 {
-    texProgram.use();
-    texProgram.setUniformMatrix4f("projection", projection);
-    texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-    glm::mat4 modelview;
-    // Posición del personaje
-    posP = player->getPosition();
-    //cout << "posP: " << posP.x << " " << posP.y << endl;    
-    // Obtener el tamaño del mapa en píxeles
-    int mapWidth = map->getMapSize().x * map->getTileSize();
-    int mapHeight = map->getMapSize().y * map->getTileSize();
+	glm::mat4 modelview;
 
-    // Centrar la cámara en el personaje (ajustado con zoom)
-    float camX = (posP.x - (SCREEN_WIDTH / (2 * CAMERA_ZOOM)));
-    float camY = (posP.y - (SCREEN_HEIGHT / (2 * CAMERA_ZOOM)));
-    //cout << "camX: " << camX << " camY: " << camY << endl;  
+	texProgram.use();
+	texProgram.setUniformMatrix4f("projection", projection);
+	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 
-    // Limitar la cámara dentro de los bordes del mapa
-    camX = glm::clamp(camX, 0.0f, float(mapWidth - SCREEN_WIDTH / CAMERA_ZOOM));
-    camY = glm::clamp(camY, 0.0f, float(mapHeight - SCREEN_HEIGHT / CAMERA_ZOOM));
+	// PosiciÃ³n del personaje
+	posPlayer = player->getPosition();
 
-    // Aplicar la transformación de la cámara
-    modelview = glm::translate(glm::mat4(1.0f), glm::vec3(-camX, -camY, 0.0f));
-    texProgram.setUniformMatrix4f("modelview", modelview);
-    texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	// Definir los lÃ­mites del mapa para evitar que la cÃ¡mara se salga
+	int mapWidth = map->getMapSize().x * map->getTileSize();
+	int mapHeight = map->getMapSize().y * map->getTileSize();
 
-    // Renderizar mapa y personaje
-    map->render();
-    player->render(modelview);
+	float playerSpeed = 8.0f;
+	float currentSpeed;
+	
+	// Centrar la cÃ¡mara en el personaje
+	float camX = posPlayer.x - SCREEN_WIDTH / 2;
+	float camY = posPlayer.y - SCREEN_HEIGHT / 2;
+
+	// Evitar que la cÃ¡mara se salga de los bordes del mapa
+	camX = glm::clamp(camX, 0.0f, float(mapWidth - SCREEN_WIDTH));
+	camY = glm::clamp(camY, 0.0f, float(mapHeight - SCREEN_HEIGHT));
+	
+
+	// Aplicar la transformaciÃ³n de la cÃ¡mara
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(-camX, -camY, 0.0f));
+
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+
+	// Renderizar mapa y personaje
+	map->render();
+	player->render();
 }
+
 
 void Scene::initShaders()
 {

@@ -15,16 +15,13 @@ class Player
 
 public:
 	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void updateCamera();
 	void update(int deltaTime);
-	void render(const glm::mat4& view);
-	
+	void render(glm::mat4 modelview);
 	void setTileMap(TileMap *tileMap);
-	void setPosition(const glm::vec2 &pos);
+	void setPosition(const glm::vec2& pos);
+	glm::vec2 getPosition() const { return glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)); }
+	void setCameraPosition(const glm::vec2& pos);
 
-	glm::ivec2 getPosition() const;
-
-	
 private:
 	bool bJumping;
 	glm::ivec2 tileMapDispl, posPlayer;
@@ -32,6 +29,7 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
+	glm::vec2 cameraPos;
 
 };
 

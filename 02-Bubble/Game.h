@@ -10,7 +10,7 @@
 #define SCREEN_HEIGHT 1080
 
 
-// Game is a singleton (a class with a single instance) that represents our whole application
+// Game is a singleton (a class	 with a single instance) that represents our whole application
 
 
 class Game

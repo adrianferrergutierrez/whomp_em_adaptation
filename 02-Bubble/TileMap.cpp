@@ -45,18 +45,18 @@ void TileMap::free()
 	glDeleteBuffers(1, &vbo);
 }
 
-bool TileMap::loadLevel(const string& levelFile)
+bool TileMap::loadLevel(const string &levelFile)
 {
 	ifstream fin;
 	string line, tilesheetFile;
 	stringstream sstream;
 	int tile;
-
+	
 	fin.open(levelFile.c_str());
-	if (!fin.is_open())
+	if(!fin.is_open())
 		return false;
 	getline(fin, line);
-	if (line.compare(0, 7, "TILEMAP") != 0)
+	if(line.compare(0, 7, "TILEMAP") != 0)
 		return false;
 	getline(fin, line);
 	sstream.str(line);
@@ -76,7 +76,7 @@ bool TileMap::loadLevel(const string& levelFile)
 	sstream.str(line);
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
-
+	
 	map = new int[mapSize.x * mapSize.y];
 	for (int j = 0; j < mapSize.y; j++)
 	{
@@ -85,16 +85,14 @@ bool TileMap::loadLevel(const string& levelFile)
 			fin >> tile;
 			map[j * mapSize.x + i] = tile;
 		}
-		//fin.ignore(numeric_limits<streamsize>::max(), '\n'); // Evita caracteres extraños
-		//fin >> tile;
+		fin.ignore(numeric_limits<streamsize>::max(), '\n'); // Evita caracteres extraños
+	
 	}
-	fin.close();
 
+
+	fin.close();
+	
 	return true;
-}
-glm::vec2 TileMap::getMapSize() const
-{
-	return mapSize;
 }
 
 void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
@@ -121,7 +119,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 				texCoordTile[0] = glm::vec2(float((tile-1)%tilesheetSize.x) / tilesheetSize.x, float((tile-1)/tilesheetSize.x) / tilesheetSize.y);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 				//texCoordTile[0] += halfTexel;
-				texCoordTile[1] -= halfTexel;
+				//texCoordTile[1] -= halfTexel;
 				// First triangle
 				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
 				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
@@ -162,8 +160,17 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		//if(map[y*mapSize.x+x] != 0)
-			//return true;
+		if (map[y * mapSize.x + x] == 0 || map[y * mapSize.x + x] == 18 || map[y * mapSize.x + x] == 19 ||
+			map[y * mapSize.x + x] == 20 || map[y * mapSize.x + x] == 21 || map[y * mapSize.x + x] == 22 ||
+			 map[y * mapSize.x + x] == 31 || map[y * mapSize.x + x] == 32 ||
+			map[y * mapSize.x + x] == 33 || map[y * mapSize.x + x] == 34 || map[y * mapSize.x + x] == 35 ||
+			map[y * mapSize.x + x] == 36 || map[y * mapSize.x + x] == 41 || map[y * mapSize.x + x] == 46 ||
+			map[y * mapSize.x + x] == 47  || map[y * mapSize.x + x] == 49 ||
+			map[y * mapSize.x + x] == 52 || map[y * mapSize.x + x] == 57 || map[y * mapSize.x + x] == 58 ||
+			map[y * mapSize.x + x] == 62 || map[y * mapSize.x + x] == 63 ||
+			map[y * mapSize.x + x] == 65 
+			)
+			return true;
 	}
 	
 	return false;
@@ -178,8 +185,16 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 	y1 = (pos.y + size.y - 1) / tileSize;
 	for(int y=y0; y<=y1; y++)
 	{
-		//if(map[y*mapSize.x+x] != 0 )
-			//return true;
+		if (map[y * mapSize.x + x] == 0 || map[y * mapSize.x + x] == 18 || map[y * mapSize.x + x] == 19 ||
+			map[y * mapSize.x + x] == 20 || map[y * mapSize.x + x] == 21 || map[y * mapSize.x + x] == 22 ||
+			 map[y * mapSize.x + x] == 31 || map[y * mapSize.x + x] == 32 ||
+			map[y * mapSize.x + x] == 33 || map[y * mapSize.x + x] == 34 || map[y * mapSize.x + x] == 35 ||
+			map[y * mapSize.x + x] == 36 || map[y * mapSize.x + x] == 41 || map[y * mapSize.x + x] == 46 ||
+			map[y * mapSize.x + x] == 47  || map[y * mapSize.x + x] == 49 ||
+			map[y * mapSize.x + x] == 52 || map[y * mapSize.x + x] == 57 || map[y * mapSize.x + x] == 58 ||
+			map[y * mapSize.x + x] == 62 || map[y * mapSize.x + x] == 63 ||
+			map[y * mapSize.x + x] == 65 )
+			return true;
 	}
 	
 	return false;
@@ -194,7 +209,20 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	y = (pos.y + size.y - 1) / tileSize;
 	for(int x=x0; x<=x1; x++)
 	{
-		if(map[y*mapSize.x+x] != 0)
+		if(map[y*mapSize.x+x] == 15 || map[y * mapSize.x + x] == 18 || map[y * mapSize.x + x] == 19||
+			map[y * mapSize.x + x] == 20 || map[y * mapSize.x + x] == 21 || map[y * mapSize.x + x] == 22 ||
+			 map[y * mapSize.x + x] == 31 || map[y * mapSize.x + x] == 32 ||
+			map[y * mapSize.x + x] == 33 || map[y * mapSize.x + x] == 34 || map[y * mapSize.x + x] == 35 ||
+			map[y * mapSize.x + x] == 36 || map[y * mapSize.x + x] == 41 || map[y * mapSize.x + x] == 46 ||
+			map[y * mapSize.x + x] == 47 || map[y * mapSize.x + x] == 48 || map[y * mapSize.x + x] == 49 ||
+			map[y * mapSize.x + x] == 52 || map[y * mapSize.x + x] == 57 || map[y * mapSize.x + x] == 58 ||
+			map[y * mapSize.x + x] == 62 || map[y * mapSize.x + x] == 63 || map[y * mapSize.x + x] == 64||
+			map[y * mapSize.x + x] == 79 || map[y * mapSize.x + x] == 80
+			
+			//quitar, solo esta para poder subir el tronco sin la necesidad de las plataformas
+			|| map[y * mapSize.x + x] == 30
+			|| map[y * mapSize.x + x] == 29
+			|| map[y * mapSize.x + x] == 28)
 		{
 			if(*posY - tileSize * y + size.y <= 4)
 			{

@@ -29,11 +29,18 @@ public:
 	void free();
 	
 	int getTileSize() const { return tileSize; }
+	int getMapWidth() const { return mapSize.x; }
+	int getMapHeight() const { return mapSize.y; }
 
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
-	glm::vec2 getMapSize() const;
+
+	int getTile(int x, int y) const {
+		if (x < 0 || x >= mapSize.x || y < 0 || y >= mapSize.y)
+			return 0;
+		return map[y * mapSize.x + x];
+	}
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
