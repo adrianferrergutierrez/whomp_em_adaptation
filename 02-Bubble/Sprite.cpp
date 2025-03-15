@@ -48,10 +48,11 @@ void Sprite::update(int deltaTime)
 	}
 }
 
-void Sprite::render() const
-{
-	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
-	shaderProgram->setUniformMatrix4f("modelview", modelview);
+void Sprite::render(glm::mat4 modelview) const
+{//es fa render en funció de la posició del jugador.
+
+	glm::mat4 modelview2 = glm::translate(modelview, glm::vec3(position.x, position.y, 0.f));
+	shaderProgram->setUniformMatrix4f("modelview", modelview2);
 	shaderProgram->setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
 	glEnable(GL_TEXTURE_2D);
 	texture->use();
@@ -104,6 +105,10 @@ int Sprite::animation() const
 void Sprite::setPosition(const glm::vec2 &pos)
 {
 	position = pos;
+}
+void Sprite::setCameraPosition(const glm::vec2 &pos)
+{
+	cameraPosition = pos;
 }
 
 

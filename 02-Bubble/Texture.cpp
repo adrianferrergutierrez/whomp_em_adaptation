@@ -3,8 +3,8 @@
 
 
 using namespace std;
-//h 
-//hola que tal
+
+
 Texture::Texture()
 {
 	wrapS = GL_REPEAT;

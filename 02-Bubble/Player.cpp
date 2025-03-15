@@ -53,7 +53,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 //en l'update mira que si s'ha apretat la key mirnat la classe game, que es static global (singleton), mira si hem premut la tecla.
 //es podria fer una manera de inputs per a distribuirlos
 void Player::update(int deltaTime)
-{
+{   
+
 	sprite->update(deltaTime);
 	if(Game::instance().getKey(GLFW_KEY_LEFT))
 	{
@@ -61,7 +62,7 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
 		//mira que si hem moc en una posició si puc pasar o no.
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
+		if(map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x == 0 || posPlayer.x == 2048 ||posPlayer.x == 2310 )
 		{
 			posPlayer.x += 2;
 			sprite->changeAnimation(STAND_LEFT);
@@ -114,13 +115,14 @@ void Player::update(int deltaTime)
 			}
 		}
 	}
-	
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite->setCameraPosition(cameraPos);
+	sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
+	cout << "Player position: " << posPlayer.x << " " << posPlayer.y << endl;
 }
 
-void Player::render()
+void Player::render(glm::mat4 modelview)
 {
-	sprite->render();
+	sprite->render(modelview);
 }
 
 void Player::setTileMap(TileMap *tileMap)
@@ -131,12 +133,13 @@ void Player::setTileMap(TileMap *tileMap)
 void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
+}
+void Player::setCameraPosition(const glm::vec2& pos)
+{
+	cameraPos = pos;
 }
 
-glm::ivec2 Player::getPosition()
-{
-	return posPlayer;
-}
+
 
 
