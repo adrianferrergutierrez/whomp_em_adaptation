@@ -21,7 +21,7 @@ enum LanzaAnims {
 
 void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-    // Inicialización del sistema de salud, items y daño
+    // Inicializaciï¿½n del sistema de salud, items y daï¿½o
     maxHealth = 120;
     health = Health(maxHealth);
 
@@ -34,12 +34,12 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     blinkTime = 0;
     visible = true;
 
-    // Inicialización del sistema de ataque
+    // Inicializaciï¿½n del sistema de ataque
     isAttacking = false;
     izq = false;
     attackTimer = 0;
 
-    // Inicialización del jugador
+    // Inicializaciï¿½n del jugador
     bJumping = false;
     spritesheet.loadFromFile("images/indio6.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
@@ -49,7 +49,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     spriteLanza->setNumberAnimations(3);
     sprite->setNumberAnimations(13);
 
-    // Configuración de animaciones para la lanza
+    // Configuraciï¿½n de animaciones para la lanza
     spriteLanza->setAnimationSpeed(VACIA, 8);
     spriteLanza->addKeyframe(VACIA, glm::vec2(0.5, 0.875));
 
@@ -63,7 +63,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     spriteLanza->addKeyframe(LEFT, glm::vec2(0.25, 0.750));
     spriteLanza->addKeyframe(LEFT, glm::vec2(0.0, 0.750));
 
-    // Configuración de animaciones del personaje
+    // Configuraciï¿½n de animaciones del personaje
     // Ataques
     sprite->setAnimationSpeed(ATTACK_DOWN, 8);
     sprite->addKeyframe(ATTACK_DOWN, glm::vec2(0.0, 0.875));
@@ -97,14 +97,14 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     sprite->setAnimationSpeed(JUMP_LEFT, 8);
     sprite->addKeyframe(JUMP_LEFT, glm::vec2(0.5, 0.254));
 
-    // Animación de estar quieto
+    // Animaciï¿½n de estar quieto
     sprite->setAnimationSpeed(STAND_LEFT, 8);
     sprite->addKeyframe(STAND_LEFT, glm::vec2(0.75, 0.125));
 
     sprite->setAnimationSpeed(STAND_RIGHT, 8);
     sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0, 0.0));
 
-    // Animación de movimiento
+    // Animaciï¿½n de movimiento
     sprite->setAnimationSpeed(MOVE_LEFT, 8);
     sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5, 0.125));
     sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.25, 0.125));
@@ -115,7 +115,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.0));
     sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.75, 0.0));
 
-    // Inicialización de animaciones
+    // Inicializaciï¿½n de animaciones
     sprite->changeAnimation(0);
     spriteLanza->changeAnimation(0);
     tileMapDispl = tileMapPos;
@@ -124,6 +124,9 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     // Variables para el casco
     hasHelmet = false;
     helmet_usages = 0;
+
+    gKeyPressedLastFrame = false; 
+	hKeyPressedLastFrame = false; 
 }
 
 void Player::update(int deltaTime, vector<Tronco*> troncos)
@@ -132,7 +135,8 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     float deltaTimeSeconds = deltaTime / 1000.0f;
     health.update(deltaTimeSeconds);
 
-    if (Game::instance().getKey(GLFW_KEY_G)) {
+    bool gKeyCurrentlyPressed = Game::instance().getKey(GLFW_KEY_G);
+    if (gKeyCurrentlyPressed && !gKeyPressedLastFrame) {
 		if (isGOD) {
 			becomeHuman();
 		}
@@ -140,6 +144,14 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
 			becomeGOD();
 		}
     }
+    gKeyPressedLastFrame = gKeyCurrentlyPressed;
+
+	bool hkeyCurrentlyPressed = Game::instance().getKey(GLFW_KEY_H);
+    if (hkeyCurrentlyPressed && !hKeyPressedLastFrame) {
+        clockscount = 2;
+		health.reset();
+    }
+	hKeyPressedLastFrame = hkeyCurrentlyPressed;
 
     // Gestionar el parpadeo cuando el jugador es invulnerable
     if (health.getIsInvulnerable()) {
@@ -165,7 +177,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         attackTimer -= deltaTime;
         if (attackTimer <= 0) {
             isAttacking = false;
-            // Restaurar la animación correcta después del ataque
+            // Restaurar la animaciï¿½n correcta despuï¿½s del ataque
             if (Game::instance().getKey(GLFW_KEY_LEFT)) {
                 sprite->changeAnimation(MOVE_LEFT);
                 izq = true;
@@ -181,7 +193,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
 
     bool movingHorizontally = false; // Variable para saber si hay input de movimiento horizontal
 
-    // ----Gestión de movimiento---
+    // ----Gestiï¿½n de movimiento---
     if (Game::instance().getKey(GLFW_KEY_LEFT))
     {
         if (!bJumping && !isAttacking) {
@@ -192,14 +204,14 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
 
         posPlayer.x -= 2;
         //Comprobamos colisiones con el mapa para la izquierda
-        if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x <= 0 || posPlayer.x == 2048 || posPlayer.x == 2310)
+        if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x <= 0 || posPlayer.x == 2048 || posPlayer.x == 2310 || posPlayer.x == 3072 || posPlayer.x == 3328 || posPlayer.x == 3840 )
         {
             //Cancelamos el movimiento
             posPlayer.x += 2;
             if (!bJumping && !isAttacking) sprite->changeAnimation(STAND_LEFT);
         }
         else {
-            //Confirmamos el movimiento para la animación
+            //Confirmamos el movimiento para la animaciï¿½n
             movingHorizontally = true;
         }
     }
@@ -220,7 +232,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             if (!bJumping && !isAttacking) sprite->changeAnimation(STAND_RIGHT);
         }
         else {
-            //Confirmamos el movimiento a la derecha para la animación
+            //Confirmamos el movimiento a la derecha para la animaciï¿½n
             movingHorizontally = true;
         }
     }
@@ -242,9 +254,9 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         }
     }
 
-    // Variable para saber si el jugador está en el suelo (mapa o tronco)
+    // Variable para saber si el jugador estï¿½ en el suelo (mapa o tronco)
     bool onGround = false;
-    float groundY = 0.f; // Posición Y del suelo donde está parado
+    float groundY = 0.f; // Posiciï¿½n Y del suelo donde estï¿½ parado
 
     // Salto
     if (bJumping)
@@ -253,7 +265,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         if (jumpAngle >= 180) // Usar >= por si acaso
         {
             bJumping = false;
-            // Al aterrizar, cambia a STAND_LEFT o STAND_RIGHT según la última animación de salto
+            // Al aterrizar, cambia a STAND_LEFT o STAND_RIGHT segï¿½n la ï¿½ltima animaciï¿½n de salto
             if (sprite->animation() == JUMP_LEFT)
                 sprite->changeAnimation(STAND_LEFT);
             else
@@ -269,14 +281,14 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
                 sprite->changeAnimation(ATTACK_DOWN);
             }
 
-            // Comprobación de aterrizaje (solo cuando va hacia abajo)
+            // Comprobaciï¿½n de aterrizaje (solo cuando va hacia abajo)
             if (jumpAngle > 90)
             {
                 // ---> INICIO: Comprobar aterrizaje en Tronco durante el salto <---
                 bool landedOnTronco = false;
                 float landingTroncoY = 0.f;
                 for (Tronco* tronco : troncos) {
-                    // Usamos una copia de posPlayer para la predicción, +1 para asegurar que esté "debajo"
+                    // Usamos una copia de posPlayer para la predicciï¿½n, +1 para asegurar que estï¿½ "debajo"
                     glm::vec2 predictedPos = posPlayer;
                     predictedPos.y += 1;
                     if (tronco != nullptr && tronco->isPlayerOnTop(predictedPos, glm::ivec2(32, 32))) {
@@ -294,10 +306,10 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
                     groundY = posPlayer.y;
                 }
                 else {
-                    // Si no aterrizó en tronco, comprobar colisión con el mapa
+                    // Si no aterrizï¿½ en tronco, comprobar colisiï¿½n con el mapa
                     if (map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
-                        bJumping = false; // Aterrizó en el mapa
-                        onGround = true; // Marcamos que está en el suelo
+                        bJumping = false; // Aterrizï¿½ en el mapa
+                        onGround = true; // Marcamos que estï¿½ en el suelo
                         groundY = posPlayer.y; // Guardamos la Y del suelo
                     }
                 }
@@ -305,7 +317,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         }
     }
 
-    // Caída (si no está saltando y no acaba de aterrizar en este frame) / Comprobación de suelo
+    // Caï¿½da (si no estï¿½ saltando y no acaba de aterrizar en este frame) / Comprobaciï¿½n de suelo
     if (!bJumping)
     {
         //aplicamos la gravedad
@@ -313,31 +325,31 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
 
         // Comprovamos si hay colision con el suelo
         bool groundDetected = false;
-        float surfaceY = 0.f; // La Y donde debería estar el jugador si toca suelo
+        float surfaceY = 0.f; // La Y donde deberï¿½a estar el jugador si toca suelo
 
         //miramos el movimiento junto a los troncos
         for (Tronco* tronco : troncos)
         {
             if (tronco != nullptr) {
-                glm::vec2 playerCurrentPos = posPlayer; // Posición después de aplicar gravedad
+                glm::vec2 playerCurrentPos = posPlayer; // Posiciï¿½n despuï¿½s de aplicar gravedad
                 glm::ivec2 playerSize = glm::ivec2(32, 32);
                 float playerHeight = 32.f;
 
                 glm::vec2 troncoPos = tronco->getPosition(); // Esquina sup. izq. de hitbox 16x16
-                glm::ivec2 troncoSize = tronco->getSize();   // Tamaño hitbox 16x16
+                glm::ivec2 troncoSize = tronco->getSize();   // Tamaï¿½o hitbox 16x16
                 float verticalDisp = tronco->getVerticalDisplacement(); // Desplazamiento del tronco este frame
 
-                // Comprobación horizontal (usando hitbox 16x16 del tronco)
+                // Comprobaciï¿½n horizontal (usando hitbox 16x16 del tronco)
                 bool horizontalAlign = (playerCurrentPos.x + playerSize.x > troncoPos.x) &&
                     (playerCurrentPos.x < troncoPos.x + troncoSize.x);
 
                 if (horizontalAlign) {
-                    // Comprobación vertical
+                    // Comprobaciï¿½n vertical
                     float troncoTopY = troncoPos.y;
                     float playerFeetY = playerCurrentPos.y + playerHeight;
-                    float tolerance = 4.0f; // Margen de detección base
+                    float tolerance = 4.0f; // Margen de detecciï¿½n base
 
-                    // Rango vertical base para detección
+                    // Rango vertical base para detecciï¿½n
                     float minDetectY = troncoTopY - tolerance;
                     float maxDetectY = troncoTopY + tolerance;
 
@@ -346,12 +358,12 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
                         maxDetectY = troncoTopY + tolerance + FALL_STEP + 2.0f;
                     }
 
-                    // Comprobar si los pies del jugador están en el rango vertical (ajustado o no)
+                    // Comprobar si los pies del jugador estï¿½n en el rango vertical (ajustado o no)
                     bool verticalAlign = (playerFeetY >= minDetectY && playerFeetY <= maxDetectY);
 
                     if (verticalAlign) {
                         groundDetected = true;
-                        surfaceY = troncoTopY - playerHeight; // Posición Y correcta sobre el tronco
+                        surfaceY = troncoTopY - playerHeight; // Posiciï¿½n Y correcta sobre el tronco
                         break;
                     }
                 }
@@ -367,18 +379,18 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             //miramos colision con el suelo del mapa
             if (map->collisionMoveDown(posInt, glm::ivec2(32, 32), &mapSurfaceY_int))
             {
-                // Hubo colisión con el mapa. La superficie Y ajustada está en mapSurfaceY_int
+                // Hubo colisiï¿½n con el mapa. La superficie Y ajustada estï¿½ en mapSurfaceY_int
                 groundDetected = true;
                 surfaceY = float(mapSurfaceY_int); // Usamos el valor int ajustado
-                // La superficie correcta es la que devuelve la función
+                // La superficie correcta es la que devuelve la funciï¿½n
             }
         }
 
 
         if (groundDetected)
         {
-            onGround = true; // Marcar estado global para animación
-            posPlayer.y = surfaceY; // Ajustar la posición Y real a la superficie detectada
+            onGround = true; // Marcar estado global para animaciï¿½n
+            posPlayer.y = surfaceY; // Ajustar la posiciï¿½n Y real a la superficie detectada
             groundY = surfaceY;
 
             // Permitir iniciar salto si se presiona Z (key de salto)
@@ -400,7 +412,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         }
     }
 
-    // Gestión de ataque con la tecla X
+    // Gestiï¿½n de ataque con la tecla X
     if (Game::instance().getKey(GLFW_KEY_X) && !isAttacking && !bJumping)
     {
         isAttacking = true;
@@ -431,7 +443,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         }
     }
 
-    // Actualizar posición de la lanza si está atacando
+    // Actualizar posiciï¿½n de la lanza si estï¿½ atacando
     if (isAttacking)
     {
         spriteLanza->update(deltaTime);
@@ -449,7 +461,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
 
 void Player::render(glm::mat4 modelview)
 {
-    // Solo renderizamos el sprite si está visible (para efecto de parpadeo)
+    // Solo renderizamos el sprite si estï¿½ visible (para efecto de parpadeo)
     if (!isBlinking || visible) {
         sprite->render(modelview);
         if (isAttacking) spriteLanza->render(modelview);
@@ -472,7 +484,7 @@ void Player::setCameraPosition(const glm::vec2& pos)
     cameraPos = pos;
 }
 
-// ----- Sistema de salud y daño -----
+// ----- Sistema de salud y daï¿½o -----
 
 void Player::takeDamage(int dmg)
 {

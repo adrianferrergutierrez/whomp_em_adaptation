@@ -60,7 +60,7 @@ int main(void)
 	glewInit();
 
 	/* Init step of the game loop */
-	Game::instance().init();
+	Game::instance().init(window);
 	timePreviousFrame = glfwGetTime();
 
 	/* Loop until the user closes the window */

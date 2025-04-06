@@ -14,38 +14,38 @@ public:
     void update(int deltaTime);
     void render(glm::mat4 modelview);
 
-    // Métodos para posición y colisiones
+    // Mï¿½todos para posiciï¿½n y colisiones
     glm::vec2 getPosition() const;
     glm::ivec2 getSize() const { return size; }
 
     void setTileMap(TileMap* tileMap);
 
-    // Comprobar si el jugador está sobre el tronco
+    // Comprobar si el jugador estï¿½ sobre el tronco
     bool isPlayerOnTop(const glm::vec2& playerPos, const glm::ivec2& playerSize) const;
 
-    // Obtener el desplazamiento vertical desde la última actualización
+    // Obtener el desplazamiento vertical desde la ï¿½ltima actualizaciï¿½n
     float getVerticalDisplacement() const { return verticalDisplacement; }
 
 private:
     glm::ivec2 tileMapDispl;
     glm::vec2 position;
-    glm::ivec2 size;               // Tamaño del tronco
+    glm::ivec2 size;               // Tamaï¿½o del tronco
     Texture spritesheet;
     Sprite* sprite;
     TileMap* map;
 
     // Variables para el movimiento vertical
-    float initialY;                // Posición Y inicial
-    float currentY;                // Posición Y actual
-    float amplitude;               // Amplitud del movimiento (en píxeles)
+    float initialY;                // Posiciï¿½n Y inicial
+    float currentY;                // Posiciï¿½n Y actual
+    float amplitude;               // Amplitud del movimiento (en pï¿½xeles)
     float speed;                   // Velocidad del movimiento
-    float time;                    // Tiempo para calcular la posición
-    float verticalDisplacement;    // Desplazamiento vertical desde la última actualización
+    float time;                    // Tiempo para calcular la posiciï¿½n
+    float verticalDisplacement;    // Desplazamiento vertical desde la ï¿½ltima actualizaciï¿½n
 
     // Constantes
     const float MOVEMENT_AMPLITUDE = 5.0f * 16.0f; // 5 tiles de movimiento vertical
-    const float BASE_MOVEMENT_AMPLITUDE = 2.0f * 16.0f; // Base 2 tiles de movimiento vertical
-    const float MOVEMENT_SPEED = 1.0f;            // Velocidad de oscilación
+    const float BASE_MOVEMENT_AMPLITUDE = 1.0f * 16.0f; // Reduced base to 1 tile of movement vertical
+    const float MOVEMENT_SPEED = 3.0f;            // Velocidad de oscilacin
 };
 
 #endif // _TRONCO_INCLUDE

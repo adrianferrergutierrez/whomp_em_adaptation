@@ -17,33 +17,32 @@ class TileMap
 {
 
 private:
-	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
+	TileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 
 public:
 	// Tile maps can only be created inside an OpenGL context
-	static TileMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
+	static TileMap* createTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
 
 	~TileMap();
 
 	void render() const;
 	void free();
-	
+
 	int getTileSize() const { return tileSize; }
 	int getMapWidth() const { return mapSize.x; }
 	int getMapHeight() const { return mapSize.y; }
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
+	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
+	int TileMap::collisionMoveDownTile(const glm::ivec2& pos, const glm::ivec2& size) const;
 
-	int getTile(int x, int y) const {
-		if (x < 0 || x >= mapSize.x || y < 0 || y >= mapSize.y)
-			return 0;
-		return map[y * mapSize.x + x];
-	}
+
+	int getTile(int i, int j) const;
+
 private:
-	bool loadLevel(const string &levelFile);
-	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+	bool loadLevel(const string& levelFile);
+	void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
 
 private:
 	GLuint vao;
@@ -54,7 +53,7 @@ private:
 	int tileSize, blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	int *map;
+	int* map;
 
 };
 

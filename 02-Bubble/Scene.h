@@ -31,12 +31,12 @@ public:
 
 	void init();
 	void update(int deltaTime);
-	void render();
-	glm::vec2 getCameraPosition() { return cameraPosition; }  // Nuevo método para obtener la posición de la cámara
+	void render(int framebufferWidth, int framebufferHeight);
+	glm::vec2 getCameraPosition() { return cameraPosition; }  // Nuevo mï¿½todo para obtener la posiciï¿½n de la cï¿½mara
 
 private:
 	void initShaders();
-	void updateCamera();  // Nuevo método para actualizar la cámara
+	void updateCamera();  // Nuevo mï¿½todo para actualizar la cï¿½mara
 	void ini_pos_snakes();
 	void ini_pos_osos();
 	void ini_pos_ranas();
@@ -60,7 +60,7 @@ private:
 	void checkItemCollisions();
 	void spawnItem(const glm::vec2& position);
 
-	glm::vec2 cameraPosition;  // Nueva variable para la posición de la cámara
+	glm::vec2 cameraPosition;  // Nueva variable para la posiciï¿½n de la cï¿½mara
 
 	//dividiremos el mapa en sectores para que se vaya mostrando a trozos
 	int sector_horizontal = 1;
@@ -92,12 +92,12 @@ private:
 	int numero_snakes = 4;
 	float despawn_distance;
 
-	// Bambús
+	// Bambï¿½s
 	vector<glm::vec2> posiciones_bambus;
 	vector<Bamboo*> bambus;
 	vector<bool> bambus_active;
 	vector<float> bamboo_spawn_timers;
-	float bamboo_spawn_delay = 2.0f; // Segundos entre spawn de bambús
+	float bamboo_spawn_delay = 2.0f; // Segundos entre spawn de bambï¿½s
 	int numero_bambus = 9;
 
 	vector <glm::vec2> posiciones_ranas;
@@ -110,10 +110,10 @@ private:
 	vector <bool> osos_spawned;
 	int numero_osos = 0;
 
-	// Troncos (plataformas móviles)
+	// Troncos (plataformas mï¿½viles)
 	vector<glm::vec2> posiciones_troncos;
 	vector<Tronco*> troncos;
-	int numero_troncos = 4;
+	int numero_troncos = 8;
 	bool player_on_tronco;
 	int current_tronco_index;
 

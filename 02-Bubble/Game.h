@@ -19,6 +19,9 @@ class Game
 
 private:
 	Game() {}
+	GLFWwindow* windowPtr = nullptr; // Store window pointer
+	int currentFramebufferWidth = 0;
+	int currentFramebufferHeight = 0;
 
 public:
 	static Game& instance()
@@ -28,7 +31,7 @@ public:
 		return G;
 	}
 
-	void init();
+	void init(GLFWwindow* window);
 	bool update(int deltaTime);
 	void render();
 
