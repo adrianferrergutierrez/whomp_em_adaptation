@@ -49,10 +49,18 @@ private:
 	int maxHealth;
 	Texture spritesheet;
 	Sprite* sprite;
+	Sprite* spriteLanza;
+
 	TileMap* map;
 	glm::vec2 cameraPos;
 	glm::ivec2 tileMapDispl, posPlayer;
 	int damage;
+
+
+	bool isAttacking = false;
+	bool izq = false;
+	int attackTimer = 0;
+	glm::vec2 lanzaOffset;
 
 
 
