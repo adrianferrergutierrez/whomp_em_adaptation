@@ -8,6 +8,7 @@
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
+#define PROPORTION SCREEN_WIDTH/SCREEN_HEIGHT
 
 
 // Game is a singleton (a class	 with a single instance) that represents our whole application
@@ -18,19 +19,19 @@ class Game
 
 private:
 	Game() {}
-	
+
 public:
-	static Game &instance()
+	static Game& instance()
 	{
 		static Game G;
-	
+
 		return G;
 	}
-	
+
 	void init();
 	bool update(int deltaTime);
 	void render();
-	
+
 	// Input callback methods
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -42,8 +43,8 @@ public:
 
 private:
 	bool bPlay; // Continue to play game?
-	bool keys[GLFW_KEY_LAST+1]; // Store key states so that 
-							    // we can have access at any time
+	bool keys[GLFW_KEY_LAST + 1]; // Store key states so that 
+	// we can have access at any time
 	Scene scene;
 
 };

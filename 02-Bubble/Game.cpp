@@ -6,7 +6,7 @@
 void Game::init()
 {
 	bPlay = true;
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	scene.init();
 }
 
@@ -25,7 +25,7 @@ void Game::render()
 
 void Game::keyPressed(int key)
 {
-	if(key == GLFW_KEY_ESCAPE) // Escape code
+	if (key == GLFW_KEY_ESCAPE) // Escape code
 		bPlay = false;
 	keys[key] = true;
 }

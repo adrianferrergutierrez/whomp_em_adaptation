@@ -12,25 +12,53 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
+    <ClInclude Include="Bamboo.h" />
+    <ClInclude Include="BigHeart.h" />
+    <ClInclude Include="Bisonte.h" />
+    <ClInclude Include="Calabaza.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GUI.h" />
+    <ClInclude Include="Health.h" />
+    <ClInclude Include="Helmet.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="Oso.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Rana.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="SmallHeart.h" />
+    <ClInclude Include="Snake.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Tronco.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bamboo.cpp" />
+    <ClCompile Include="BigHeart.cpp" />
+    <ClCompile Include="Bisonte.cpp" />
+    <ClCompile Include="Calabaza.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="Health.cpp" />
+    <ClCompile Include="Helmet.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Oso.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Rana.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="SmallHeart.cpp" />
+    <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Tronco.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5BE6CA2A-E5A8-40CC-9015-047CE0C78036}</ProjectGuid>

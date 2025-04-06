@@ -3,9 +3,18 @@
 
 
 #include <glm/glm.hpp>
+#include <vector>
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Snake.h"
+#include "Bamboo.h"
+#include "Tronco.h"
+#include "Rana.h"
+#include "GUI.h"
+#include "Item.h"
+#include "SmallHeart.h"
+#include <glm/gtc/epsilon.hpp>
 
 
 // Scene contains all the entities of our game.
@@ -28,6 +37,29 @@ public:
 private:
 	void initShaders();
 	void updateCamera();  // Nuevo método para actualizar la cámara
+	void ini_pos_snakes();
+	void ini_pos_osos();
+	void ini_pos_ranas();
+	void ini_pos_bambus();
+	void ini_pos_troncos();
+	void updateSnakes(int deltaTime);
+	void updateOsos();
+	void updateRanas(int deltaTime);
+	void updateBambus(int deltaTime);
+	void updateTroncos(int deltaTime);
+	void updateItems(int deltaTime);
+	void renderSnakes(glm::mat4 modelview);
+	void renderOsos(glm::mat4 modelview);
+	void renderRanas(glm::mat4 modelview);
+	void renderBambus(glm::mat4 modelview);
+	void renderTroncos(glm::mat4 modelview);
+	void renderItems(glm::mat4& modelview);
+	bool checkCollisionAABB(const glm::vec2& pos1, const glm::ivec2& size1, const glm::vec2& pos2, const glm::ivec2& size2) const;
+	void checkCollisions();
+	void checkTroncoCollisions();
+	void checkItemCollisions();
+	void spawnItem(const glm::vec2& position);
+
 	glm::vec2 cameraPosition;  // Nueva variable para la posición de la cámara
 
 	//dividiremos el mapa en sectores para que se vaya mostrando a trozos
@@ -42,17 +74,53 @@ private:
 	float quinto_checkpoint;
 
 	bool verticalPos = false;
-	TileMap *map;
-	Player *player;
+	Player* player;
+	TileMap* map;
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
 	//variable para saber si estamos en el final y bloquear la camara en caso de que sea asi 
 	bool final = false;
 
+	//ENEMIGOS***********************************************************************************************************
 
+	vector <glm::vec2> posiciones_snakes;
+	//vector que marca que snakes ya han spawneado, si es true han spawneado y ya estan en pantalla o estan muertas (y el player no ha pasado por el trigger point otra vez)
+	vector <bool> snakes_spawned;
+	vector <bool> snakes_spawn_point_was_visible;
+	vector <Snake*> snakes;
+	int numero_snakes = 4;
+	float despawn_distance;
 
+	// Bambús
+	vector<glm::vec2> posiciones_bambus;
+	vector<Bamboo*> bambus;
+	vector<bool> bambus_active;
+	vector<float> bamboo_spawn_timers;
+	float bamboo_spawn_delay = 2.0f; // Segundos entre spawn de bambús
+	int numero_bambus = 9;
 
+	vector <glm::vec2> posiciones_ranas;
+	vector <bool> ranas_spawned;
+	vector <bool> ranas_spawn_point_was_visible;
+	vector <Rana*> ranas;
+	int numero_ranas = 7;
+
+	vector <glm::vec2> posiciones_osos;
+	vector <bool> osos_spawned;
+	int numero_osos = 0;
+
+	// Troncos (plataformas móviles)
+	vector<glm::vec2> posiciones_troncos;
+	vector<Tronco*> troncos;
+	int numero_troncos = 4;
+	bool player_on_tronco;
+	int current_tronco_index;
+
+	GUI* gui;
+
+	// Items
+	std::vector<Item*> activeItems;
 };
 
 
