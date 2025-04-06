@@ -28,8 +28,15 @@ private:
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite *sprite;
+	Sprite* spriteLanza;
 	TileMap *map;
 	glm::vec2 cameraPos;
+	glm::vec2 lanzaOffset;
+	bool isAttacking = false;
+	bool izq = false;
+	int attackTimer = 0;
+
+
 
 };
 
