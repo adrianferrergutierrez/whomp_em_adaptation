@@ -58,7 +58,7 @@ private:
 	glm::ivec2 tileMapDispl, posPlayer;
 	int damage;
 
-
+	bool isGOD = false;
 	bool isAttacking = false;
 	bool izq = false;
 	int attackTimer = 0;

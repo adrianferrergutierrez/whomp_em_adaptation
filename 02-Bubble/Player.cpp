@@ -133,7 +133,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     health.update(deltaTimeSeconds);
 
     if (Game::instance().getKey(GLFW_KEY_G)) {
-		if (health.getIsInvulnerable()) {
+		if (isGOD) {
 			becomeHuman();
 		}
 		else {
@@ -530,8 +530,10 @@ void Player::becomeInvulnerable(float duration) {
 }
 
 void Player::becomeGOD() {
+    isGOD = true;
 	health.beInvulnerable(1000000.0f);
 }
 void Player::becomeHuman() {
+	isGOD = false;
 	health.beInvulnerable(0.0f);
  }
