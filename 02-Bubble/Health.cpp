@@ -31,7 +31,8 @@ void Health::heal(int amount)
 
 void Health::beInvulnerable(float deltaTime)
 {
-    invulnerabilityTimer = 5.0f; // Hecho para el objecto de bisonte
+    isInvulnerable = true;
+    invulnerabilityTimer = deltaTime; // Hecho para el objecto de bisonte
 
 }
 

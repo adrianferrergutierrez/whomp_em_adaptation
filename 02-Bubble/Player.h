@@ -40,6 +40,8 @@ public:
 	void healToMax();
 	void equipHelmet();
 	void becomeInvulnerable(float duration);
+	void becomeGOD();
+	void becomeHuman();
 
 private:
 	void calculatAndUpdateMaxHealth();

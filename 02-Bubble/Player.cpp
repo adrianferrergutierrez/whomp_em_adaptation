@@ -132,6 +132,15 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     float deltaTimeSeconds = deltaTime / 1000.0f;
     health.update(deltaTimeSeconds);
 
+    if (Game::instance().getKey(GLFW_KEY_G)) {
+		if (health.getIsInvulnerable()) {
+			becomeHuman();
+		}
+		else {
+			becomeGOD();
+		}
+    }
+
     // Gestionar el parpadeo cuando el jugador es invulnerable
     if (health.getIsInvulnerable()) {
         isBlinking = true;
@@ -519,3 +528,10 @@ void Player::becomeInvulnerable(float duration) {
     isBlinking = true;
     blinkTime = 5;
 }
+
+void Player::becomeGOD() {
+	health.beInvulnerable(1000000.0f);
+}
+void Player::becomeHuman() {
+	health.beInvulnerable(0.0f);
+ }

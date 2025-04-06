@@ -1,22 +1,22 @@
 ﻿  Player.cpp
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(283,50): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(283,50): warning C4244:         with
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(283,50): warning C4244:         [
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(283,50): warning C4244:             T=int
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(283,50): warning C4244:         ]
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(285,40): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(285,40): warning C4244:         with
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(285,40): warning C4244:         [
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(285,40): warning C4244:             T=int
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(285,40): warning C4244:         ]
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,44): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,44): warning C4244:         with
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,44): warning C4244:         [
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,44): warning C4244:             T=int
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,44): warning C4244:         ]
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(372,27): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(372,27): warning C4244:         with
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(372,27): warning C4244:         [
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(372,27): warning C4244:             T=int
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(372,27): warning C4244:         ]
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,50): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,50): warning C4244:         with
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,50): warning C4244:         [
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,50): warning C4244:             T=int
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(292,50): warning C4244:         ]
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(294,40): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(294,40): warning C4244:         with
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(294,40): warning C4244:         [
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(294,40): warning C4244:             T=int
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(294,40): warning C4244:         ]
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(301,44): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(301,44): warning C4244:         with
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(301,44): warning C4244:         [
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(301,44): warning C4244:             T=int
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(301,44): warning C4244:         ]
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(381,27): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(381,27): warning C4244:         with
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(381,27): warning C4244:         [
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(381,27): warning C4244:             T=int
+C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(381,27): warning C4244:         ]
   02-Bubble.vcxproj -> C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\Debug\02-Bubble.exe
