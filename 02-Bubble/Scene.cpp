@@ -835,14 +835,23 @@ void Scene::checkCollisions()
 	glm::ivec2 playerSize(32, 32);
 
 	// Detección de colisiones con serpientes
-	for (Snake* snake : snakes) {
-		if (snake != nullptr && snake->isAlive()) { // Comprobar también si la serpiente está viva
-			glm::vec2 snakePos = snake->getHitboxPosition();
-			glm::ivec2 snakeSize = snake->getHitboxSize();
+	for (int i = 0; i < numero_snakes; ++i) {
+		if (snakes_spawned[i] && snakes[i] != nullptr && snakes[i]->isAlive()) { // Comprobar también si la serpiente está viva
+			glm::vec2 snakePos = snakes[i]->getHitboxPosition();
+			glm::ivec2 snakeSize = snakes[i]->getHitboxSize();
 
 			if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
-				player->takeDamage(snake->getDamage());
+				player->takeDamage(snakes[i]->getDamage());
 				break; // Salimos del bucle de serpientes
+			}
+			if (player->estaAttacking()) {
+				if (checkCollisionAABB(lanzaPos, playerSize, snakePos, snakeSize)) {
+					// Si el jugador está atacando y colisiona con la serpiente, eliminarla
+					std::cout << "Serpiente eliminada por ataque del jugador." << std::endl;
+					delete snakes[i];
+					snakes[i] = nullptr; // Eliminar la serpiente
+					break; // Salimos del bucle de serpientes
+				}
 			}
 		}
 	}
