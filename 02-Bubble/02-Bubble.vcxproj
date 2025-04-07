@@ -17,6 +17,7 @@
     <ClInclude Include="Bisonte.h" />
     <ClInclude Include="Calabaza.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FireStickProjectile.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Health.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="Bisonte.cpp" />
     <ClCompile Include="Calabaza.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FireStickProjectile.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Health.cpp" />

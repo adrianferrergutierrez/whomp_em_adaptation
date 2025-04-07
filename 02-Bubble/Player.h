@@ -6,6 +6,8 @@
 #include "TileMap.h"
 #include "Health.h"
 #include "Tronco.h"
+#include "FireStickProjectile.h"
+
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -43,6 +45,8 @@ public:
 	void becomeGOD();
 	void becomeHuman();
 
+	Player::~Player();
+
 private:
 	void calculatAndUpdateMaxHealth();
 
@@ -63,6 +67,10 @@ private:
 	bool izq = false;
 	int attackTimer = 0;
 	glm::vec2 lanzaOffset;
+	std::vector<FireStickProjectile*> projectiles;
+	ShaderProgram* shaderProgram; 
+
+
 
 
 
