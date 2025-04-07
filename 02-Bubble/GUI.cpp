@@ -11,6 +11,8 @@ GUI::GUI()
     clockIcon = nullptr;
     flintIcon = nullptr;
     helmetIcon = nullptr;
+    bossHealthIcon = nullptr; // Init boss health icon pointer
+    showBossHealth = false;
 }
 
 GUI::~GUI()
@@ -21,6 +23,7 @@ GUI::~GUI()
     if (clockIcon) delete clockIcon;
     if (flintIcon) delete flintIcon;
     if (helmetIcon) delete helmetIcon;
+    if (bossHealthIcon) delete bossHealthIcon; // Delete boss health icon
 }
 
 void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int camHeight)
@@ -42,6 +45,10 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
     }
     if (!items1Texture.loadFromFile("images/Items1.png", TEXTURE_PIXEL_FORMAT_RGBA)) {
         std::cout << "Error cargando Items1.png!" << std::endl;
+    }
+    // Load boss health texture
+    if (!bossHealthTexture.loadFromFile("images/vidas_boss.png", TEXTURE_PIXEL_FORMAT_RGBA)) {
+        std::cout << "Error cargando vidas_boss.png!" << std::endl;
     }
 
     // --- Creamos sprites--
@@ -72,6 +79,15 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
     helmetIcon->setNumberAnimations(1);
     helmetIcon->addKeyframe(0, glm::vec2(0.5f, 0.0f));
     helmetIcon->changeAnimation(0);
+
+    // Boss Health Icon (vidas_boss.png: 40x10, Icon: 10x10, 4 frames)
+    bossHealthIcon = Sprite::createSprite(glm::ivec2(10, 10), glm::vec2(0.25f, 1.0f), &bossHealthTexture, shaderProgram);
+    bossHealthIcon->setNumberAnimations(4);
+    bossHealthIcon->addKeyframe(0, glm::vec2(0.0f, 0.0f)); // Lleno
+    bossHealthIcon->addKeyframe(1, glm::vec2(0.25f, 0.0f)); // 2/3
+    bossHealthIcon->addKeyframe(2, glm::vec2(0.5f, 0.0f)); // 1/3
+    bossHealthIcon->addKeyframe(3, glm::vec2(0.75f, 0.0f)); // Vacio
+    bossHealthIcon->changeAnimation(0);
 
 
     // --- Calculamos posiciones en la pantalla ----
@@ -111,10 +127,41 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
         itemPositions[i] = glm::vec2(16.f + i * 18.f, cameraHeight - 16.f - 16.f);
     }
 
+    // Boss Health positions (e.g., top right)
+    bossHealthPositions.resize(MAX_BOSS_ORANGES);
+
+    // Calcular la posición X de inicio para la primera columna de vidas del boss
+    // Basado en la segunda columna de vidas del player + un hueco
+    // Asumimos que heartPositions[heartsPerColumn] es el inicio de la segunda columna del player
+    const float bossHealthGap = 8.f; // Espacio entre vidas player y vidas boss
+    float bossHealthStartX_col1 = heartPositions[heartsPerColumn].x + heartHorizontalSpacing + bossHealthGap;
+
+    // Calcular posiciones (similar a los corazones del player, pero con MAX_BOSS_ORANGES)
+    // --- AJUSTE: Columna 1 de 6, Columna 2 de 4 ---
+    const int bossOrangesPerColumn1 = 6; // Primera columna tiene 6
+    const float bossOrangeVerticalSpacing = 12.f; // Igual que corazones?
+    const float bossOrangeHorizontalSpacing = 12.f; // Igual que corazones?
+
+    for (int i = 0; i < MAX_BOSS_ORANGES; ++i) {
+        // Determinar columna y fila basado en 6 para la primera
+        int columnIndex = (i < bossOrangesPerColumn1) ? 0 : 1;
+        int rowIndex = (i < bossOrangesPerColumn1) ? i : (i - bossOrangesPerColumn1);
+
+        // Calcular X basado en la columna (relativo a bossHealthStartX_col1)
+        float posX = bossHealthStartX_col1 + (columnIndex * bossOrangeHorizontalSpacing);
+        // Calcular Y basado en la fila (igual que corazones player)
+        float posY = spearPos.y + heartOffsetY + (rowIndex * bossOrangeVerticalSpacing);
+
+        bossHealthPositions[i] = glm::vec2(posX, posY);
+    }
+    // --- FIN AJUSTE ---
+
     std::cout << "GUI Initialized" << std::endl;
 }
 
-void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet)
+// Modify update signature
+
+void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool bossIsActive, int currentBossOranges)
 {
     // Cogemos los valores del update del scene para actualizar la GUI
     currentHP = currentHealth;
@@ -122,6 +169,10 @@ void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint,
     clocks = numClocks;
     flintCollected = hasFlint;
     helmetCollected = hasHelmet;
+    // Store boss info
+    showBossHealth = bossIsActive;
+    bossCurrentOranges = currentBossOranges;
+    bossMaxOranges = MAX_BOSS_ORANGES; // Assuming constant
 }
 
 void GUI::render()
@@ -182,6 +233,28 @@ void GUI::render()
         helmetIcon->setPosition(itemPositions[currentItemIndex]);
         helmetIcon->render(modelview);
         currentItemIndex++;
+    }
+
+    // ---> Render Boss Health <--- 
+    if (showBossHealth && bossHealthIcon) {
+        // Calculate how many full/partial oranges to show based on bossCurrentOranges
+        // (This assumes bossCurrentOranges is the direct number, not HP)
+        for (int i = 0; i < bossMaxOranges; ++i) {
+            bossHealthIcon->setPosition(bossHealthPositions[i]);
+
+            // Determine animation based on current oranges
+            // This logic assumes bossCurrentOranges maps directly to the icon state needed.
+            // If boss health works differently (e.g. 3 HP per orange state), adjust logic.
+            int animIndex = 3; // Default to empty
+            if (i < bossCurrentOranges) { // Only show non-empty for current count
+                // Assuming simple mapping: 1 orange = full icon for now
+                animIndex = 0; // Full
+                // TODO: Refine this if health mapping is more complex (like player hearts)
+            }
+
+            bossHealthIcon->changeAnimation(animIndex);
+            bossHealthIcon->render(modelview);
+        }
     }
 }
 

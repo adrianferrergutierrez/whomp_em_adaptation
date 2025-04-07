@@ -15,6 +15,7 @@
 #include "Bisonte.h"     // <-- INCLUIR BISONTE
 #include "Calabaza.h"    // <-- INCLUIR CALABAZA
 #include <glm/gtc/epsilon.hpp>
+#include "Boss.h" // Add Boss include
 
 
 #define INIT_PLAYER_X_TILES 4
@@ -34,6 +35,9 @@ Scene::Scene()
 	gui = NULL; // Inicializar gui a nullptr
 	// Asegurarse que el vector de items esté vacío
 	activeItems.clear();
+	boss = nullptr; // Initialize boss pointer
+	bossActive = false; // Initialize boss state
+	bossBamboos.clear(); // Ensure boss bamboo vector is empty
 }
 
 Scene::~Scene()
@@ -83,6 +87,19 @@ Scene::~Scene()
 		}
 	}
 	activeItems.clear();
+
+	// Clean up boss
+	if (boss != nullptr) {
+		delete boss;
+		boss = nullptr;
+	}
+	// Clean up boss bamboos
+	for (Bamboo* bamboo : bossBamboos) {
+		if (bamboo != nullptr) {
+			delete bamboo;
+		}
+	}
+	bossBamboos.clear();
 }
 
 void Scene::init()
@@ -200,7 +217,7 @@ void Scene::ini_pos_troncos() {
 	posiciones_troncos[7] = glm::vec2(197 * TILESIZE, 40 * TILESIZE); // Up and Left (Highest)
 
 	// Variables para el seguimiento del jugador sobre los troncos (kept for potential future use)
-	player_on_tronco = false; 
+	player_on_tronco = false;
 	current_tronco_index = -1;
 
 	// Crear los troncos con las nuevas posiciones
@@ -320,8 +337,58 @@ void Scene::update(int deltaTime)
 			player->getMaxHealth(),
 			player->getClockCount(),
 			player->getHasFlint(),
-			player->getHasHelmet());
+			player->getHasHelmet(),
+			// Pass boss status to GUI
+			bossActive && boss != nullptr, // Show health if boss is active
+			bossActive && boss != nullptr ? boss->getCurrentHealthOranges() : 0 // Current oranges (or 0 if no boss)
+		);
 	}
+
+	// --- Boss Activation & Update ---
+	// Check if player reached the boss arena (using quinto_checkpoint)
+	if (!bossActive && player && player->getPosition().x >= quinto_checkpoint)
+	{
+		bossActive = true;
+		final = true; // Lock camera
+		std::cout << "Player reached boss arena! Activating boss..." << std::endl;
+
+		// Define boss spawn position
+		glm::ivec2 bossSpawnPos = glm::ivec2(248 * TILESIZE, 39 * TILESIZE);
+
+		if (boss == nullptr) {
+			boss = new Boss();
+			// Pass Scene instance (`this`) to the boss init
+			boss->init(bossSpawnPos, texProgram, player, map, this);
+		}
+	}
+
+	// Update boss if active
+	if (bossActive && boss != nullptr) {
+		boss->update(deltaTime);
+		// Update boss-spawned bamboos
+		for (Bamboo* bamboo : bossBamboos) {
+			if (bamboo != nullptr) {
+				bamboo->update(deltaTime);
+				// TODO: Add despawn logic for boss bamboos (visibility or timer?)
+			}
+		}
+		// TODO: Add cleanup for inactive boss bamboos (similar to items/leaves)
+		// Example using remove-erase idiom (needs modification based on how bamboos are marked inactive):
+		/*
+		bossBamboos.erase(
+			std::remove_if(bossBamboos.begin(), bossBamboos.end(),
+						   [](Bamboo* bamboo) {
+							   if (bamboo != nullptr && !bamboo->isAlive()) { // Example condition
+								   delete bamboo;
+								   return true;
+							   }
+							   return false;
+						   }),
+			bossBamboos.end()
+		);
+		*/
+	}
+	// --- End Boss Activation & Update ---
 
 	//updateOsos();
 	//updateRanas();
@@ -693,7 +760,7 @@ void Scene::render(int framebufferWidth, int framebufferHeight)
 	// Use the dynamically obtained framebuffer dimensions
 
 	float targetAspectRatio = float(CAMERA_WIDTH) / float(CAMERA_HEIGHT); // 16:15
-    // Calculate aspect ratio of the current framebuffer
+	// Calculate aspect ratio of the current framebuffer
 	float windowAspectRatio = (framebufferHeight > 0) ? float(framebufferWidth) / float(framebufferHeight) : targetAspectRatio;
 
 	int vp_x, vp_y, vp_width, vp_height;
@@ -713,14 +780,14 @@ void Scene::render(int framebufferWidth, int framebufferHeight)
 		vp_y = (framebufferHeight - vp_height) / 2;
 	}
 
-    // Check for zero dimensions to avoid issues with glViewport
-    if (vp_width <= 0 || vp_height <= 0) {
-        // Fallback or handle error, maybe use default if possible
-        // For now, just use the full framebuffer to avoid glError
-        vp_x = 0; vp_y = 0; vp_width = framebufferWidth; vp_height = framebufferHeight;
-        if (vp_width <= 0) vp_width = 1; // Ensure non-zero
-        if (vp_height <= 0) vp_height = 1; // Ensure non-zero
-    }
+	// Check for zero dimensions to avoid issues with glViewport
+	if (vp_width <= 0 || vp_height <= 0) {
+		// Fallback or handle error, maybe use default if possible
+		// For now, just use the full framebuffer to avoid glError
+		vp_x = 0; vp_y = 0; vp_width = framebufferWidth; vp_height = framebufferHeight;
+		if (vp_width <= 0) vp_width = 1; // Ensure non-zero
+		if (vp_height <= 0) vp_height = 1; // Ensure non-zero
+	}
 
 	// Aplicar el viewport calculado
 	glViewport(vp_x, vp_y, vp_width, vp_height);
@@ -747,8 +814,16 @@ void Scene::render(int framebufferWidth, int framebufferHeight)
 
 	player->render(modelview);
 
-	//renderOsos(modelview);
-	//renderRanas(modelview);
+	// Render Boss if active
+	if (bossActive && boss != nullptr) {
+		boss->render(modelview);
+		// Render boss bamboos
+		for (Bamboo* bamboo : bossBamboos) {
+			if (bamboo != nullptr) {
+				bamboo->render(modelview);
+			}
+		}
+	}
 
 	// <-- RENDERIZAR GUI AL FINAL -->
 	if (gui) {
@@ -939,6 +1014,20 @@ void Scene::checkCollisions()
 	}
 	// ---> FIN: Detección de colisiones con Ranas <---
 
+	// ---> INICIO: Detección de colisiones con BOSS <---
+	if (bossActive && boss != nullptr && boss->isAlive() && player->isAlive()) {
+		// 1. Player vs Boss Body Collision
+		glm::vec2 bossPos = boss->getHitboxPosition(); // Use hitbox pos/size
+		glm::ivec2 bossSize = boss->getHitboxSize();
+		if (checkCollisionAABB(playerPos, playerSize, bossPos, bossSize)) {
+			player->takeDamage(boss->getDamage());
+			// Note: Player takes damage, boss does not necessarily change state here
+		}
+
+		// Leaf collision is handled inside Boss::update
+	}
+	// ---> FIN: Detección de colisiones con BOSS <---
+
 }
 
 bool Scene::checkCollisionAABB(const glm::vec2& pos1, const glm::ivec2& size1,
@@ -949,4 +1038,40 @@ bool Scene::checkCollisionAABB(const glm::vec2& pos1, const glm::ivec2& size1,
 
 	return collisionX && collisionY;
 }
+
+
+// --- Boss Helper Functions ---
+
+void Scene::spawnSingleBamboo(const glm::vec2& spawnPos) {
+	// Spawn a bamboo at the given position (e.g., boss feet)
+	if (bossActive) { // Only spawn if boss is active
+		std::cout << "Scene spawning single bamboo at (" << spawnPos.x << ", " << spawnPos.y << ")" << std::endl;
+		Bamboo* newBamboo = new Bamboo();
+		// Use the provided spawnPos directly
+		glm::vec2 correctedSpawnPos = glm::vec2(spawnPos.x - 8, spawnPos.y); // Center the 16px bamboo
+		newBamboo->init(correctedSpawnPos, texProgram);
+		newBamboo->setTileMap(map);
+		bossBamboos.push_back(newBamboo);
+	}
+}
+
+void Scene::spawnBambooRain(float leftBound, float rightBound, float spawnY) {
+	// Spawn multiple bamboos across the specified range at the given Y
+	if (bossActive) {
+		std::cout << "Scene spawning bamboo rain between " << leftBound << " and " << rightBound << " at Y=" << spawnY << std::endl;
+		const int rainCount = 5; // Number of bamboos in the rain, adjust as needed
+		float spacing = (rightBound - leftBound) / (rainCount + 1);
+
+		for (int i = 0; i < rainCount; ++i) {
+			Bamboo* newBamboo = new Bamboo();
+			float spawnX = leftBound + (i + 1) * spacing - 8; // Center the bamboo
+			glm::vec2 spawnPos = glm::vec2(spawnX, spawnY); // Use the provided Y
+			newBamboo->init(spawnPos, texProgram);
+			newBamboo->setTileMap(map);
+			bossBamboos.push_back(newBamboo);
+		}
+	}
+}
+
+// --- End Boss Helper Functions ---
 

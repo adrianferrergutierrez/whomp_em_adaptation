@@ -14,6 +14,7 @@
 #include "GUI.h"
 #include "Item.h"
 #include "SmallHeart.h"
+#include "Boss.h"
 #include <glm/gtc/epsilon.hpp>
 
 
@@ -33,6 +34,10 @@ public:
 	void update(int deltaTime);
 	void render(int framebufferWidth, int framebufferHeight);
 	glm::vec2 getCameraPosition() { return cameraPosition; }  // Nuevo m�todo para obtener la posici�n de la c�mara
+
+	// Public functions for Boss to call
+	void spawnSingleBamboo(const glm::vec2& spawnPos);
+	void spawnBambooRain(float leftBound, float rightBound, float spawnY);
 
 private:
 	void initShaders();
@@ -121,6 +126,11 @@ private:
 
 	// Items
 	std::vector<Item*> activeItems;
+
+	// Boss related members
+	Boss* boss = nullptr;
+	std::vector<Bamboo*> bossBamboos; // Separate vector for boss-spawned bamboos
+	bool bossActive = false; // Flag to know if boss fight has started
 };
 
 

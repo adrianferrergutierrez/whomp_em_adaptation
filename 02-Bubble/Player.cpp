@@ -140,28 +140,37 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     health.update(deltaTimeSeconds);
 
     if (Game::instance().getKey(GLFW_KEY_T)) {
-        if (fireusages>0) {
-            firemode=true;
+        if (fireusages > 0) {
+            firemode = true;
             firetimer = 10000;
         }
     }
 
-	if (firemode) {
-		firetimer -= deltaTime;
-		if (firetimer <= 0) {
-			firemode = false;
-			fireusages--;
-		}
-	}
-
-    if (Game::instance().getKey(GLFW_KEY_G)) {
-		if (isGOD) {
-			becomeHuman();
-		}
-		else {
-			becomeGOD();
-		}
+    if (firemode) {
+        firetimer -= deltaTime;
+        if (firetimer <= 0) {
+            firemode = false;
+            fireusages--;
+        }
     }
+
+    bool gKeyCurrentlyPressed = Game::instance().getKey(GLFW_KEY_G);
+    if (gKeyCurrentlyPressed && !gKeyPressedLastFrame) {
+        if (isGOD) {
+            becomeHuman();
+        }
+        else {
+            becomeGOD();
+        }
+    }
+    gKeyPressedLastFrame = gKeyCurrentlyPressed;
+
+    bool hkeyCurrentlyPressed = Game::instance().getKey(GLFW_KEY_H);
+    if (hkeyCurrentlyPressed && !hKeyPressedLastFrame) {
+        clockscount = 2;
+        health.reset();
+    }
+    hKeyPressedLastFrame = hkeyCurrentlyPressed;
 
     // Gestionar el parpadeo cuando el jugador es invulnerable
     if (health.getIsInvulnerable()) {
@@ -441,7 +450,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             spriteLanza->changeAnimation(LEFT);
             lanzaOffset = glm::vec2(-30, 0);
 
-            projPos = glm::vec2(float(posPlayer.x + lanzaOffset.x + 5),float(posPlayer.y+lanzaOffset.y+10));
+            projPos = glm::vec2(float(posPlayer.x + lanzaOffset.x + 5), float(posPlayer.y + lanzaOffset.y + 10));
             projDirection = -1;
         }
         else {
@@ -454,7 +463,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             spriteLanza->changeAnimation(RIGHT);
             lanzaOffset = glm::vec2(29, 1);
 
-            projPos = glm::vec2(float(posPlayer.x + lanzaOffset.x + 5), float(posPlayer.y + lanzaOffset.y+10));
+            projPos = glm::vec2(float(posPlayer.x + lanzaOffset.x + 5), float(posPlayer.y + lanzaOffset.y + 10));
             projDirection = 1;
         }
         if (firemode) {
@@ -585,12 +594,12 @@ void Player::becomeInvulnerable(float duration) {
 
 void Player::becomeGOD() {
     isGOD = true;
-	health.beInvulnerable(1000000.0f);
+    health.beInvulnerable(1000000.0f);
 }
 void Player::becomeHuman() {
-	isGOD = false;
-	health.beInvulnerable(0.0f);
- }
+    isGOD = false;
+    health.beInvulnerable(0.0f);
+}
 
 Player::~Player() {
     // Limpiar todos los proyectiles

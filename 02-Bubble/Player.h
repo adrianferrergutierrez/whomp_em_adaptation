@@ -69,7 +69,7 @@ private:
 	int attackTimer = 0;
 	glm::vec2 lanzaOffset;
 	std::vector<FireStickProjectile*> projectiles;
-	ShaderProgram* shaderProgram; 
+	ShaderProgram* shaderProgram;
 	bool firemode = false;
 	int fireusages = 1;
 	int firetimer = 0;
@@ -95,6 +95,8 @@ private:
 	int helmet_usages;
 	bool hKeyPressedLastFrame;
 	bool gKeyPressedLastFrame;
+
+
 };
 
 
