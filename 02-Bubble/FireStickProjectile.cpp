@@ -10,7 +10,7 @@ FireStickProjectile::FireStickProjectile() {
     direction = 1;
     map = nullptr;
     active = true;
-    size = glm::ivec2(16, 16); // Tamaño visual del sprite
+    size = glm::ivec2(16, 16); // TamaÃ±o visual del sprite
 }
 
 FireStickProjectile::~FireStickProjectile() {
@@ -54,8 +54,11 @@ void FireStickProjectile::update(int deltaTime) {
         }
     }
 
-    // Desactivar si sale de los límites del nivel
-    if (posProj.x < 0 || posProj.x > 2048) {  // Ajusta este valor al ancho de tu nivel
+    // Desactivar si sale de los lÃ­mites del nivel
+    // Get map width in pixels for boundary check
+    float mapWidthPixels = map ? float(map->getMapWidth() * map->getTileSize()) : 2048.f; // Fallback if map is null
+
+    if (posProj.x < 0 || posProj.x > mapWidthPixels) {
         active = false;
         return;
     }
@@ -96,7 +99,7 @@ glm::ivec2 FireStickProjectile::getSize() const {
 }
 
 glm::ivec2 FireStickProjectile::getHitboxSize() const {
-    return glm::ivec2(16, 16); // Puedes ajustar esto si quieres un hitbox más pequeño
+    return glm::ivec2(16, 16); // Puedes ajustar esto si quieres un hitbox mÃ¡s pequeÃ±o
 }
 
 
