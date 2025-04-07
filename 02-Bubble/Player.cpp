@@ -485,7 +485,8 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     if (isAttacking)
     {
         spriteLanza->update(deltaTime);
-        spriteLanza->setPosition(glm::vec2(float(posPlayer.x + lanzaOffset.x), float(posPlayer.y + lanzaOffset.y)));
+        lanzaPos = glm::vec2(float(posPlayer.x + lanzaOffset.x), float(posPlayer.y + lanzaOffset.y));
+        spriteLanza->setPosition(lanzaPos);
         spriteLanza->setCameraPosition(cameraPos);
     }
 

@@ -18,6 +18,7 @@ public:
 private:
     Player* player; // Puntero al jugador para saber su posición
 
+   
     // Variables para el salto
     bool isJumping;
     float jumpTimer;

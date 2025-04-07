@@ -829,6 +829,8 @@ void Scene::checkCollisions()
 	}
 
 	glm::vec2 playerPos = player->getPosition();
+	glm::vec2 lanzaPos = player->getPositionLanza();
+
 	// ¡¡IMPORTANTE!! Usar el tamaño correcto de la hitbox del jugador si es diferente a 32x32
 	glm::ivec2 playerSize(32, 32);
 
@@ -912,6 +914,16 @@ void Scene::checkCollisions()
 				if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
 					player->takeDamage(ranas[i]->getDamage()); // Usar getDamage()
 					break; // Salir solo del bucle de ranas si recibe daño
+				}
+				if (player->estaAttacking()) {
+					if (checkCollisionAABB(lanzaPos, playerSize, ranaPos, ranaSize)) {
+						// Si el jugador está atacando y colisiona con la rana, eliminarla
+						std::cout << "Rana " << i << " eliminada por ataque del jugador." << std::endl;
+						delete ranas[i];
+						ranas[i] = nullptr;
+						ranas_spawned[i] = false; // Marcar como no spawn
+						break; // Salir del bucle de ranas
+					}
 				}
 			}
 		}

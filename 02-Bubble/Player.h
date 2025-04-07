@@ -28,6 +28,8 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
 	glm::vec2 getPosition() const { return posPlayer; }
+	glm::vec2 getPositionLanza() const { return lanzaPos; }
+
 	void setCameraPosition(const glm::vec2& pos);
 	void collectPumpkin();
 
@@ -44,9 +46,8 @@ public:
 	void becomeInvulnerable(float duration);
 	void becomeGOD();
 	void becomeHuman();
-
+	bool estaAttacking() const { return isAttacking; }
 	Player::~Player();
-
 private:
 	void calculatAndUpdateMaxHealth();
 
@@ -59,7 +60,7 @@ private:
 
 	TileMap* map;
 	glm::vec2 cameraPos;
-	glm::ivec2 tileMapDispl, posPlayer;
+	glm::ivec2 tileMapDispl, posPlayer, lanzaPos;
 	int damage;
 
 	bool isGOD = false;
