@@ -40,6 +40,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     attackTimer = 0;
 
     // Inicialización del jugador
+    isGOD = false;
     bJumping = false;
     spritesheet.loadFromFile("images/indio6.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
