@@ -81,6 +81,8 @@ private:
 	bool hasFlint;
 	bool hasHelmet;
 	int helmet_usages;
+	bool hKeyPressedLastFrame;
+	bool gKeyPressedLastFrame;
 };
 
 

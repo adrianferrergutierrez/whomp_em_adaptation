@@ -183,23 +183,27 @@ void Scene::ini_pos_bambus() {
 }
 
 void Scene::ini_pos_troncos() {
+	// Ensure vectors are resized according to numero_troncos (should be 8)
 	posiciones_troncos.resize(numero_troncos);
 	troncos.resize(numero_troncos, nullptr);
 
-	// Posiciones X específicas para los troncos (originales)
-	// Original: 196, 199, 200, 202 * TILESIZE
-	// Nuevo:    196, 200, 204, 208 * TILESIZE (separación de 4, 4, 4 tiles)
-	posiciones_troncos[0] = glm::vec2(197 * TILESIZE, 37 * TILESIZE);
-	posiciones_troncos[1] = glm::vec2(198 * TILESIZE, 41 * TILESIZE);
-	posiciones_troncos[2] = glm::vec2(200 * TILESIZE, 45 * TILESIZE);
-	posiciones_troncos[3] = glm::vec2(202 * TILESIZE, 48 * TILESIZE); // Original
+	// Define initial positions for the 8 troncos for VERTICAL ASCENT
+	// Player needs to reach the first one from around Y=53*TILESIZE
+	// Horizontal range approx X = 196*TILESIZE to 204*TILESIZE
+	posiciones_troncos[0] = glm::vec2(198 * TILESIZE, 51 * TILESIZE); // Start
+	posiciones_troncos[1] = glm::vec2(202 * TILESIZE, 48 * TILESIZE); // Up and Left
+	posiciones_troncos[2] = glm::vec2(197 * TILESIZE, 45 * TILESIZE); // Up and Right
+	posiciones_troncos[3] = glm::vec2(199 * TILESIZE, 43 * TILESIZE); // Up and Left
+	posiciones_troncos[4] = glm::vec2(198 * TILESIZE, 30 * TILESIZE); // Up and Right
+	posiciones_troncos[5] = glm::vec2(202 * TILESIZE, 41 * TILESIZE); // Up and Left
+	posiciones_troncos[6] = glm::vec2(197 * TILESIZE, 36 * TILESIZE); // Up and Right
+	posiciones_troncos[7] = glm::vec2(197 * TILESIZE, 40 * TILESIZE); // Up and Left (Highest)
 
-	// Variables para el seguimiento del jugador sobre los troncos
-	player_on_tronco = false; // Estas variables parecen no usarse globalmente
-	current_tronco_index = -1;// La lógica está en Player::update ahora
+	// Variables para el seguimiento del jugador sobre los troncos (kept for potential future use)
+	player_on_tronco = false; 
+	current_tronco_index = -1;
 
-
-	// Crear los troncos
+	// Crear los troncos con las nuevas posiciones
 	for (int i = 0; i < numero_troncos; ++i) {
 		troncos[i] = new Tronco();
 		troncos[i]->init(posiciones_troncos[i], texProgram);
@@ -681,34 +685,42 @@ void Scene::checkItemCollisions() {
 	}
 }
 
-void Scene::render()
+void Scene::render(int framebufferWidth, int framebufferHeight)
 {
 	glm::mat4 modelview;
 
 	// --- Cálculo y aplicación del Viewport para Pillarboxing --- 
-	// Asumiendo que Game::instance() puede darnos el tamaño actual de la ventana/framebuffer
-	// o usando las constantes si asumimos tamaño fijo.
-	// Usaremos las constantes SCREEN_WIDTH y SCREEN_HEIGHT definidas en Game.h por ahora.
+	// Use the dynamically obtained framebuffer dimensions
 
 	float targetAspectRatio = float(CAMERA_WIDTH) / float(CAMERA_HEIGHT); // 16:15
-	float windowAspectRatio = float(SCREEN_WIDTH) / float(SCREEN_HEIGHT); // 16:9
+    // Calculate aspect ratio of the current framebuffer
+	float windowAspectRatio = (framebufferHeight > 0) ? float(framebufferWidth) / float(framebufferHeight) : targetAspectRatio;
 
 	int vp_x, vp_y, vp_width, vp_height;
 
 	if (windowAspectRatio >= targetAspectRatio) {
-		// Ventana más ancha que el objetivo (Pillarboxing)
-		vp_height = SCREEN_HEIGHT;
+		// Window wider than target (Pillarboxing)
+		vp_height = framebufferHeight;
 		vp_width = int(vp_height * targetAspectRatio);
-		vp_x = (SCREEN_WIDTH - vp_width) / 2;
+		vp_x = (framebufferWidth - vp_width) / 2;
 		vp_y = 0;
 	}
 	else {
-		// Ventana más alta que el objetivo (Letterboxing) - No debería pasar con 1920x1080 y 256x240
-		vp_width = SCREEN_WIDTH;
+		// Window taller than target (Letterboxing)
+		vp_width = framebufferWidth;
 		vp_height = int(vp_width / targetAspectRatio);
 		vp_x = 0;
-		vp_y = (SCREEN_HEIGHT - vp_height) / 2;
+		vp_y = (framebufferHeight - vp_height) / 2;
 	}
+
+    // Check for zero dimensions to avoid issues with glViewport
+    if (vp_width <= 0 || vp_height <= 0) {
+        // Fallback or handle error, maybe use default if possible
+        // For now, just use the full framebuffer to avoid glError
+        vp_x = 0; vp_y = 0; vp_width = framebufferWidth; vp_height = framebufferHeight;
+        if (vp_width <= 0) vp_width = 1; // Ensure non-zero
+        if (vp_height <= 0) vp_height = 1; // Ensure non-zero
+    }
 
 	// Aplicar el viewport calculado
 	glViewport(vp_x, vp_y, vp_width, vp_height);
@@ -899,8 +911,6 @@ void Scene::checkCollisions()
 
 				if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
 					player->takeDamage(ranas[i]->getDamage()); // Usar getDamage()
-					// ¡¡IMPORTANTE!! No matar a la rana al colisionar
-					//return; // Usar return si solo puede recibir un golpe por frame
 					break; // Salir solo del bucle de ranas si recibe daño
 				}
 			}

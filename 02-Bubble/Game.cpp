@@ -3,8 +3,9 @@
 #include "Game.h"
 
 
-void Game::init()
+void Game::init(GLFWwindow* window)
 {
+	windowPtr = window;
 	bPlay = true;
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	scene.init();
@@ -12,6 +13,9 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
+	if (windowPtr) {
+		glfwGetFramebufferSize(windowPtr, &currentFramebufferWidth, &currentFramebufferHeight);
+	}
 	scene.update(deltaTime);
 
 	return bPlay;
@@ -20,7 +24,7 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+	scene.render(currentFramebufferWidth, currentFramebufferHeight);
 }
 
 void Game::keyPressed(int key)
