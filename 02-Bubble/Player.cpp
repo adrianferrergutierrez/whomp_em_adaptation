@@ -42,6 +42,8 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     isAttacking = false;
     izq = false;
     attackTimer = 0;
+    fireusages = 3;
+    firetimer = 0;
 
     // Inicialización del jugador
     isGOD = false;
@@ -136,6 +138,21 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     // Actualizar el sistema de salud
     float deltaTimeSeconds = deltaTime / 1000.0f;
     health.update(deltaTimeSeconds);
+
+    if (Game::instance().getKey(GLFW_KEY_T)) {
+        if (fireusages>0) {
+            firemode=true;
+            firetimer = 10000;
+        }
+    }
+
+	if (firemode) {
+		firetimer -= deltaTime;
+		if (firetimer <= 0) {
+			firemode = false;
+			fireusages--;
+		}
+	}
 
     if (Game::instance().getKey(GLFW_KEY_G)) {
 		if (isGOD) {
@@ -440,12 +457,13 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             projPos = glm::vec2(float(posPlayer.x + lanzaOffset.x + 5), float(posPlayer.y + lanzaOffset.y+10));
             projDirection = 1;
         }
-
-        // ⚠️ Crear el proyectil y añadirlo al vector
-        FireStickProjectile* projectile = new FireStickProjectile();
-        projectile->init(projPos, *shaderProgram, projDirection);
-        projectile->setTileMap(map);
-        projectiles.push_back(projectile);
+        if (firemode) {
+            // ⚠️ Crear el proyectil y añadirlo al vector
+            FireStickProjectile* projectile = new FireStickProjectile();
+            projectile->init(projPos, *shaderProgram, projDirection);
+            projectile->setTileMap(map);
+            projectiles.push_back(projectile);
+        }
     }
 
     // Actualizar proyectiles

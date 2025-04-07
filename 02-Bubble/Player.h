@@ -69,6 +69,9 @@ private:
 	glm::vec2 lanzaOffset;
 	std::vector<FireStickProjectile*> projectiles;
 	ShaderProgram* shaderProgram; 
+	bool firemode = false;
+	int fireusages = 1;
+	int firetimer = 0;
 
 
 
