@@ -426,7 +426,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     if (Game::instance().getKey(GLFW_KEY_X) && !isAttacking && !bJumping)
     {
         isAttacking = true;
-        attackTimer = 100;
+        attackTimer = 300;
 
         glm::vec2 projPos;
         int projDirection;
