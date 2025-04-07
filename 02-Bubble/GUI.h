@@ -16,7 +16,7 @@ public:
     ~GUI();
 
     void init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int camHeight);
-    void update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool bossIsActive, int currentBossOranges);
+    void update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossOranges);
     void render();
 
 private:
@@ -25,7 +25,8 @@ private:
     int cameraWidth;
     int cameraHeight;
 
-    // Añadimos texturas individuales
+    // Aï¿½adimos texturas individuales
+    Texture totemsTodosTexture;
     Texture totemsTexture;
     Texture corazonesTexture;
     Texture corazones2Texture;
@@ -33,6 +34,7 @@ private:
     Texture bossHealthTexture; // Texture for boss health
 
     // Sprites para los elementos
+    Sprite* fireIcon;
     Sprite* spearIcon;
     Sprite* heartIcon;
     Sprite* clockIcon;
@@ -46,6 +48,7 @@ private:
     int clocks;
     bool flintCollected;
     bool helmetCollected;
+    bool isFireMode;
     // Boss status
     bool showBossHealth;
     int bossCurrentOranges;
@@ -60,8 +63,8 @@ private:
 
     // Constantes como la vida que representa un corazon o el numero de maximo de elementos
     const int HEALTH_PER_HEART = 30;
-    const int MAX_DISPLAYABLE_HEARTS = 12; // O el máximo que quepa
-    const int MAX_DISPLAYABLE_CLOCKS = 10; // O el máximo que quepa
+    const int MAX_DISPLAYABLE_HEARTS = 12; // O el mï¿½ximo que quepa
+    const int MAX_DISPLAYABLE_CLOCKS = 10; // O el mï¿½ximo que quepa
     const int MAX_BOSS_ORANGES = 10;
     const int BOSS_HEALTH_PER_ORANGE = 30; // Must match value in Boss.cpp
 

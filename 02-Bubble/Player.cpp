@@ -601,6 +601,10 @@ void Player::becomeHuman() {
     health.beInvulnerable(0.0f);
 }
 
+bool Player::isInFireMode() const {
+    return firemode;
+}
+
 Player::~Player() {
     // Limpiar todos los proyectiles
     for (auto it = projectiles.begin(); it != projectiles.end(); ++it) {

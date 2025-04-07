@@ -13,6 +13,7 @@ GUI::GUI()
     helmetIcon = nullptr;
     bossHealthIcon = nullptr; // Init boss health icon pointer
     showBossHealth = false;
+    isFireMode = false; // Initialize fire mode flag
 }
 
 GUI::~GUI()
@@ -24,6 +25,7 @@ GUI::~GUI()
     if (flintIcon) delete flintIcon;
     if (helmetIcon) delete helmetIcon;
     if (bossHealthIcon) delete bossHealthIcon; // Delete boss health icon
+    if (fireIcon) delete fireIcon; // Delete fire icon
 }
 
 void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int camHeight)
@@ -36,6 +38,9 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
     // Cargamos las texturas con proteccion de errores
     if (!totemsTexture.loadFromFile("images/Totems.png", TEXTURE_PIXEL_FORMAT_RGBA)) {
         std::cout << "Error cargando Totems.png!" << std::endl;
+    }
+    if (!totemsTodosTexture.loadFromFile("images/totems_todos.png", TEXTURE_PIXEL_FORMAT_RGBA)) {
+        std::cout << "Error cargando totems_todos.png!" << std::endl;
     }
     if (!corazonesTexture.loadFromFile("images/Corazones.png", TEXTURE_PIXEL_FORMAT_RGBA)) {
         std::cout << "Error cargando Corazones.png!" << std::endl;
@@ -59,7 +64,13 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
     spearIcon->addKeyframe(0, glm::vec2(0.5f, 0.0f));
     spearIcon->changeAnimation(0);
 
-    // Corazón (Corazones.png: 50x10, Icono: 10x10)
+    // Fire Icon (totems_todos.png: 112x16, Icon: 16x16, 2nd sprite in the row)
+    fireIcon = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.0f / 7.0f, 1.0f), &totemsTodosTexture, shaderProgram);
+    fireIcon->setNumberAnimations(1);
+    fireIcon->addKeyframe(0, glm::vec2(1.0f / 7.0f, 0.0f)); // Second sprite (index 1) texture coordinate
+    fireIcon->changeAnimation(0);
+
+    // Corazn (Corazones.png: 50x10, Icono: 10x10)
     heartIcon = Sprite::createSprite(glm::ivec2(10, 10), glm::vec2(0.2f, 1.0f), &corazonesTexture, shaderProgram);
     heartIcon->setNumberAnimations(4);
     heartIcon->addKeyframe(0, glm::vec2(0.0f, 0.0f)); // Lleno
@@ -130,7 +141,7 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
     // Boss Health positions (e.g., top right)
     bossHealthPositions.resize(MAX_BOSS_ORANGES);
 
-    // Calcular la posición X de inicio para la primera columna de vidas del boss
+    // Calcular la posiciï¿½n X de inicio para la primera columna de vidas del boss
     // Basado en la segunda columna de vidas del player + un hueco
     // Asumimos que heartPositions[heartsPerColumn] es el inicio de la segunda columna del player
     const float bossHealthGap = 8.f; // Espacio entre vidas player y vidas boss
@@ -161,7 +172,7 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
 
 // Modify update signature
 
-void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool bossIsActive, int currentBossOranges)
+void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossOranges)
 {
     // Cogemos los valores del update del scene para actualizar la GUI
     currentHP = currentHealth;
@@ -169,6 +180,7 @@ void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint,
     clocks = numClocks;
     flintCollected = hasFlint;
     helmetCollected = hasHelmet;
+    isFireMode = isFireModeActive; // Update fire mode status
     // Store boss info
     showBossHealth = bossIsActive;
     bossCurrentOranges = currentBossOranges;
@@ -185,8 +197,12 @@ void GUI::render()
     shaderProgram->setUniformMatrix4f("projection", projectionMatrix);
     shaderProgram->setUniformMatrix4f("modelview", glm::mat4(1.0f));
 
-    // Lanza
-    if (spearIcon) {
+    // Conditionally render spear or fire icon
+    if (isFireMode && fireIcon) {
+        fireIcon->setPosition(spearPos);
+        fireIcon->render(modelview);
+    }
+    else if (spearIcon) {
         spearIcon->setPosition(spearPos);
         spearIcon->render(modelview);
     }

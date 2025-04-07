@@ -338,6 +338,7 @@ void Scene::update(int deltaTime)
 			player->getClockCount(),
 			player->getHasFlint(),
 			player->getHasHelmet(),
+			player->isInFireMode(),
 			// Pass boss status to GUI
 			bossActive && boss != nullptr, // Show health if boss is active
 			bossActive && boss != nullptr ? boss->getCurrentHealthOranges() : 0 // Current oranges (or 0 if no boss)

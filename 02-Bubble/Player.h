@@ -47,6 +47,7 @@ public:
 	void becomeGOD();
 	void becomeHuman();
 	bool estaAttacking() const { return isAttacking; }
+	bool isInFireMode() const;
 	Player::~Player();
 private:
 	void calculatAndUpdateMaxHealth();
