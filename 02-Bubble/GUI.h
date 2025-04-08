@@ -18,7 +18,7 @@ public:
     void init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int camHeight);
     void update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossOranges);
     void render();
-	void updateFinal(bool final) { this->final = final; } // Update final state
+    void updateFinal(bool final) { this->final = final; } // Update final state
     void getPositionBoss(glm::vec2 positionBoss);
 
 private:
@@ -71,6 +71,7 @@ private:
     const int MAX_DISPLAYABLE_CLOCKS = 10; // O el m�ximo que quepa
     const int MAX_BOSS_ORANGES = 10;
     const int BOSS_HEALTH_PER_ORANGE = 30; // Must match value in Boss.cpp
+    int boss_health = 0; // Boss health in oranges
 
 };
 

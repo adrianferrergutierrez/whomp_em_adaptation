@@ -591,7 +591,7 @@ void Player::takeDamage(int dmg)
 
     }
 
-    health.takeDamage(dmg);
+    health.takeDamage(dmg,false);
    
 
     // Comprobar si el jugador ha muerto

@@ -13,12 +13,18 @@ Health::~Health()
 {
 }
 
-void Health::takeDamage(int damage)
+void Health::takeDamage(int damage, bool enemy)
 {
     if (!isInvulnerable && damage > 0) {
         currentHealth = std::max(0, currentHealth - damage);
-        isInvulnerable = true;
-        invulnerabilityTimer = 2.0f; // 2 segundos de invulnerabilidad
+        if (!enemy) {
+            isInvulnerable = true;
+            invulnerabilityTimer = 2.0f; // 2 segundos de invulnerabilidad
+        }
+        else {
+            isInvulnerable = true;
+            invulnerabilityTimer = 0.5f;
+        }
     }
 }
 

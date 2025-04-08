@@ -26,9 +26,8 @@ public:
 	void update(int deltaTime) override;
 	void render(glm::mat4 modelview) override;
 	void takeDamage(int damage) override;
-
+	int getCurrentHealth() const { return health.getCurrentHealth(); }
 	// Getters for GUI or Scene
-	int getCurrentHealthOranges() const;
 	const int MAX_HEALTH_ORANGES = 10; // Public constant for GUI
 
 private:

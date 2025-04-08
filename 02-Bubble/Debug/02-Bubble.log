@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  Player.cpp
 C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.h(69,26): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
   (compilando archivo de origen "Player.cpp")
@@ -23,3 +24,30 @@ C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cp
 C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(427,27): warning C4244:             T=int
 C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(427,27): warning C4244:         ]
   02-Bubble.vcxproj -> C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\Debug\02-Bubble.exe
+=======
+﻿  AudioManager.cpp
+  Bamboo.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244: '+=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244:         ]
+  BigHeart.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Player.h(69,26): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+  (compilando archivo de origen "BigHeart.cpp")
+  
+  Shader.cpp
+  Tronco.cpp
+  Generando código...
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(image_DXT.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(image_helper.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(SOIL.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(stb_image_aug.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+  02-Bubble.vcxproj -> C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\Debug\02-Bubble.exe
+>>>>>>> e50be42ba377a2fc7b2283a7e1c58d89267b42c1

@@ -58,10 +58,10 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
     }
 
     // --- Creamos sprites--
-	totemBossIcon = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.0f / 7.0f, 1.0f), &totemsTodosTexture, shaderProgram);
-	totemBossIcon->setNumberAnimations(1);
-	totemBossIcon->addKeyframe(0, glm::vec2(0.0f, 0.0f));
-	totemBossIcon->changeAnimation(0);
+    totemBossIcon = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.0f / 7.0f, 1.0f), &totemsTodosTexture, shaderProgram);
+    totemBossIcon->setNumberAnimations(1);
+    totemBossIcon->addKeyframe(0, glm::vec2(0.0f, 0.0f));
+    totemBossIcon->changeAnimation(0);
 
     // Lanza (Totems.png: 64x16, Icono: 16x16, 3er elemento)
     spearIcon = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25f, 1.0f), &totemsTexture, shaderProgram);
@@ -180,7 +180,7 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
 
 
 
-void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossOranges/*, bool final*/)
+void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossHealth/*, bool final*/)
 {
     // Cogemos los valores del update del scene para actualizar la GUI
     currentHP = currentHealth;
@@ -190,10 +190,9 @@ void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint,
     helmetCollected = hasHelmet;
     isFireMode = isFireModeActive; // Update fire mode status
     // Store boss info
-	this->final = final; 
+    this->final = final;
     showBossHealth = bossIsActive;
-    bossCurrentOranges = currentBossOranges;
-    bossMaxOranges = MAX_BOSS_ORANGES; // Assuming constant
+    boss_health = currentBossHealth;
 }
 
 void GUI::render()
@@ -216,7 +215,7 @@ void GUI::render()
         spearIcon->render(modelview);
     }
     if (final) {
-        totemBossIcon->setPosition(glm::vec2(128.0f,128.0f));
+        totemBossIcon->setPosition(glm::vec2(128.0f, 128.0f));
         totemBossIcon->render(modelview);
 
     }
@@ -267,19 +266,26 @@ void GUI::render()
 
     // ---> Render Boss Health <--- 
     if (showBossHealth && bossHealthIcon) {
-        // Calculate how many full/partial oranges to show based on bossCurrentOranges
-        // (This assumes bossCurrentOranges is the direct number, not HP)
-        for (int i = 0; i < bossMaxOranges; ++i) {
+        // Calculamos cuántas naranjas mostrar en total basado en la vida máxima del boss
+        int orangesToDraw = (int)ceil((float)MAX_BOSS_ORANGES);
+        orangesToDraw = glm::clamp(orangesToDraw, 0, MAX_BOSS_ORANGES);
+
+        for (int i = 0; i < orangesToDraw; ++i) {
             bossHealthIcon->setPosition(bossHealthPositions[i]);
 
-            // Determine animation based on current oranges
-            // This logic assumes bossCurrentOranges maps directly to the icon state needed.
-            // If boss health works differently (e.g. 3 HP per orange state), adjust logic.
-            int animIndex = 3; // Default to empty
-            if (i < bossCurrentOranges) { // Only show non-empty for current count
-                // Assuming simple mapping: 1 orange = full icon for now
-                animIndex = 0; // Full
-                // TODO: Refine this if health mapping is more complex (like player hearts)
+            // Calculamos la salud en esta naranja específica
+            int healthInThisOrange = boss_health - (i * BOSS_HEALTH_PER_ORANGE);
+
+            int animIndex = 3; // Vacío por defecto
+
+            if (healthInThisOrange >= BOSS_HEALTH_PER_ORANGE) { // Naranja completamente llena
+                animIndex = 0;
+            }
+            else if (healthInThisOrange >= 20) { // 2/3 llena (ajustar según tus necesidades)
+                animIndex = 1;
+            }
+            else if (healthInThisOrange > 0) { // 1/3 llena (ajustar según tus necesidades)
+                animIndex = 2;
             }
 
             bossHealthIcon->changeAnimation(animIndex);
