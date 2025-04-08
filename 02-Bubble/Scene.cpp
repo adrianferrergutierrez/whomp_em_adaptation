@@ -313,59 +313,60 @@ void Scene::updateCamera()
 
 
 void Scene::mirar_condicion_muerte(){
-	if (bossActive && !boss->isAlive()) {
+	if (bossActive && boss != nullptr && !boss->isAlive()) {
 		player->setVictory();
 		gui->updateFinal(true);
+		// El Game se encargará de la transición a la pantalla de victoria después del delay
 	}
 }
 
 void Scene::update(int deltaTime)
 {
-	 currentTime += deltaTime;
+    currentTime += deltaTime;
 
-   if (bossActive && boss != nullptr) {
-     updateBambusBoss(deltaTime); // Actualiza el jefe y sus bambús
- }
+    if (bossActive && boss != nullptr) {
+        updateBambusBoss(deltaTime); // Actualiza el jefe y sus bambús
+    }
 
- mirar_condicion_muerte();
- player->update(deltaTime, troncos);
- updateCamera();
- updateTroncos(deltaTime);        
- updateSnakes(deltaTime);
- updateBambus(deltaTime); 
- updateRanas(deltaTime);
- updateItems(deltaTime);
- checkCollisions();       
- checkItemCollisions();   
- // 7. Actualizar GUI (con el estado final del jugador y jefe)
- if (player && gui) {
-     gui->update(player->getCurrentHealth(),
-         player->getMaxHealth(),
-         player->getClockCount(),
-         player->getHasFlint(),
-         player->getHasHelmet(),
-         player->isInFireMode(),
-		 bossActive && boss != nullptr,
-		 bossActive && boss != nullptr ? boss->getCurrentHealth() : 0
-     );
- }
+    mirar_condicion_muerte();
+    player->update(deltaTime, troncos);
+    updateCamera();
+    updateTroncos(deltaTime);        
+    updateSnakes(deltaTime);
+    updateBambus(deltaTime); 
+    updateRanas(deltaTime);
+    updateItems(deltaTime);
+    checkCollisions();       
+    checkItemCollisions();   
+    
+    // Actualizar GUI (con el estado final del jugador y jefe)
+    if (player && gui) {
+        gui->update(player->getCurrentHealth(),
+            player->getMaxHealth(),
+            player->getClockCount(),
+            player->getHasFlint(),
+            player->getHasHelmet(),
+            player->isInFireMode(),
+            bossActive && boss != nullptr,
+            bossActive && boss != nullptr ? boss->getCurrentHealth() : 0
+        );
+    }
 
- if (!bossActive && player && player->getPosition().x >= quinto_checkpoint)
- {
-     bossActive = true;
-     final = true; // Lock camera
-     std::cout << "Player reached boss arena! Activating boss..." << std::endl;
-     glm::ivec2 bossSpawnPos = glm::ivec2(248 * TILESIZE, 39 * TILESIZE);
-     if (boss == nullptr) {
-         boss = new Boss();
-         boss->init(bossSpawnPos, texProgram, player, map, this);
-     }
- }
-	}
-	// --- End Boss Activation & Update ---
+    // Activar el jefe cuando el jugador llega al punto designado
+    if (!bossActive && player && player->getPosition().x >= quinto_checkpoint) {
+        bossActive = true;
+        final = true; // Lock camera
+        std::cout << "Player reached boss arena! Activating boss..." << std::endl;
+        glm::ivec2 bossSpawnPos = glm::ivec2(248 * TILESIZE, 39 * TILESIZE);
+        if (boss == nullptr) {
+            boss = new Boss();
+            boss->init(bossSpawnPos, texProgram, player, map, this);
+        }
+    }
 
-	//updateOsos();
-	//updateRanas();
+    // No hay necesidad de updateOsos() y updateRanas() porque ya se han llamado arriba
+}
+
 void Scene::updateBambusBoss(int deltaTime) {
 	if (bossActive && boss != nullptr) {
 		boss->update(deltaTime);

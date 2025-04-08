@@ -49,7 +49,7 @@ void AudioManager::close() {
 bool AudioManager::playMusic(const std::string& fileName, bool loop, float volume) {
     if (!soundEngine) return false;
 
-    // Detener música anterior si existe
+    // Detener mï¿½sica anterior si existe
     if (!currentMusicName.empty()) {
         auto it = sounds.find(currentMusicName);
         if (it != sounds.end() && it->second) {
@@ -59,11 +59,11 @@ bool AudioManager::playMusic(const std::string& fileName, bool loop, float volum
         }
     }
 
-    // Reproducir nueva música
+    // Reproducir nueva mï¿½sica
     ISound* music = soundEngine->play2D(fileName.c_str(), loop, true, true);
 
     if (!music) {
-        std::cerr << "No se pudo reproducir la música: " << fileName << std::endl;
+        std::cerr << "No se pudo reproducir la mï¿½sica: " << fileName << std::endl;
         return false;
     }
 
@@ -81,7 +81,7 @@ bool AudioManager::playMusic(const std::string& fileName, bool loop, float volum
 }
 
 void AudioManager::playSound(const std::string& fileName, float volume) {
-    if (!soundEngine) return;
+    if (!soundEngine || effectVolume <= 0.0f) return; // No reproducir si el motor no estÃ¡ disponible o el volumen de efectos es 0
 
     // Reproducir efecto de sonido (sin guardar referencia)
     soundEngine->play2D(fileName.c_str(), false, false, true)->setVolume(volume * effectVolume);
@@ -121,7 +121,7 @@ void AudioManager::setMusicVolume(float volume) {
     // Limitar rango de 0.0 a 1.0
     musicVolume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
 
-    // Actualizar volumen de la música actual
+    // Actualizar volumen de la mï¿½sica actual
     if (!currentMusicName.empty()) {
         auto it = sounds.find(currentMusicName);
         if (it != sounds.end() && it->second) {

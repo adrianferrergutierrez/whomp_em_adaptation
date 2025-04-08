@@ -15,7 +15,7 @@ enum PlayerAnims
 {
     STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_RIGHT, JUMP_LEFT,
     ATTACK_LEFT, ATTACK_RIGHT, ATTACK_STAND_LEFT, ATTACK_STAND_RIGHT,
-    ATTACK_UP_LEFT, ATTACK_UP_RIGHT, ATTACK_DOWN, DAMAGE, VICTORY
+    ATTACK_UP_LEFT, ATTACK_UP_RIGHT, ATTACK_DOWN, DAMAGE, VICTORIA
 };
 
 enum LanzaAnims {
@@ -128,8 +128,8 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setAnimationSpeed(DAMAGE, 8);
 	sprite->addKeyframe(DAMAGE, glm::vec2(0.0, 0.125 * 5));
 
-	sprite->setAnimationSpeed(VICTORY, 8);
-	sprite->addKeyframe(VICTORY, glm::vec2(0.75, 0.125 * 6));
+	sprite->setAnimationSpeed(VICTORIA, 8);
+	sprite->addKeyframe(VICTORIA, glm::vec2(0.75, 0.125 * 6));
 
     // Inicialización de animaciones
     sprite->changeAnimation(0);
@@ -637,7 +637,7 @@ void Player::becomeInvulnerable(float duration) {
 
 void Player::becomeGOD() {
     isGOD = true;
-    health.beInvulnerable(1000000.0f);
+    health.beInvulnerable(100000000000.0f);
 }
 void Player::becomeHuman() {
     isGOD = false;

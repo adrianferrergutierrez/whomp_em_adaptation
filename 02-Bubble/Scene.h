@@ -33,16 +33,21 @@ public:
 	void init();
 	void update(int deltaTime);
 	void render(int framebufferWidth, int framebufferHeight);
-	glm::vec2 getCameraPosition() { return cameraPosition; }  // Nuevo m�todo para obtener la posici�n de la c�mara
+	glm::vec2 getCameraPosition() { return cameraPosition; }  // Nuevo método para obtener la posición de la cámara
 
 	// Public functions for Boss to call
 	void spawnSingleBamboo(const glm::vec2& spawnPos);
 	void spawnBambooRain(float leftBound, float rightBound, float spawnY);
+	
+	// State check methods
+	bool bossDefeated() const { return bossActive && boss != nullptr && !boss->isAlive(); }
+	Player* getPlayer() const { return player; }
+	ShaderProgram& getShaderProgram(){ return texProgram; }
 
 private:
 	void updateBambusBoss(int deltaTime);
 	void initShaders();
-	void updateCamera();  // Nuevo m�todo para actualizar la c�mara
+	void updateCamera();  // Nuevo método para actualizar la cámara
 	void ini_pos_snakes();
 	void ini_pos_osos();
 	void ini_pos_ranas();
@@ -68,7 +73,7 @@ private:
 	void mirar_condicion_muerte();
 	void checkGameEndConditions();
 
-	glm::vec2 cameraPosition;  // Nueva variable para la posici�n de la c�mara
+	glm::vec2 cameraPosition;  // Nueva variable para la posición de la cámara
 
 	//dividiremos el mapa en sectores para que se vaya mostrando a trozos
 	int sector_horizontal = 1;
@@ -100,12 +105,12 @@ private:
 	int numero_snakes = 4;
 	float despawn_distance;
 
-	// Bamb�s
+	// Bambús
 	vector<glm::vec2> posiciones_bambus;
 	vector<Bamboo*> bambus;
 	vector<bool> bambus_active;
 	vector<float> bamboo_spawn_timers;
-	float bamboo_spawn_delay = 2.0f; // Segundos entre spawn de bamb�s
+	float bamboo_spawn_delay = 2.0f; // Segundos entre spawn de bambús
 	int numero_bambus = 9;
 
 	vector <glm::vec2> posiciones_ranas;
@@ -118,7 +123,7 @@ private:
 	vector <bool> osos_spawned;
 	int numero_osos = 0;
 
-	// Troncos (plataformas m�viles)
+	// Troncos (plataformas móviles)
 	vector<glm::vec2> posiciones_troncos;
 	vector<Tronco*> troncos;
 	int numero_troncos = 8;
@@ -134,6 +139,10 @@ private:
 	Boss* boss = nullptr;
 	vector<Bamboo*> bossBamboos; // Separate vector for boss-spawned bamboos
 	bool bossActive = false; // Flag to know if boss fight has started
+	
+public:
+	// Make bossActive available to Game for checking
+	bool isBossActive() const { return bossActive; }
 };
 
 

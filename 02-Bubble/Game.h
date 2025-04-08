@@ -4,6 +4,8 @@
 
 #include <GLFW/glfw3.h>
 #include "Scene.h"
+#include "Sprite.h"
+#include "Texture.h"
 
 
 #define SCREEN_WIDTH 1920
@@ -11,9 +13,16 @@
 #define PROPORTION SCREEN_WIDTH/SCREEN_HEIGHT
 
 
+// Game states
+enum GameState {
+	CREDITS,       // No se usa, pero se mantiene para no cambiar los otros valores
+	MAIN_MENU,     // Menú principal
+	PLAYING,       // Jugando
+	GAME_OVER,     // Juego terminado (derrota)
+	VICTORY        // Juego terminado (victoria)
+};
+
 // Game is a singleton (a class	 with a single instance) that represents our whole application
-
-
 class Game
 {
 
@@ -43,13 +52,39 @@ public:
 	void mouseRelease(int button);
 
 	bool getKey(int key) const;
+	
+	// Game state methods
+	void changeState(GameState newState);
+	GameState getState() const { return currentState; }
+	void restartGame();
 
 private:
 	bool bPlay; // Continue to play game?
 	bool keys[GLFW_KEY_LAST + 1]; // Store key states so that 
 	// we can have access at any time
 	Scene scene;
-
+	
+	// Game state
+	GameState currentState;
+	
+	// Victory delay timer
+	int victoryTimer;
+	const int VICTORY_DELAY = 5000; // 5 seconds in milliseconds
+	
+	// Menu textures
+	Texture newGameTexture;
+	Texture volumeOnTexture;
+	Texture volumeOffTexture;
+	
+	// Sound state
+	bool soundEnabled;
+	
+	// Mouse position
+	int mouseX, mouseY;
+	bool mousePressed;
+	
+	// Helper methods for rendering different screens
+	void renderMenu();
 };
 
 
