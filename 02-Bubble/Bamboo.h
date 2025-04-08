@@ -21,13 +21,14 @@ public:
 
     // Pasa a través del suelo sin detenerse
     bool shouldPassThroughGround() const { return true; }
-
+    bool shouldBeRemoved() const { return needsRemoval; }
+    void markForRemoval();
 private:
 
     bool landed;
     float groundY;        // Posición Y del suelo si ha tocado
     float disappearTimer; // Tiempo para desaparecer después de tocar el suelo
-
+    bool needsRemoval;
     const float FALL_SPEED = 4.0f;
     const float DISAPPEAR_TIME = 2.0f; // Segundos que tardará en desaparecer después de tocar el suelo
 };

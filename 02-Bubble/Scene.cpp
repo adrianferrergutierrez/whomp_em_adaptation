@@ -176,7 +176,6 @@ void Scene::ini_pos_bambus() {
 	posiciones_bambus.resize(numero_bambus);
 	bambus.resize(numero_bambus, nullptr);
 	bambus_active.resize(numero_bambus, false);
-	// bambus_spawn_point_was_visible.resize(numero_bambus, false); // <-- ELIMINAR O COMENTAR
 	bamboo_spawn_timers.resize(numero_bambus, 0.0f); // <-- RESTAURAR ESTA LÍNEA
 
 	// Posiciones X específicas para el spawn de bambús
@@ -313,87 +312,93 @@ void Scene::updateCamera()
 }
 
 
-
+void Scene::mirar_condicion_muerte(){
+	if (bossActive && !boss->isAlive()) {
+		player->setVictory();
+		gui->updateFinal(true);
+	}
+}
 
 void Scene::update(int deltaTime)
 {
-	currentTime += deltaTime;
+	 currentTime += deltaTime;
 
-	// Actualizar troncos antes del jugador para que la colisión funcione bien
-	updateTroncos(deltaTime);
-	//las colisiones se miran dentro del proppio player cpp
-	player->update(deltaTime, troncos);
-	updateCamera();
-	updateSnakes(deltaTime);
-	updateBambus(deltaTime);
-	updateRanas(deltaTime);
-	updateItems(deltaTime); // <-- ACTUALIZAR ITEMS
-	checkCollisions();
-	checkItemCollisions(); // <-- RESTAURAR COMPROBACIÓN COLISIONES CON ITEMS
+   if (bossActive && boss != nullptr) {
+     updateBambusBoss(deltaTime); // Actualiza el jefe y sus bambús
+ }
 
-	// <-- ACTUALIZAR GUI -->
-	if (player && gui) { // Comprobar que existen
-		gui->update(player->getCurrentHealth(),
-			player->getMaxHealth(),
-			player->getClockCount(),
-			player->getHasFlint(),
-			player->getHasHelmet(),
-			player->isInFireMode(),
-			// Pass boss status to GUI
-			bossActive && boss != nullptr, // Show health if boss is active
-			bossActive && boss != nullptr ? boss->getCurrentHealthOranges() : 0 // Current oranges (or 0 if no boss)
-		);
-	}
+ mirar_condicion_muerte();
+ player->update(deltaTime, troncos);
+ updateCamera();
+ updateTroncos(deltaTime);        
+ updateSnakes(deltaTime);
+ updateBambus(deltaTime); 
+ updateRanas(deltaTime);
+ updateItems(deltaTime);
+ checkCollisions();       
+ checkItemCollisions();   
+ // 7. Actualizar GUI (con el estado final del jugador y jefe)
+ if (player && gui) {
+     gui->update(player->getCurrentHealth(),
+         player->getMaxHealth(),
+         player->getClockCount(),
+         player->getHasFlint(),
+         player->getHasHelmet(),
+         player->isInFireMode(),
+         bossActive && boss != nullptr,
+         bossActive && boss != nullptr ? boss->getCurrentHealthOranges() : 0
+     );
+ }
 
-	// --- Boss Activation & Update ---
-	// Check if player reached the boss arena (using quinto_checkpoint)
-	if (!bossActive && player && player->getPosition().x >= quinto_checkpoint)
-	{
-		bossActive = true;
-		final = true; // Lock camera
-		std::cout << "Player reached boss arena! Activating boss..." << std::endl;
-
-		// Define boss spawn position
-		glm::ivec2 bossSpawnPos = glm::ivec2(248 * TILESIZE, 39 * TILESIZE);
-
-		if (boss == nullptr) {
-			boss = new Boss();
-			// Pass Scene instance (`this`) to the boss init
-			boss->init(bossSpawnPos, texProgram, player, map, this);
-		}
-	}
-
-	// Update boss if active
-	if (bossActive && boss != nullptr) {
-		boss->update(deltaTime);
-		// Update boss-spawned bamboos
-		for (Bamboo* bamboo : bossBamboos) {
-			if (bamboo != nullptr) {
-				bamboo->update(deltaTime);
-				// TODO: Add despawn logic for boss bamboos (visibility or timer?)
-			}
-		}
-		// TODO: Add cleanup for inactive boss bamboos (similar to items/leaves)
-		// Example using remove-erase idiom (needs modification based on how bamboos are marked inactive):
-		/*
-		bossBamboos.erase(
-			std::remove_if(bossBamboos.begin(), bossBamboos.end(),
-						   [](Bamboo* bamboo) {
-							   if (bamboo != nullptr && !bamboo->isAlive()) { // Example condition
-								   delete bamboo;
-								   return true;
-							   }
-							   return false;
-						   }),
-			bossBamboos.end()
-		);
-		*/
+ if (!bossActive && player && player->getPosition().x >= quinto_checkpoint)
+ {
+     bossActive = true;
+     final = true; // Lock camera
+     std::cout << "Player reached boss arena! Activating boss..." << std::endl;
+     glm::ivec2 bossSpawnPos = glm::ivec2(248 * TILESIZE, 39 * TILESIZE);
+     if (boss == nullptr) {
+         boss = new Boss();
+         boss->init(bossSpawnPos, texProgram, player, map, this);
+     }
+ }
 	}
 	// --- End Boss Activation & Update ---
 
 	//updateOsos();
 	//updateRanas();
+void Scene::updateBambusBoss(int deltaTime) {
+	if (bossActive && boss != nullptr) {
+		boss->update(deltaTime);
+
+		// Update boss-spawned bamboos
+		for (Bamboo* bamboo : bossBamboos) {
+			if (bamboo != nullptr && !bamboo->shouldBeRemoved()) { // Solo actualiza si no está marcado
+				bamboo->update(deltaTime);
+				// Opcional: Añadir aquí lógica de despawn por visibilidad para bossBamboos
+				// if (bamboo está fuera de cámara) { bamboo->markForRemoval(); }
+			}
+		}
+
+		// --- AÑADIR LIMPIEZA DE BAMBÚS DEL JEFE ---
+		// Eliminar bambús del jefe marcados para borrado usando remove-erase idiom
+		bossBamboos.erase(
+			std::remove_if(bossBamboos.begin(), bossBamboos.end(),
+				[](Bamboo* bamboo) {
+					if (bamboo != nullptr && bamboo->shouldBeRemoved()) {
+						std::cout << "Limpiando bambú del jefe marcado." << std::endl;
+						delete bamboo; // Liberar memoria
+						return true;  // Indicar que debe ser eliminado del vector
+					}
+					return false; // Mantener el bambú
+				}),
+			bossBamboos.end()
+		);
+		// --- FIN LIMPIEZA ---
+
+	}
+
 }
+
 void Scene::updateSnakes(int deltaTime) {
 	glm::vec2 playerPos = player->getPosition(); // Necesario para la condición de zona
 
@@ -900,61 +905,66 @@ void Scene::initShaders()
 void Scene::checkCollisions()
 {
 	// Solo comprobar colisiones si el jugador no está muerto
-	if (!player->isAlive()) {
-		return;
-	}
+if (!player->isAlive()) {
+    return;
+}
 
-	glm::vec2 playerPos = player->getPosition();
-	glm::vec2 lanzaPos = player->getPositionLanza();
-	// Obtener los proyectiles del jugador
-	vector<FireStickProjectile*>& projectiles = player->getProjectiles();
+glm::vec2 playerPos = player->getPosition();
+glm::vec2 lanzaPos = player->getPositionLanza();
+// Obtener los proyectiles del jugador
+vector<FireStickProjectile*>& projectiles = player->getProjectiles();
 
-	// ¡¡IMPORTANTE!! Usar el tamaño correcto de la hitbox del jugador si es diferente a 32x32
-	glm::ivec2 playerSize(32, 32);
+// ¡¡IMPORTANTE!! Usar el tamaño correcto de la hitbox del jugador si es diferente a 32x32
+glm::ivec2 playerSize(32, 32);
 
-	// Detección de colisiones con serpientes
-	for (int i = 0; i < numero_snakes; ++i) {
-		if (snakes_spawned[i] && snakes[i] != nullptr && snakes[i]->isAlive()) { // Comprobar también si la serpiente está viva
-			glm::vec2 snakePos = snakes[i]->getHitboxPosition();
-			glm::ivec2 snakeSize = snakes[i]->getHitboxSize();
+// Detección de colisiones con serpientes
+for (int i = 0; i < numero_snakes; ++i) {
+    if (snakes_spawned[i] && snakes[i] != nullptr && snakes[i]->isAlive()) { // Comprobar también si la serpiente está viva
+        glm::vec2 snakePos = snakes[i]->getHitboxPosition();
+        glm::ivec2 snakeSize = snakes[i]->getHitboxSize();
 
-			if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
-				player->takeDamage(snakes[i]->getDamage());
-				break; // Salimos del bucle de serpientes
-			}
-			if (player->estaAttacking()) {
-				if (checkCollisionAABB(lanzaPos, playerSize, snakePos, snakeSize)) {
-					// Si el jugador está atacando y colisiona con la serpiente, eliminarla
-					std::cout << "Serpiente eliminada por ataque del jugador." << std::endl;
-					delete snakes[i];
-					snakes[i] = nullptr; // Eliminar la serpiente
-					break; // Salimos del bucle de serpientes
-				}
-			}
-			// Colisión proyectil-serpiente
-			for (auto it = projectiles.begin(); it != projectiles.end(); ) {
-				FireStickProjectile* proj = *it;
-				if (proj->isActive()) {
-					glm::vec2 projPos = proj->getPosition();
-					glm::ivec2 projSize = proj->getSize();
+        // Colisión jugador - serpiente
+        if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
+            player->takeDamage(snakes[i]->getDamage());
+            if (!snakes[i]->isAlive()) {
+                delete snakes[i];
+                snakes[i] = nullptr; // Eliminar la serpiente
+            }
+            break; // Salimos del bucle de serpientes después de la colisión con el jugador
+        }
 
-					if (checkCollisionAABB(projPos, projSize, snakePos, snakeSize)) {
-						// El proyectil impactó con la serpiente
-						std::cout << "Serpiente eliminada por proyectil de fuego." << std::endl;
-						delete snakes[i];
-						snakes[i] = nullptr;
+        // Colisión ataque del jugador - serpiente
+        if (player->estaAttacking()) {
+            if (checkCollisionAABB(lanzaPos, playerSize, snakePos, snakeSize)) {
+                snakes[i]->takeDamage(player->getDamage());
+                if (!snakes[i]->isAlive()) {
+                    delete snakes[i];
+                    snakes[i] = nullptr; // Eliminar la serpiente
+                    break; // Salimos del bucle de serpientes después de matar a una
+                }
+            }
+        }
 
-						// Desactivar el proyectil
-						proj->deactivate();
+        // Colisión proyectil - serpiente
+        for (auto it = projectiles.begin(); it != projectiles.end(); ) {
+            FireStickProjectile* proj = *it;
+            if (proj->isActive()) {
+                glm::vec2 projPos = proj->getPosition();
+                glm::ivec2 projSize = proj->getSize();
 
-						break; // Salir del bucle de proyectiles
-					}
-				}
-				++it;
-			}
-		}
-	}
-
+                if (checkCollisionAABB(projPos, projSize, snakePos, snakeSize)) {
+                    // El proyectil impactó con la serpiente
+                    std::cout << "Serpiente eliminada por proyectil de fuego." << std::endl;
+                    delete snakes[i];
+                    snakes[i] = nullptr;
+                    snakes_spawned[i] = false; // Marcar como no spawn
+                    proj->deactivate(); // Desactivar el proyectil
+                }
+            }
+            ++it;
+        }
+    }
+}
 	// Detección de colisiones con bambús
 	if (player->isAlive()) { // Verificamos de nuevo por si murió por una serpiente
 		for (int i = 0; i < numero_bambus; ++i) {
@@ -963,8 +973,9 @@ void Scene::checkCollisions()
 				glm::ivec2 bambooSize = bambus[i]->getHitboxSize();
 
 				if (checkCollisionAABB(playerPos, playerSize, bambooPos, bambooSize)) {
-					player->takeDamage(bambus[i]->getDamage());
-					// Eliminar el bambú SOLO cuando golpea al jugador
+					if (!player->getProteccionSuperior()) {
+						player->takeDamage(bambus[i]->getDamage());
+						}
 					delete bambus[i];
 					bambus[i] = nullptr;
 					bambus_active[i] = false;
@@ -1025,11 +1036,12 @@ void Scene::checkCollisions()
 				}
 				if (player->estaAttacking()) {
 					if (checkCollisionAABB(lanzaPos, playerSize, ranaPos, ranaSize)) {
-						// Si el jugador está atacando y colisiona con la rana, eliminarla
-						std::cout << "Rana " << i << " eliminada por ataque del jugador." << std::endl;
-						delete ranas[i];
-						ranas[i] = nullptr;
-						ranas_spawned[i] = false; // Marcar como no spawn
+						ranas[i]->takeDamage(player->getDamage());
+						if (!ranas[i]->isAlive()){
+							delete ranas[i];
+							ranas[i] = nullptr;
+							ranas_spawned[i] = false; // Marcar como no spawn
+						}
 						break; // Salir del bucle de ranas
 					}
 				}
@@ -1041,12 +1053,12 @@ void Scene::checkCollisions()
 						glm::ivec2 projSize = proj->getSize();
 
 						if (checkCollisionAABB(projPos, projSize, ranaPos, ranaSize)) {
-							// El proyectil impactó con la rana
-							std::cout << "Rana eliminada por proyectil de fuego." << std::endl;
+							ranas[i]->takeDamage(player->getFireDamage());
+							if (!ranas[i]->isAlive()){
 							delete ranas[i];
 							ranas[i] = nullptr;
 
-							// Desactivar el proyectil
+							}
 							proj->deactivate();
 
 							break; // Salir del bucle de proyectiles
@@ -1072,8 +1084,6 @@ void Scene::checkCollisions()
 		// 2. Lanza vs Boss Collision
 		if (player->estaAttacking()) {
 			if (checkCollisionAABB(lanzaPos, playerSize, bossPos, bossSize)) {
-				// La lanza impacta al jefe
-				std::cout << "Lanza impacta al jefe! Daño: " << player->getDamage() << std::endl;
 				boss->takeDamage(player->getDamage());
 
 				// Opcional: Efectos visuales o sonoros al impactar
@@ -1090,12 +1100,8 @@ void Scene::checkCollisions()
 				glm::ivec2 projSize = proj->getSize();
 
 				if (checkCollisionAABB(projPos, projSize, bossPos, bossSize)) {
-					// El proyectil impacta al jefe
 					int fireDamage = player->getFireDamage(); // Más daño por ser fuego
-					std::cout << "Proyectil de fuego impacta al jefe! Daño: " << fireDamage << std::endl;
 					boss->takeDamage(fireDamage);
-
-					// Desactivar el proyectil después de impactar
 					proj->deactivate();
 
 					// Opcional: Efectos visuales o sonoros al impactar
@@ -1115,6 +1121,34 @@ void Scene::checkCollisions()
 	}
 	// ---> FIN: Detección de colisiones con BOSS <---
 
+	if (player->isAlive() && bossActive) { 
+		for (Bamboo* bamboo : bossBamboos) { // Iterar sobre los bambús del jefe
+			// Comprobar si el bambú es válido, está "vivo" y no está ya marcado
+			if (bamboo != nullptr && bamboo->isAlive() && !bamboo->shouldBeRemoved()) {
+				glm::vec2 bambooPos = bamboo->getHitboxPosition();
+				glm::ivec2 bambooSize = bamboo->getHitboxSize();
+
+				if (checkCollisionAABB(playerPos, playerSize, bambooPos, bambooSize)) {
+					std::cout << "Colisión detectada con bambú del jefe!" << std::endl;
+					// Comprobar protección del jugador
+					if (!player->getProteccionSuperior()) {
+						std::cout << "Jugador sin protección, recibe daño." << std::endl;
+						player->takeDamage(bamboo->getDamage());
+						// Podrías añadir un pequeño retroceso al jugador aquí si quieres
+					}
+					else {
+						std::cout << "Jugador protegido, no recibe daño." << std::endl;
+						// Podrías añadir un sonido de "bloqueo" aquí
+					}
+
+					// Marcar el bambú para eliminarlo, independientemente de la protección
+					bamboo->markForRemoval();
+					std::cout << "Bambú del jefe marcado para eliminación." << std::endl;
+
+				}
+			}
+		}
+	}
 }
 
 bool Scene::checkCollisionAABB(const glm::vec2& pos1, const glm::ivec2& size1,

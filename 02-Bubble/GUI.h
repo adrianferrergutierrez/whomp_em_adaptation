@@ -18,6 +18,8 @@ public:
     void init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int camHeight);
     void update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossOranges);
     void render();
+	void updateFinal(bool final) { this->final = final; } // Update final state
+    void getPositionBoss(glm::vec2 positionBoss);
 
 private:
     ShaderProgram* shaderProgram;
@@ -36,6 +38,7 @@ private:
     // Sprites para los elementos
     Sprite* fireIcon;
     Sprite* spearIcon;
+    Sprite* totemBossIcon;
     Sprite* heartIcon;
     Sprite* clockIcon;
     Sprite* flintIcon;
@@ -49,6 +52,7 @@ private:
     bool flintCollected;
     bool helmetCollected;
     bool isFireMode;
+    bool final;
     // Boss status
     bool showBossHealth;
     int bossCurrentOranges;
