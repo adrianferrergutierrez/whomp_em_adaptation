@@ -163,7 +163,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) c
 		if (map[y * mapSize.x + x] == 0 || map[y * mapSize.x + x] == 18 || map[y * mapSize.x + x] == 19 ||
 			map[y * mapSize.x + x] == 20 || map[y * mapSize.x + x] == 21 || map[y * mapSize.x + x] == 22 ||
 			map[y * mapSize.x + x] == 33 || map[y * mapSize.x + x] == 34 || map[y * mapSize.x + x] == 35 ||
-			map[y * mapSize.x + x] == 36 || map[y * mapSize.x + x] == 41 || map[y * mapSize.x + x] == 46 ||
+			map[y * mapSize.x + x] == 36 || map[y * mapSize.x + x] == 46 ||
 			map[y * mapSize.x + x] == 47 || map[y * mapSize.x + x] == 49 ||
 			map[y * mapSize.x + x] == 52 || map[y * mapSize.x + x] == 57 || map[y * mapSize.x + x] == 58 ||
 			map[y * mapSize.x + x] == 65
@@ -248,7 +248,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 			map[y * mapSize.x + x] == 47 || map[y * mapSize.x + x] == 48 || map[y * mapSize.x + x] == 49 ||
 			map[y * mapSize.x + x] == 52 || map[y * mapSize.x + x] == 57 || map[y * mapSize.x + x] == 58 ||
 			map[y * mapSize.x + x] == 62 || map[y * mapSize.x + x] == 63 || map[y * mapSize.x + x] == 64 || map[y * mapSize.x + x] == 73 ||
-			map[y * mapSize.x + x] == 79 || map[y * mapSize.x + x] == 80
+			map[y * mapSize.x + x] == 79 || map[y * mapSize.x + x] == 80 || map[y * mapSize.x + x] == 50 
 
 
 			)

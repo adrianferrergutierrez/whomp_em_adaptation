@@ -905,66 +905,68 @@ void Scene::initShaders()
 void Scene::checkCollisions()
 {
 	// Solo comprobar colisiones si el jugador no está muerto
-if (!player->isAlive()) {
-    return;
-}
+	if (!player->isAlive()) {
+		return;
+	}
 
-glm::vec2 playerPos = player->getPosition();
-glm::vec2 lanzaPos = player->getPositionLanza();
-// Obtener los proyectiles del jugador
-vector<FireStickProjectile*>& projectiles = player->getProjectiles();
+	glm::vec2 playerPos = player->getPosition();
+	glm::vec2 lanzaPos = player->getPositionLanza();
+	// Obtener los proyectiles del jugador
+	vector<FireStickProjectile*>& projectiles = player->getProjectiles();
 
-// ¡¡IMPORTANTE!! Usar el tamaño correcto de la hitbox del jugador si es diferente a 32x32
-glm::ivec2 playerSize(32, 32);
+	// ¡¡IMPORTANTE!! Usar el tamaño correcto de la hitbox del jugador si es diferente a 32x32
+	glm::ivec2 playerSize(32, 32);
 
-// Detección de colisiones con serpientes
-for (int i = 0; i < numero_snakes; ++i) {
-    if (snakes_spawned[i] && snakes[i] != nullptr && snakes[i]->isAlive()) { // Comprobar también si la serpiente está viva
-        glm::vec2 snakePos = snakes[i]->getHitboxPosition();
-        glm::ivec2 snakeSize = snakes[i]->getHitboxSize();
+	// Detección de colisiones con serpientes
+	for (int i = 0; i < numero_snakes; ++i) {
+		if (snakes_spawned[i] && snakes[i] != nullptr && snakes[i]->isAlive()) { // Comprobar también si la serpiente está viva
+			glm::vec2 snakePos = snakes[i]->getHitboxPosition();
+			glm::ivec2 snakeSize = snakes[i]->getHitboxSize();
 
-        // Colisión jugador - serpiente
-        if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
-            player->takeDamage(snakes[i]->getDamage());
-            if (!snakes[i]->isAlive()) {
-                delete snakes[i];
-                snakes[i] = nullptr; // Eliminar la serpiente
-            }
-            break; // Salimos del bucle de serpientes después de la colisión con el jugador
-        }
+			// Colisión jugador - serpiente
+			if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
+				player->takeDamage(snakes[i]->getDamage());
+				//if (!snakes[i]->isAlive()) {
+				  //  delete snakes[i];
+				   // snakes[i] = nullptr; // Eliminar la serpiente
+				//}
+				break; // Salimos del bucle de serpientes después de la colisión con el jugador
+			}
 
-        // Colisión ataque del jugador - serpiente
-        if (player->estaAttacking()) {
-            if (checkCollisionAABB(lanzaPos, playerSize, snakePos, snakeSize)) {
-                snakes[i]->takeDamage(player->getDamage());
-                if (!snakes[i]->isAlive()) {
-                    delete snakes[i];
-                    snakes[i] = nullptr; // Eliminar la serpiente
-                    break; // Salimos del bucle de serpientes después de matar a una
-                }
-            }
-        }
+			// Colisión ataque del jugador - serpiente
+			if (player->estaAttacking()) {
+				if (checkCollisionAABB(lanzaPos, playerSize, snakePos, snakeSize)) {
+					snakes[i]->takeDamage(player->getDamage());
+					//if (!snakes[i]->isAlive()) {
+					 //   delete snakes[i];
+					  //  snakes[i] = nullptr; // Eliminar la serpiente
+					   // break; // Salimos del bucle de serpientes después de matar a una
+					//}
+					break;
+				}
+			}
 
-        // Colisión proyectil - serpiente
-        for (auto it = projectiles.begin(); it != projectiles.end(); ) {
-            FireStickProjectile* proj = *it;
-            if (proj->isActive()) {
-                glm::vec2 projPos = proj->getPosition();
-                glm::ivec2 projSize = proj->getSize();
+			// Colisión proyectil - serpiente
+			for (auto it = projectiles.begin(); it != projectiles.end(); ) {
+				FireStickProjectile* proj = *it;
+				if (proj->isActive()) {
+					glm::vec2 projPos = proj->getPosition();
+					glm::ivec2 projSize = proj->getSize();
 
-                if (checkCollisionAABB(projPos, projSize, snakePos, snakeSize)) {
-                    // El proyectil impactó con la serpiente
-                    std::cout << "Serpiente eliminada por proyectil de fuego." << std::endl;
-                    delete snakes[i];
-                    snakes[i] = nullptr;
-                    snakes_spawned[i] = false; // Marcar como no spawn
-                    proj->deactivate(); // Desactivar el proyectil
-                }
-            }
-            ++it;
-        }
-    }
-}
+					if (checkCollisionAABB(projPos, projSize, snakePos, snakeSize)) {
+						// El proyectil impactó con la serpiente
+						std::cout << "Serpiente eliminada por proyectil de fuego." << std::endl;
+						snakes[i]->takeDamage(player->getFireDamage());
+						// delete snakes[i];
+						 //snakes[i] = nullptr;
+						 //snakes_spawned[i] = false; // Marcar como no spawn
+						proj->deactivate(); // Desactivar el proyectil
+					}
+				}
+				++it;
+			}
+		}
+	}
 	// Detección de colisiones con bambús
 	if (player->isAlive()) { // Verificamos de nuevo por si murió por una serpiente
 		for (int i = 0; i < numero_bambus; ++i) {
@@ -975,7 +977,7 @@ for (int i = 0; i < numero_snakes; ++i) {
 				if (checkCollisionAABB(playerPos, playerSize, bambooPos, bambooSize)) {
 					if (!player->getProteccionSuperior()) {
 						player->takeDamage(bambus[i]->getDamage());
-						}
+					}
 					delete bambus[i];
 					bambus[i] = nullptr;
 					bambus_active[i] = false;
@@ -1034,25 +1036,16 @@ for (int i = 0; i < numero_snakes; ++i) {
 					player->takeDamage(ranas[i]->getDamage()); // Usar getDamage()
 					break; // Salir solo del bucle de ranas si recibe daño
 				}
-				if (player->estaAttackingJump()) {
-					if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
-						ranas[i]->takeDamage(player->getDamage());
-						if (!ranas[i]->isAlive()) {
-							delete ranas[i];
-							ranas[i] = nullptr;
-							ranas_spawned[i] = false; // Marcar como no spawn
-						}
-						break; // Salir del bucle de ranas
-					}
-				}
 				if (player->estaAttacking()) {
 					if (checkCollisionAABB(lanzaPos, playerSize, ranaPos, ranaSize)) {
 						ranas[i]->takeDamage(player->getDamage());
-						if (!ranas[i]->isAlive()){
-							delete ranas[i];
-							ranas[i] = nullptr;
-							ranas_spawned[i] = false; // Marcar como no spawn
-						}
+						cout << player->getDamage() << " de daño a rana" << endl;
+
+						//if (!ranas[i]->isAlive()){
+							//delete ranas[i];
+							//ranas[i] = nullptr;
+							//ranas_spawned[i] = false; // Marcar como no spawn
+						//}
 						break; // Salir del bucle de ranas
 					}
 				}
@@ -1065,11 +1058,11 @@ for (int i = 0; i < numero_snakes; ++i) {
 
 						if (checkCollisionAABB(projPos, projSize, ranaPos, ranaSize)) {
 							ranas[i]->takeDamage(player->getFireDamage());
-							if (!ranas[i]->isAlive()){
-							delete ranas[i];
-							ranas[i] = nullptr;
+							//if (!ranas[i]->isAlive()){
+							//delete ranas[i];
+							//ranas[i] = nullptr;
 
-							}
+							//}
 							proj->deactivate();
 
 							break; // Salir del bucle de proyectiles
@@ -1096,6 +1089,7 @@ for (int i = 0; i < numero_snakes; ++i) {
 		if (player->estaAttacking()) {
 			if (checkCollisionAABB(lanzaPos, playerSize, bossPos, bossSize)) {
 				boss->takeDamage(player->getDamage());
+				cout << player->getDamage() << " de daño a boss!" << endl;
 
 				// Opcional: Efectos visuales o sonoros al impactar
 				// AudioManager::getInstance()->playSound("boss_hit");
@@ -1113,6 +1107,7 @@ for (int i = 0; i < numero_snakes; ++i) {
 				if (checkCollisionAABB(projPos, projSize, bossPos, bossSize)) {
 					int fireDamage = player->getFireDamage(); // Más daño por ser fuego
 					boss->takeDamage(fireDamage);
+					cout << fireDamage << " de daño a boss por proyectil!" << endl;
 					proj->deactivate();
 
 					// Opcional: Efectos visuales o sonoros al impactar
@@ -1132,7 +1127,7 @@ for (int i = 0; i < numero_snakes; ++i) {
 	}
 	// ---> FIN: Detección de colisiones con BOSS <---
 
-	if (player->isAlive() && bossActive) { 
+	if (player->isAlive() && bossActive) {
 		for (Bamboo* bamboo : bossBamboos) { // Iterar sobre los bambús del jefe
 			// Comprobar si el bambú es válido, está "vivo" y no está ya marcado
 			if (bamboo != nullptr && bamboo->isAlive() && !bamboo->shouldBeRemoved()) {
@@ -1161,6 +1156,7 @@ for (int i = 0; i < numero_snakes; ++i) {
 		}
 	}
 }
+
 
 bool Scene::checkCollisionAABB(const glm::vec2& pos1, const glm::ivec2& size1,
 	const glm::vec2& pos2, const glm::ivec2& size2) const
