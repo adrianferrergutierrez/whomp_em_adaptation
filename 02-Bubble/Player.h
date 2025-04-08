@@ -76,6 +76,7 @@ private:
 
 	bool isGOD = false;
 	bool isAttacking = false;
+	bool isAttJump = false;
 	bool izq = false;
 	int attackTimer = 0;
 	glm::vec2 lanzaOffset;

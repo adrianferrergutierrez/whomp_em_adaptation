@@ -313,6 +313,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             if (jumpAngle > 90 && Game::instance().getKey(GLFW_KEY_DOWN) && !isAttacking && !victory_state)
             {
                 sprite->changeAnimation(ATTACK_DOWN);
+                isAttJump = true;
             }
 
             // Comprobación de aterrizaje (solo cuando va hacia abajo)

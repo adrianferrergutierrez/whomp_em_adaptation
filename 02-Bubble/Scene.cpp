@@ -1034,6 +1034,9 @@ for (int i = 0; i < numero_snakes; ++i) {
 					player->takeDamage(ranas[i]->getDamage()); // Usar getDamage()
 					break; // Salir solo del bucle de ranas si recibe daño
 				}
+				if (player->estaAttackingJump()) {
+
+				}
 				if (player->estaAttacking()) {
 					if (checkCollisionAABB(lanzaPos, playerSize, ranaPos, ranaSize)) {
 						ranas[i]->takeDamage(player->getDamage());
