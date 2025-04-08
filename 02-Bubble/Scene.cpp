@@ -345,8 +345,8 @@ void Scene::update(int deltaTime)
          player->getHasFlint(),
          player->getHasHelmet(),
          player->isInFireMode(),
-         bossActive && boss != nullptr,
-         bossActive && boss != nullptr ? boss->getCurrentHealthOranges() : 0
+		 bossActive && boss != nullptr,
+		 bossActive && boss != nullptr ? boss->getCurrentHealth() : 0
      );
  }
 

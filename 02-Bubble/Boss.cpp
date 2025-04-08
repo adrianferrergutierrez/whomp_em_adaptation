@@ -227,20 +227,14 @@ void Boss::takeDamage(int dmg)
 		currentState != BossState::VANISHING &&
 		currentState != BossState::FALLING_DEFEATED &&
 		currentState != BossState::DYING_GROUND &&
-		currentState != BossState::REAPPEARING_GROUND &&
-		currentState != BossState::ASCENDING)
+		currentState != BossState::REAPPEARING_GROUND
+		)
 	{
 		Enemy::takeDamage(dmg);
 		// std::cout << "Boss took " << dmg << " damage. Current HP: " << health.getCurrentHealth() << std::endl; 
 	}
 }
 
-int Boss::getCurrentHealthOranges() const
-{
-	if (!isAlive()) return 0;
-	float healthPercentage = (float)health.getCurrentHealth() / (float)(MAX_HEALTH_ORANGES * BASE_HEALTH_PER_ORANGE);
-	return static_cast<int>(ceil(healthPercentage * MAX_HEALTH_ORANGES));
-}
 
 void Boss::changeState(BossState newState)
 {

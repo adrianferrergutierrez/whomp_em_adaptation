@@ -72,5 +72,5 @@ void Enemy::setPosition(const glm::vec2& pos)
 
 void Enemy::takeDamage(int dmg)
 {
-    health.takeDamage(dmg);
+    health.takeDamage(dmg,true);
 }

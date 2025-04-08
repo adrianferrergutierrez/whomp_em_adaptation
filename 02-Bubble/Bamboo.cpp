@@ -65,7 +65,7 @@ void Bamboo::update(int deltaTime)
 
         //lo hacemos desaparecer
         if (posEnemy.y > groundY + 100 || disappearTimer > DISAPPEAR_TIME) {
-            health.takeDamage(100); // Con esto sabemos que debe desaparecer
+            health.takeDamage(100, false); // Con esto sabemos que debe desaparecer
         }
     }
     sprite->setPosition(glm::vec2(float(posEnemy.x), float(posEnemy.y)));

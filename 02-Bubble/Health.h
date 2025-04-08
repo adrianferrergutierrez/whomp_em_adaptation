@@ -14,7 +14,7 @@ public:
 
     void beInvulnerable(float deltaTime);
 
-    void takeDamage(int damage);
+    void takeDamage(int damage, bool enemy);
     void heal(int amount);
     void update(float deltaTime);
 
