@@ -14,7 +14,7 @@ enum PlayerAnims
 {
     STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, JUMP_RIGHT, JUMP_LEFT,
     ATTACK_LEFT, ATTACK_RIGHT, ATTACK_STAND_LEFT, ATTACK_STAND_RIGHT,
-    ATTACK_UP_LEFT, ATTACK_UP_RIGHT, ATTACK_DOWN
+    ATTACK_UP_LEFT, ATTACK_UP_RIGHT, ATTACK_DOWN, DAMAGE, VICTORY
 };
 
 enum LanzaAnims {
@@ -54,7 +54,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     spriteLanza = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.125), &spritesheet, &shaderProgram);
 
     spriteLanza->setNumberAnimations(3);
-    sprite->setNumberAnimations(13);
+    sprite->setNumberAnimations(15);
 
     // Configuración de animaciones para la lanza
     spriteLanza->setAnimationSpeed(VACIA, 8);
@@ -122,6 +122,12 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5, 0.0));
     sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.75, 0.0));
 
+	sprite->setAnimationSpeed(DAMAGE, 8);
+	sprite->addKeyframe(DAMAGE, glm::vec2(0.0, 0.125 * 5));
+
+	sprite->setAnimationSpeed(VICTORY, 8);
+	sprite->addKeyframe(VICTORY, glm::vec2(0.75, 0.125 * 6));
+
     // Inicialización de animaciones
     sprite->changeAnimation(0);
     spriteLanza->changeAnimation(0);
@@ -133,13 +139,18 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     helmet_usages = 0;
 }
 
+
 void Player::update(int deltaTime, vector<Tronco*> troncos)
 {
     // Actualizar el sistema de salud
     float deltaTimeSeconds = deltaTime / 1000.0f;
     health.update(deltaTimeSeconds);
 
-    if (Game::instance().getKey(GLFW_KEY_T)) {
+ 
+    //por defecto no se esta protegiendo de arriba
+    proteccion_superior = false;
+
+    if (Game::instance().getKey(GLFW_KEY_T) && !victory_state) {
         if (fireusages > 0) {
             firemode = true;
             firetimer = 10000;
@@ -155,7 +166,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     }
 
     bool gKeyCurrentlyPressed = Game::instance().getKey(GLFW_KEY_G);
-    if (gKeyCurrentlyPressed && !gKeyPressedLastFrame) {
+    if (gKeyCurrentlyPressed && !gKeyPressedLastFrame && !victory_state) {
         if (isGOD) {
             becomeHuman();
         }
@@ -166,7 +177,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     gKeyPressedLastFrame = gKeyCurrentlyPressed;
 
     bool hkeyCurrentlyPressed = Game::instance().getKey(GLFW_KEY_H);
-    if (hkeyCurrentlyPressed && !hKeyPressedLastFrame) {
+    if (hkeyCurrentlyPressed && !hKeyPressedLastFrame && !victory_state) {
         clockscount = 2;
         health.reset();
     }
@@ -197,11 +208,11 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         if (attackTimer <= 0) {
             isAttacking = false;
             // Restaurar la animación correcta después del ataque
-            if (Game::instance().getKey(GLFW_KEY_LEFT)) {
+            if (Game::instance().getKey(GLFW_KEY_LEFT) && !victory_state) {
                 sprite->changeAnimation(MOVE_LEFT);
                 izq = true;
             }
-            else if (Game::instance().getKey(GLFW_KEY_RIGHT)) {
+            else if (Game::instance().getKey(GLFW_KEY_RIGHT) && !victory_state) {
                 sprite->changeAnimation(MOVE_RIGHT);
                 izq = false;
             }
@@ -213,7 +224,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     bool movingHorizontally = false; // Variable para saber si hay input de movimiento horizontal
 
     // ----Gestión de movimiento---
-    if (Game::instance().getKey(GLFW_KEY_LEFT))
+    if (Game::instance().getKey(GLFW_KEY_LEFT) && !victory_state)
     {
         if (!bJumping && !isAttacking) {
             if (sprite->animation() != MOVE_LEFT)
@@ -223,7 +234,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
 
         posPlayer.x -= 2;
         //Comprobamos colisiones con el mapa para la izquierda
-        if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x <= 0 || posPlayer.x == 2048 || posPlayer.x == 2310)
+        if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)) || posPlayer.x <= 0 || posPlayer.x == 2048 || posPlayer.x == 2310 || posPlayer.x == 3072 || posPlayer.x == 3328 || posPlayer.x == 3840)
         {
             //Cancelamos el movimiento
             posPlayer.x += 2;
@@ -234,7 +245,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             movingHorizontally = true;
         }
     }
-    else if (Game::instance().getKey(GLFW_KEY_RIGHT))
+    else if (Game::instance().getKey(GLFW_KEY_RIGHT) && !victory_state)
     {
         if (!bJumping && !isAttacking) {
             if (sprite->animation() != MOVE_RIGHT)
@@ -255,19 +266,20 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             movingHorizontally = true;
         }
     }
-    else if (Game::instance().getKey(GLFW_KEY_UP) && !isAttacking && !bJumping)
+    else if (Game::instance().getKey(GLFW_KEY_UP) && !isAttacking && !bJumping && !victory_state)
     {
+        proteccion_superior = true;
         if (izq) sprite->changeAnimation(ATTACK_UP_LEFT);
         else sprite->changeAnimation(ATTACK_UP_RIGHT);
     }
-    else if (Game::instance().getKey(GLFW_KEY_DOWN) && !bJumping && !isAttacking)
+    else if (Game::instance().getKey(GLFW_KEY_DOWN) && !bJumping && !isAttacking && !victory_state)
     {
         if (izq) sprite->changeAnimation(JUMP_LEFT);
         else sprite->changeAnimation(JUMP_RIGHT);
     }
     else
     {
-        if (!bJumping && !isAttacking) {
+        if (!bJumping && !isAttacking && !victory_state) {
             if (izq) sprite->changeAnimation(STAND_LEFT);
             else sprite->changeAnimation(STAND_RIGHT);
         }
@@ -295,7 +307,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             posPlayer.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
 
             // Si estamos en la fase de descenso y pulsamos DOWN, hacer ataque hacia abajo
-            if (jumpAngle > 90 && Game::instance().getKey(GLFW_KEY_DOWN) && !isAttacking)
+            if (jumpAngle > 90 && Game::instance().getKey(GLFW_KEY_DOWN) && !isAttacking && !victory_state)
             {
                 sprite->changeAnimation(ATTACK_DOWN);
             }
@@ -413,7 +425,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             groundY = surfaceY;
 
             // Permitir iniciar salto si se presiona Z (key de salto)
-            if (Game::instance().getKey(GLFW_KEY_Z))
+            if (Game::instance().getKey(GLFW_KEY_Z) && !victory_state)
             {
                 bJumping = true;
                 jumpAngle = 0;
@@ -432,7 +444,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     }
 
     // Gestión de ataque con la tecla X
-    if (Game::instance().getKey(GLFW_KEY_X) && !isAttacking && !bJumping)
+    if (Game::instance().getKey(GLFW_KEY_X) && !isAttacking && !bJumping && !victory_state)
     {
         isAttacking = true;
         attackTimer = 300;
@@ -467,7 +479,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             projDirection = 1;
         }
         if (firemode) {
-            // ⚠️ Crear el proyectil y añadirlo al vector
+            // Crear el proyectil y añadirlo al vector
             FireStickProjectile* projectile = new FireStickProjectile();
             projectile->init(projPos, *shaderProgram, projDirection);
             projectile->setTileMap(map);
@@ -498,7 +510,12 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         spriteLanza->setPosition(lanzaPos);
         spriteLanza->setCameraPosition(cameraPos);
     }
-
+    if (victory_state && onGround)sprite->changeAnimation(VICTORY);
+    else if (tiempoDamageTemporal - deltaTimeSeconds > 0) {
+        sprite->changeAnimation(DAMAGE);
+		tiempoDamageTemporal -= deltaTimeSeconds;
+    }
+    
     sprite->setCameraPosition(cameraPos);
     sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
 
@@ -549,7 +566,15 @@ void Player::takeDamage(int dmg)
             std::cout << "El casco se ha roto." << std::endl;
         }
     }
+    if (!health.getIsInvulnerable()) {
+        sprite->changeAnimation(DAMAGE);
+        tiempoDamageTemporal = tiempoDamage;
+
+    }
+
     health.takeDamage(dmg);
+    
+
 
     // Comprobar si el jugador ha muerto
     if (!health.isAlive()) {
@@ -601,6 +626,9 @@ void Player::becomeHuman() {
     health.beInvulnerable(0.0f);
 }
 
+bool Player::isInFireMode() const {
+    return firemode;
+}
 
 Player::~Player() {
     // Limpiar todos los proyectiles
@@ -609,4 +637,9 @@ Player::~Player() {
     }
     projectiles.clear();
     // Otros recursos a liberar...
+}
+
+
+void Player::setVictory() {
+    victory_state = true;
 }

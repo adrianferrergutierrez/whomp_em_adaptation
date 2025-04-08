@@ -14,6 +14,7 @@ GUI::GUI()
     bossHealthIcon = nullptr; // Init boss health icon pointer
     showBossHealth = false;
     isFireMode = false; // Initialize fire mode flag
+    final = false;
 }
 
 GUI::~GUI()
@@ -34,7 +35,7 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
     projectionMatrix = projectionMat; // Guardamos la projection matrix ya que la GUI va separada de la modelview de toda la escena, sino se moveria con la camara
     cameraWidth = camWidth;
     cameraHeight = camHeight;
-
+    final = false;
     // Cargamos las texturas con proteccion de errores
     if (!totemsTexture.loadFromFile("images/Totems.png", TEXTURE_PIXEL_FORMAT_RGBA)) {
         std::cout << "Error cargando Totems.png!" << std::endl;
@@ -57,6 +58,10 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
     }
 
     // --- Creamos sprites--
+	totemBossIcon = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.0f / 7.0f, 1.0f), &totemsTodosTexture, shaderProgram);
+	totemBossIcon->setNumberAnimations(1);
+	totemBossIcon->addKeyframe(0, glm::vec2(0.0f, 0.0f));
+	totemBossIcon->changeAnimation(0);
 
     // Lanza (Totems.png: 64x16, Icono: 16x16, 3er elemento)
     spearIcon = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25f, 1.0f), &totemsTexture, shaderProgram);
@@ -172,7 +177,10 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
 
 // Modify update signature
 
-void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossOranges)
+
+
+
+void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossOranges/*, bool final*/)
 {
     // Cogemos los valores del update del scene para actualizar la GUI
     currentHP = currentHealth;
@@ -182,6 +190,7 @@ void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint,
     helmetCollected = hasHelmet;
     isFireMode = isFireModeActive; // Update fire mode status
     // Store boss info
+	this->final = final; 
     showBossHealth = bossIsActive;
     bossCurrentOranges = currentBossOranges;
     bossMaxOranges = MAX_BOSS_ORANGES; // Assuming constant
@@ -205,6 +214,11 @@ void GUI::render()
     else if (spearIcon) {
         spearIcon->setPosition(spearPos);
         spearIcon->render(modelview);
+    }
+    if (final) {
+        totemBossIcon->setPosition(glm::vec2(128.0f,128.0f));
+        totemBossIcon->render(modelview);
+
     }
 
     // Corazones

@@ -29,7 +29,6 @@ public:
 	void setPosition(const glm::vec2& pos);
 	glm::vec2 getPosition() const { return posPlayer; }
 	glm::vec2 getPositionLanza() const { return lanzaPos; }
-	vector<FireStickProjectile*>& getProjectiles() { return projectiles; }
 
 	void setCameraPosition(const glm::vec2& pos);
 	void collectPumpkin();
@@ -41,25 +40,34 @@ public:
 	int getMaxHealth() const { return maxHealth; }
 	int getCurrentHealth() const { return health.getCurrentHealth(); }
 	int getDamage() const { return damage; }
-	int getFireDamage() const { return firedamage; }
 	void addHealth(int amount);
 	void healToMax();
 	void equipHelmet();
 	void becomeInvulnerable(float duration);
 	void becomeGOD();
 	void becomeHuman();
+	int getFireDamage() const { return firedamage; }
+
 	bool estaAttacking() const { return isAttacking; }
-	bool isInFireMode() const { return firemode; }
+	bool isInFireMode() const;
+	vector<FireStickProjectile*>& getProjectiles() { return projectiles; }
+
 	Player::~Player();
+	bool getProteccionSuperior() const { return proteccion_superior; }
+	void setVictory();
+	bool getVictoryState() const { return victory_state; }
 private:
 	void calculatAndUpdateMaxHealth();
-
+	
 	//atributos como vida, items, efectos
 	Health health;
 	int maxHealth;
 	Texture spritesheet;
 	Sprite* sprite;
 	Sprite* spriteLanza;
+	bool proteccion_superior;
+	int firedamage = damage * 1.5;
+
 
 	TileMap* map;
 	glm::vec2 cameraPos;
@@ -76,10 +84,11 @@ private:
 	bool firemode = false;
 	int fireusages = 1;
 	int firetimer = 0;
-	int firedamage = damage * 1.5;
 
 
 
+
+	bool victory_state = false;
 
 	bool bJumping;
 	int jumpAngle, startY;
@@ -98,6 +107,8 @@ private:
 	int helmet_usages;
 	bool hKeyPressedLastFrame;
 	bool gKeyPressedLastFrame;
+	float tiempoDamage = 0.5f;
+	float tiempoDamageTemporal;
 
 
 };

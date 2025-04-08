@@ -40,6 +40,7 @@ public:
 	void spawnBambooRain(float leftBound, float rightBound, float spawnY);
 
 private:
+	void updateBambusBoss(int deltaTime);
 	void initShaders();
 	void updateCamera();  // Nuevo m�todo para actualizar la c�mara
 	void ini_pos_snakes();
@@ -64,6 +65,8 @@ private:
 	void checkTroncoCollisions();
 	void checkItemCollisions();
 	void spawnItem(const glm::vec2& position);
+	void mirar_condicion_muerte();
+	void checkGameEndConditions();
 
 	glm::vec2 cameraPosition;  // Nueva variable para la posici�n de la c�mara
 
@@ -129,7 +132,7 @@ private:
 
 	// Boss related members
 	Boss* boss = nullptr;
-	std::vector<Bamboo*> bossBamboos; // Separate vector for boss-spawned bamboos
+	vector<Bamboo*> bossBamboos; // Separate vector for boss-spawned bamboos
 	bool bossActive = false; // Flag to know if boss fight has started
 };
 

@@ -22,6 +22,7 @@ Bamboo::~Bamboo() {}
 void Bamboo::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
     //Inicializamos la clase padre
+    needsRemoval = false;
     Enemy::init(tileMapPos, shaderProgram);
 
     // Configuración específica del bambú
@@ -34,6 +35,10 @@ void Bamboo::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     sprite->changeAnimation(FALLING);
 
     sprite->setPosition(glm::vec2(float(posEnemy.x), float(posEnemy.y)));
+}
+
+void Bamboo::markForRemoval() {
+    needsRemoval = true;
 }
 
 void Bamboo::update(int deltaTime)

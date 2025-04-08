@@ -101,6 +101,7 @@ void Boss::update(int deltaTime)
 	float dt = static_cast<float>(deltaTime) / 1000.0f;
 	if (currentState != BossState::DEFEATED) {
 		stateTimer += dt;
+
 	}
 
 	switch (currentState)
@@ -478,12 +479,9 @@ void Boss::updateVanishing(float dt)
 
 void Boss::updateReappearingGround(float dt)
 {
-	// stateTimer is incremented globally in Boss::update
-	// Boss appears on the ground (handled in render) for a short time
-	// std::cout << "Boss::updateReappearingGround - Timer: " << stateTimer << std::endl;
+
 	if (stateTimer >= REAPPEAR_DURATION)
 	{
-		// std::cout << "Reappear duration over. Transitioning to ASCENDING." << std::endl;
 		changeState(BossState::ASCENDING);
 	}
 }
@@ -523,20 +521,18 @@ void Boss::updateFallingDefeated(float dt)
 
 void Boss::updateDyingGround(float dt)
 {
-	// std::cout << "Boss::updateDyingGround - Timer: " << stateTimer << std::endl;
 	if (stateTimer >= DEATH_POSE_DURATION)
 	{
-		// std::cout << "Death pose duration over. Transitioning to DEFEATED." << std::endl;
 		changeState(BossState::DEFEATED);
 	}
 }
 
-void Boss::updateDefeated(float dt) {}
+void Boss::updateDefeated(float dt) {
+
+}
 
 void Boss::triggerLeafSwirl(bool outward)
 {
-	// std::cout << "===> ENTERING triggerLeafSwirl (outward: " << outward << ")" << std::endl;
-	// std::cout << "Triggering leaf swirl (outward: " << outward << ")" << std::endl;
 	clearLeaves();
 
 	glm::vec2 centerPoint = glm::vec2(posEnemy.x + hitboxSize.x / 2.f, posEnemy.y + hitboxSize.y / 2.f);
