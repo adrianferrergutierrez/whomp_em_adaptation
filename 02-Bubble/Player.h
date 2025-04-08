@@ -49,6 +49,7 @@ public:
 	int getFireDamage() const { return firedamage; }
 
 	bool estaAttacking() const { return isAttacking; }
+	bool estaAttackingJump() const { return isAttJump; }
 	bool isInFireMode() const;
 	vector<FireStickProjectile*>& getProjectiles() { return projectiles; }
 

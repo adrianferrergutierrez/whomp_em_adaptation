@@ -1035,7 +1035,15 @@ for (int i = 0; i < numero_snakes; ++i) {
 					break; // Salir solo del bucle de ranas si recibe daño
 				}
 				if (player->estaAttackingJump()) {
-
+					if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
+						ranas[i]->takeDamage(player->getDamage());
+						if (!ranas[i]->isAlive()) {
+							delete ranas[i];
+							ranas[i] = nullptr;
+							ranas_spawned[i] = false; // Marcar como no spawn
+						}
+						break; // Salir del bucle de ranas
+					}
 				}
 				if (player->estaAttacking()) {
 					if (checkCollisionAABB(lanzaPos, playerSize, ranaPos, ranaSize)) {
