@@ -319,6 +319,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             // Comprobación de aterrizaje (solo cuando va hacia abajo)
             if (jumpAngle > 90)
             {
+                isAttJump = false;
                 // ---> INICIO: Comprobar aterrizaje en Tronco durante el salto <---
                 bool landedOnTronco = false;
                 float landingTroncoY = 0.f;

@@ -933,6 +933,17 @@ for (int i = 0; i < numero_snakes; ++i) {
             break; // Salimos del bucle de serpientes después de la colisión con el jugador
         }
 
+		if (player->estaAttackingJump()) {
+			if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
+				snakes[i]->takeDamage(player->getDamage());
+				if (!snakes[i]->isAlive()) {
+					delete snakes[i];
+					snakes[i] = nullptr; // Eliminar la serpiente
+					break; // Salimos del bucle de serpientes después de matar a una
+				}
+			}
+		}
+
         // Colisión ataque del jugador - serpiente
         if (player->estaAttacking()) {
             if (checkCollisionAABB(lanzaPos, playerSize, snakePos, snakeSize)) {
@@ -1030,10 +1041,7 @@ for (int i = 0; i < numero_snakes; ++i) {
 				glm::vec2 ranaPos = ranas[i]->getHitboxPosition();
 				glm::ivec2 ranaSize = ranas[i]->getHitboxSize();
 
-				if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
-					player->takeDamage(ranas[i]->getDamage()); // Usar getDamage()
-					break; // Salir solo del bucle de ranas si recibe daño
-				}
+				
 				if (player->estaAttackingJump()) {
 					if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
 						ranas[i]->takeDamage(player->getDamage());
@@ -1043,6 +1051,12 @@ for (int i = 0; i < numero_snakes; ++i) {
 							ranas_spawned[i] = false; // Marcar como no spawn
 						}
 						break; // Salir del bucle de ranas
+					}
+				}
+				else {
+					if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
+						player->takeDamage(ranas[i]->getDamage()); // Usar getDamage()
+						break; // Salir solo del bucle de ranas si recibe daño
 					}
 				}
 				if (player->estaAttacking()) {
