@@ -94,7 +94,7 @@ private:
 	const float SWIRL_RADIUS = 6.f * 16.f; // Radius for outward swirl
 	const float SWIRL_DURATION = 2.f; // Seconds for swirl animation
 	const float BAMBOO_DROP_COOLDOWN = 0.85f; // Decreased cooldown for more drops (was 1.5f)
-	const float GROUND_WAIT_DURATION = 0.5f; // Pause on ground before vanishing
+	const float GROUND_WAIT_DURATION = 2.0f; // Pause on ground before vanishing
 	const float REAPPEAR_DURATION = 0.25f;
 	const float DEATH_POSE_DURATION = 3.0f; // How long boss stays on ground after falling defeated
 
