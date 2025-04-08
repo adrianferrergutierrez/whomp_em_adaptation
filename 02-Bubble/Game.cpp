@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Game.h"
+#include "AudioManager.h"
 
 
 void Game::init(GLFWwindow* window)
@@ -9,6 +10,14 @@ void Game::init(GLFWwindow* window)
 	bPlay = true;
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	scene.init();
+	//Inicializar audio
+	if (!AudioManager::getInstance()->init()) {
+		std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+	}
+	else {
+		// Reproducir música de fondo principal
+		AudioManager::getInstance()->playMusic("sounds/supermario.mp3", true, 0.6f);
+	}
 }
 
 bool Game::update(int deltaTime)

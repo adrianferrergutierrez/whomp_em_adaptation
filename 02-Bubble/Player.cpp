@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Game.h"
 #include "FireStickProjectile.h"
+#include "AudioManager.h"
 
 
 #define JUMP_ANGLE_STEP 4
@@ -24,6 +25,8 @@ enum LanzaAnims {
 void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
     this->shaderProgram = &shaderProgram;
+
+
 
     // Inicialización del sistema de salud, items y daño
     maxHealth = 120;
@@ -418,6 +421,12 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
                 bJumping = true;
                 jumpAngle = 0;
                 startY = posPlayer.y;
+                // Reproducir sonido de salto
+                if (!AudioManager::getInstance()->init()) {
+                    std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+          
+                }
+                else AudioManager::getInstance()->playSound("sounds/SE_marioland_jump.wav", 0.8f);
                 if (izq)
                     sprite->changeAnimation(JUMP_LEFT);
                 else
@@ -436,7 +445,11 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     {
         isAttacking = true;
         attackTimer = 300;
+        if (!AudioManager::getInstance()->init()) {
+            std::cerr << "Error al inicializar el sistema de audio" << std::endl;
 
+        }
+        else AudioManager::getInstance()->playSound("sounds/hit.mp3", 0.8f);
         glm::vec2 projPos;
         int projDirection;
 
@@ -467,6 +480,11 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             projDirection = 1;
         }
         if (firemode) {
+            if (!AudioManager::getInstance()->init()) {
+                std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+
+            }
+            else AudioManager::getInstance()->playSound("sounds/SE_LinkGuardGB.wav", 0.8f);
             // ⚠️ Crear el proyectil y añadirlo al vector
             FireStickProjectile* projectile = new FireStickProjectile();
             projectile->init(projPos, *shaderProgram, projDirection);
@@ -550,6 +568,7 @@ void Player::takeDamage(int dmg)
         }
     }
     health.takeDamage(dmg);
+   
 
     // Comprobar si el jugador ha muerto
     if (!health.isAlive()) {
