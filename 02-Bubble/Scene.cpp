@@ -1069,6 +1069,48 @@ void Scene::checkCollisions()
 			// Note: Player takes damage, boss does not necessarily change state here
 		}
 
+		// 2. Lanza vs Boss Collision
+		if (player->estaAttacking()) {
+			if (checkCollisionAABB(lanzaPos, playerSize, bossPos, bossSize)) {
+				// La lanza impacta al jefe
+				std::cout << "Lanza impacta al jefe! Daño: " << player->getDamage() << std::endl;
+				boss->takeDamage(player->getDamage());
+
+				// Opcional: Efectos visuales o sonoros al impactar
+				// AudioManager::getInstance()->playSound("boss_hit");
+			}
+		}
+
+		// 3. Proyectiles vs Boss Collision
+		vector<FireStickProjectile*>& projectiles = player->getProjectiles();
+		for (auto it = projectiles.begin(); it != projectiles.end(); ++it) {
+			FireStickProjectile* proj = *it;
+			if (proj->isActive()) {
+				glm::vec2 projPos = proj->getPosition();
+				glm::ivec2 projSize = proj->getSize();
+
+				if (checkCollisionAABB(projPos, projSize, bossPos, bossSize)) {
+					// El proyectil impacta al jefe
+					int fireDamage = player->getFireDamage(); // Más daño por ser fuego
+					std::cout << "Proyectil de fuego impacta al jefe! Daño: " << fireDamage << std::endl;
+					boss->takeDamage(fireDamage);
+
+					// Desactivar el proyectil después de impactar
+					proj->deactivate();
+
+					// Opcional: Efectos visuales o sonoros al impactar
+					// AudioManager::getInstance()->playSound("fire_hit");
+				}
+			}
+		}
+
+		// 4. Comprobar si el jefe ha sido derrotado
+		if (!boss->isAlive()) {
+			std::cout << "¡Jefe derrotado!" << std::endl;
+			// Aquí puedes añadir lógica adicional para cuando el jefe es derrotado
+			// Por ejemplo, cambiar a la siguiente escena, dar recompensas, etc.
+		}
+
 		// Leaf collision is handled inside Boss::update
 	}
 	// ---> FIN: Detección de colisiones con BOSS <---

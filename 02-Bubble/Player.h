@@ -41,6 +41,7 @@ public:
 	int getMaxHealth() const { return maxHealth; }
 	int getCurrentHealth() const { return health.getCurrentHealth(); }
 	int getDamage() const { return damage; }
+	int getFireDamage() const { return firedamage; }
 	void addHealth(int amount);
 	void healToMax();
 	void equipHelmet();
@@ -75,7 +76,7 @@ private:
 	bool firemode = false;
 	int fireusages = 1;
 	int firetimer = 0;
-
+	int firedamage = damage * 1.5;
 
 
 
