@@ -906,6 +906,8 @@ void Scene::checkCollisions()
 
 	glm::vec2 playerPos = player->getPosition();
 	glm::vec2 lanzaPos = player->getPositionLanza();
+	// Obtener los proyectiles del jugador
+	vector<FireStickProjectile*>& projectiles = player->getProjectiles();
 
 	// ¡¡IMPORTANTE!! Usar el tamaño correcto de la hitbox del jugador si es diferente a 32x32
 	glm::ivec2 playerSize(32, 32);
@@ -928,6 +930,27 @@ void Scene::checkCollisions()
 					snakes[i] = nullptr; // Eliminar la serpiente
 					break; // Salimos del bucle de serpientes
 				}
+			}
+			// Colisión proyectil-serpiente
+			for (auto it = projectiles.begin(); it != projectiles.end(); ) {
+				FireStickProjectile* proj = *it;
+				if (proj->isActive()) {
+					glm::vec2 projPos = proj->getPosition();
+					glm::ivec2 projSize = proj->getSize();
+
+					if (checkCollisionAABB(projPos, projSize, snakePos, snakeSize)) {
+						// El proyectil impactó con la serpiente
+						std::cout << "Serpiente eliminada por proyectil de fuego." << std::endl;
+						delete snakes[i];
+						snakes[i] = nullptr;
+
+						// Desactivar el proyectil
+						proj->deactivate();
+
+						break; // Salir del bucle de proyectiles
+					}
+				}
+				++it;
 			}
 		}
 	}
@@ -1009,6 +1032,27 @@ void Scene::checkCollisions()
 						ranas_spawned[i] = false; // Marcar como no spawn
 						break; // Salir del bucle de ranas
 					}
+				}
+				// Colisión proyectil-rana
+				for (auto it = projectiles.begin(); it != projectiles.end(); ) {
+					FireStickProjectile* proj = *it;
+					if (proj->isActive()) {
+						glm::vec2 projPos = proj->getPosition();
+						glm::ivec2 projSize = proj->getSize();
+
+						if (checkCollisionAABB(projPos, projSize, ranaPos, ranaSize)) {
+							// El proyectil impactó con la rana
+							std::cout << "Rana eliminada por proyectil de fuego." << std::endl;
+							delete ranas[i];
+							ranas[i] = nullptr;
+
+							// Desactivar el proyectil
+							proj->deactivate();
+
+							break; // Salir del bucle de proyectiles
+						}
+					}
+					++it;
 				}
 			}
 		}

@@ -29,6 +29,7 @@ public:
 	void setPosition(const glm::vec2& pos);
 	glm::vec2 getPosition() const { return posPlayer; }
 	glm::vec2 getPositionLanza() const { return lanzaPos; }
+	vector<FireStickProjectile*>& getProjectiles() { return projectiles; }
 
 	void setCameraPosition(const glm::vec2& pos);
 	void collectPumpkin();
@@ -47,7 +48,7 @@ public:
 	void becomeGOD();
 	void becomeHuman();
 	bool estaAttacking() const { return isAttacking; }
-	bool isInFireMode() const;
+	bool isInFireMode() const { return firemode; }
 	Player::~Player();
 private:
 	void calculatAndUpdateMaxHealth();
