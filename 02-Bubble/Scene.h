@@ -41,6 +41,8 @@ public:
 	
 	// State check methods
 	bool bossDefeated() const { return bossActive && boss != nullptr && !boss->isAlive(); }
+	bool isBossActive() const { return bossActive; }
+
 	Player* getPlayer() const { return player; }
 	ShaderProgram& getShaderProgram(){ return texProgram; }
 
@@ -140,9 +142,7 @@ private:
 	vector<Bamboo*> bossBamboos; // Separate vector for boss-spawned bamboos
 	bool bossActive = false; // Flag to know if boss fight has started
 	
-public:
-	// Make bossActive available to Game for checking
-	bool isBossActive() const { return bossActive; }
+
 };
 
 

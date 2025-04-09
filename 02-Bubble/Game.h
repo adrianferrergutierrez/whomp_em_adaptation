@@ -31,6 +31,7 @@ private:
 	GLFWwindow* windowPtr = nullptr; // Store window pointer
 	int currentFramebufferWidth = 0;
 	int currentFramebufferHeight = 0;
+	int flag = 0;
 
 public:
 	static Game& instance()

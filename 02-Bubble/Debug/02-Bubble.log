@@ -1,28 +1,6 @@
-﻿  Player.cpp
+﻿  Game.cpp
 C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.h(70,26): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
-  (compilando archivo de origen "Player.cpp")
+  (compilando archivo de origen "Game.cpp")
   
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(339,50): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(339,50): warning C4244:         with
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(339,50): warning C4244:         [
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(339,50): warning C4244:             T=int
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(339,50): warning C4244:         ]
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(341,40): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(341,40): warning C4244:         with
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(341,40): warning C4244:         [
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(341,40): warning C4244:             T=int
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(341,40): warning C4244:         ]
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(348,44): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(348,44): warning C4244:         with
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(348,44): warning C4244:         [
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(348,44): warning C4244:             T=int
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(348,44): warning C4244:         ]
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(428,27): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(428,27): warning C4244:         with
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(428,27): warning C4244:         [
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(428,27): warning C4244:             T=int
-C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\02-Bubble\Player.cpp(428,27): warning C4244:         ]
 SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(image_DXT.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(image_helper.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
-SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(stb_image_aug.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
   02-Bubble.vcxproj -> C:\Users\adrif\Desktop\UNI\VJ\OpenGL_VS2015\2DGame\02-Bubble\Debug\02-Bubble.exe

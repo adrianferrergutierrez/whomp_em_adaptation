@@ -44,6 +44,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
     // Inicialización del sistema de ataque
     isAttacking = false;
+	isAttJump = false;
     izq = false;
     attackTimer = 0;
     fireusages = 3;
@@ -320,6 +321,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
             // Comprobación de aterrizaje (solo cuando va hacia abajo)
             if (jumpAngle > 90)
             {
+              
                 // ---> INICIO: Comprobar aterrizaje en Tronco durante el salto <---
                 bool landedOnTronco = false;
                 float landingTroncoY = 0.f;
@@ -331,6 +333,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
                         // Aterriza en un tronco
                         landedOnTronco = true;
                         landingTroncoY = tronco->getPosition().y;
+						isAttJump = true; // Activar ataque de salto
                         break;
                     }
                 }
@@ -340,6 +343,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
                     posPlayer.y = landingTroncoY - 32.f;
                     onGround = true;
                     groundY = posPlayer.y;
+					isAttJump = false; // Reiniciar el ataque de salto
                 }
                 else {
                     // Si no aterrizó en tronco, comprobar colisión con el mapa
@@ -347,6 +351,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
                         bJumping = false; // Aterrizó en el mapa
                         onGround = true; // Marcamos que está en el suelo
                         groundY = posPlayer.y; // Guardamos la Y del suelo
+						isAttJump = false; // Reiniciar el ataque de salto
                     }
                 }
             }
@@ -589,6 +594,11 @@ void Player::takeDamage(int dmg)
     if (!health.getIsInvulnerable()) {
         sprite->changeAnimation(DAMAGE);
         tiempoDamageTemporal = tiempoDamage;
+        if (!AudioManager::getInstance()->init()) {
+            std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+
+        }
+        else AudioManager::getInstance()->playSound("sounds/mario-bros-die.mp3", 0.8f);
 
     }
 

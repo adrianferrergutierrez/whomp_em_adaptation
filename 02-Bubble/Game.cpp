@@ -11,7 +11,7 @@ void Game::init(GLFWwindow* window)
 	windowPtr = window;
 	bPlay = true;
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	
+	flag = 1;
 	// Initialize game state
 	currentState = MAIN_MENU; // Comenzar directamente en el menú principal
 	victoryTimer = 0;
@@ -64,7 +64,16 @@ bool Game::update(int deltaTime)
 			if (!scene.getPlayer()->isAlive()) {
 				changeState(GAME_OVER);
 			}
-			
+			if (scene.isBossActive() && flag == 1) {
+				if (!AudioManager::getInstance()->init()) {
+					std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+				}
+				else {
+					// Reproducir música de fondo principal
+					AudioManager::getInstance()->playMusic("sounds/bossfight.mp3", true, 0.6f);
+				}
+				flag = 0;
+			}
 			// Check victory condition with delay
 			if (scene.bossDefeated()) {
 				victoryTimer += deltaTime;

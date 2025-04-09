@@ -925,15 +925,22 @@ void Scene::checkCollisions()
 			glm::ivec2 snakeSize = snakes[i]->getHitboxSize();
 
 			// Colisión jugador - serpiente
-			if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
+			if (player->estaAttackingJump()) {
+				if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
+					snakes[i]->takeDamage(player->getDamage());
+					cout << player->getDamage() << " de daño a snake" << endl;
+				}
+			}
+			else{
+				if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
 				player->takeDamage(snakes[i]->getDamage());
 				//if (!snakes[i]->isAlive()) {
 				  //  delete snakes[i];
 				   // snakes[i] = nullptr; // Eliminar la serpiente
 				//}
 				break; // Salimos del bucle de serpientes después de la colisión con el jugador
+				}
 			}
-
 			// Colisión ataque del jugador - serpiente
 			if (player->estaAttacking()) {
 				if (checkCollisionAABB(lanzaPos, playerSize, snakePos, snakeSize)) {
@@ -1032,10 +1039,17 @@ void Scene::checkCollisions()
 			if (ranas_spawned[i] && ranas[i] != nullptr && ranas[i]->isAlive()) {
 				glm::vec2 ranaPos = ranas[i]->getHitboxPosition();
 				glm::ivec2 ranaSize = ranas[i]->getHitboxSize();
-
-				if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
-					player->takeDamage(ranas[i]->getDamage()); // Usar getDamage()
-					break; // Salir solo del bucle de ranas si recibe daño
+				if (player->estaAttackingJump()) {
+					if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
+						ranas[i]->takeDamage(player->getDamage());
+						cout << player->getDamage() << " de daño a rana" << endl;
+					}
+				}
+				else {
+					if (checkCollisionAABB(playerPos, playerSize, ranaPos, ranaSize)) {
+						player->takeDamage(ranas[i]->getDamage()); // Usar getDamage()
+						break; // Salir solo del bucle de ranas si recibe daño
+					}
 				}
 				if (player->estaAttacking()) {
 					if (checkCollisionAABB(lanzaPos, playerSize, ranaPos, ranaSize)) {
@@ -1081,9 +1095,18 @@ void Scene::checkCollisions()
 		// 1. Player vs Boss Body Collision
 		glm::vec2 bossPos = boss->getHitboxPosition(); // Use hitbox pos/size
 		glm::ivec2 bossSize = boss->getHitboxSize();
-		if (checkCollisionAABB(playerPos, playerSize, bossPos, bossSize)) {
-			player->takeDamage(boss->getDamage());
-			// Note: Player takes damage, boss does not necessarily change state here
+		if (player->estaAttackingJump()) {
+			if (checkCollisionAABB(playerPos, playerSize, bossPos, bossSize)) {
+				boss->takeDamage(player->getDamage());
+				cout << player->getDamage() << " de daño a boss" << endl;
+			}
+		}
+		else
+		{
+			if (checkCollisionAABB(playerPos, playerSize, bossPos, bossSize)) {
+				player->takeDamage(boss->getDamage());
+				cout << "Jugador golpeado por el jefe!" << endl;
+			}
 		}
 
 		// 2. Lanza vs Boss Collision
