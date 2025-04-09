@@ -25,6 +25,7 @@ enum LanzaAnims {
 void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
     this->shaderProgram = &shaderProgram;
+    victory_state = false;
 
 
 
@@ -35,7 +36,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     pumpinkcount = 0;
     clockscount = 2;
 
-    damage = 10;
+    damage = 300;
 
     isBlinking = false;
     blinkTime = 0;
@@ -660,4 +661,9 @@ Player::~Player() {
 
 void Player::setVictory() {
     victory_state = true;
+    if (!AudioManager::getInstance()->init()) {
+        std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+
+    }
+    else AudioManager::getInstance()->playSound("sounds/victory-sonic.mp3", 0.8f);
 }
