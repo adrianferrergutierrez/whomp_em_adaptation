@@ -36,7 +36,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     pumpinkcount = 0;
     clockscount = 2;
 
-    damage = 300;
+    damage = 10;
     firedamage = damage * 1.5;
 
     isBlinking = false;

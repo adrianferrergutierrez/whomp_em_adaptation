@@ -29,20 +29,23 @@ void Game::init(GLFWwindow* window)
 	newGameTexture.loadFromFile("images/NewGame.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	volumeOnTexture.loadFromFile("images/volume_on.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	volumeOffTexture.loadFromFile("images/volume_off.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	// Load new screen textures
+	instructionsTexture.loadFromFile("images/Instrucciones.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	creditsTexture.loadFromFile("images/Creditos.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	
-	// Initialize scene (even though we start in menu)
-	if (scene != nullptr) delete scene; // Delete old scene if exists (safety)
-	scene = new Scene(); // Create new scene
-	scene->init(); // Initialize the newly created scene
-	
-	//Inicializar audio
+	// Create Scene object and initialize its shaders EARLY for UI rendering
+	if (scene != nullptr) delete scene; // Safety check
+	scene = new Scene();
+	scene->init(); // Initialize shaders needed for UI
+
+	// Don't initialize the main scene gameplay elements here, 
+	// that happens when transitioning to PLAYING
+
+	// Initialize audio (keep existing logic)
 	if (!AudioManager::getInstance()->init()) {
 		std::cerr << "Error al inicializar el sistema de audio" << std::endl;
 	}
-	else {
-		// Reproducir música de fondo principal
-		AudioManager::getInstance()->playMusic("sounds/supermario.mp3", true, 0.6f);
-	}
+	// DO NOT start music here - start it only when entering PLAYING state
 }
 
 bool Game::update(int deltaTime)
@@ -81,7 +84,8 @@ bool Game::update(int deltaTime)
 				if (scene->bossDefeated()) {
 					victoryTimer += deltaTime;
 					if (victoryTimer >= VICTORY_DELAY) {
-						changeState(VICTORY);
+						// Go directly to Credits after victory delay
+						changeState(CREDITS_SCREEN);
 					}
 				}
 			}
@@ -90,6 +94,7 @@ bool Game::update(int deltaTime)
 		case MAIN_MENU:
 		case GAME_OVER:
 		case VICTORY:
+		case CREDITS_SCREEN:
 		default:
 			// Handle menu logic
 			if (mousePressed) {
@@ -130,10 +135,12 @@ bool Game::update(int deltaTime)
 					scaledMouseY >= centerY && 
 					scaledMouseY <= centerY + newGameHeight) {
 					
-					if (currentState == GAME_OVER || currentState == VICTORY) {
-						restartGame();
+					// If clicking New Game in Game Over, we need to restart before instructions
+					if (currentState == GAME_OVER) { 
+						restartGame(); // Restart game logic state first
 					}
-					changeState(PLAYING);
+					// Always transition to Instructions from menu click
+					changeState(INSTRUCTIONS_SCREEN); 
 					mousePressed = false;
 				}
 				
@@ -149,10 +156,14 @@ bool Game::update(int deltaTime)
 					soundEnabled = !soundEnabled;
 					
 					if (soundEnabled) {
-						AudioManager::getInstance()->resumeMusic();
+						// Restore volumes and resume music via AudioManager
+						AudioManager::getInstance()->setMusicVolume(1.0f); 
 						AudioManager::getInstance()->setEffectVolume(1.0f);
+						AudioManager::getInstance()->resumeMusic();
 					} else {
+						// Set volumes to 0 and pause music via AudioManager
 						AudioManager::getInstance()->pauseMusic();
+						AudioManager::getInstance()->setMusicVolume(0.0f);
 						AudioManager::getInstance()->setEffectVolume(0.0f);
 					}
 					
@@ -183,7 +194,12 @@ void Game::render()
 				scene->render(currentFramebufferWidth, currentFramebufferHeight);
 			}
 			break;
-			
+		case INSTRUCTIONS_SCREEN:
+			renderInstructionsScreen();
+			break;
+		case CREDITS_SCREEN:
+			renderCreditsScreen();
+			break;
 		case MAIN_MENU:
 		case GAME_OVER:
 		case VICTORY:
@@ -277,6 +293,88 @@ void Game::renderMenu() {
 	// Necesitarías imágenes adicionales con estas instrucciones para mostrarlas en pantalla
 }
 
+// --- Render Instructions Screen ---
+void Game::renderInstructionsScreen() {
+	ShaderProgram* shader = nullptr;
+	if(scene != nullptr) { 
+		shader = &scene->getShaderProgram(); 
+	} else {
+		std::cerr << "Error: Scene is null in renderInstructionsScreen! Cannot get shader." << std::endl;
+		return; 
+	}
+	shader->use();
+
+	// Apply viewport scaling (same as renderMenu)
+	float targetAspectRatio = float(SCREEN_WIDTH) / float(SCREEN_HEIGHT);
+	float windowAspectRatio = (currentFramebufferHeight > 0) ? float(currentFramebufferWidth) / float(currentFramebufferHeight) : targetAspectRatio;
+	int vp_x, vp_y, vp_width, vp_height;
+	if (windowAspectRatio >= targetAspectRatio) {
+		vp_height = currentFramebufferHeight;
+		vp_width = int(vp_height * targetAspectRatio);
+		vp_x = (currentFramebufferWidth - vp_width) / 2;
+		vp_y = 0;
+	} else {
+		vp_width = currentFramebufferWidth;
+		vp_height = int(vp_width / targetAspectRatio);
+		vp_x = 0;
+		vp_y = (currentFramebufferHeight - vp_height) / 2;
+	}
+	glViewport(vp_x, vp_y, vp_width, vp_height);
+
+	// Setup projection and modelview
+	shader->setUniformMatrix4f("projection", glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT), 0.f));
+	shader->setUniformMatrix4f("modelview", glm::mat4(1.0f));
+	shader->setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	shader->setUniform2f("texCoordDispl", 0.f, 0.f);
+
+	// Render the instructions image full screen
+	Sprite* instructionsSprite = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(1.0f, 1.0f), &instructionsTexture, shader);
+	instructionsSprite->setPosition(glm::vec2(0, 0));
+	instructionsSprite->render(glm::mat4(1.0f));
+	delete instructionsSprite;
+}
+
+// --- Render Credits Screen ---
+void Game::renderCreditsScreen() {
+	ShaderProgram* shader = nullptr;
+	if(scene != nullptr) { 
+		shader = &scene->getShaderProgram(); 
+	} else {
+		std::cerr << "Error: Scene is null in renderCreditsScreen! Cannot get shader." << std::endl;
+		return; 
+	}
+	shader->use();
+
+	// Apply viewport scaling (same as renderMenu)
+	float targetAspectRatio = float(SCREEN_WIDTH) / float(SCREEN_HEIGHT);
+	float windowAspectRatio = (currentFramebufferHeight > 0) ? float(currentFramebufferWidth) / float(currentFramebufferHeight) : targetAspectRatio;
+	int vp_x, vp_y, vp_width, vp_height;
+	if (windowAspectRatio >= targetAspectRatio) {
+		vp_height = currentFramebufferHeight;
+		vp_width = int(vp_height * targetAspectRatio);
+		vp_x = (currentFramebufferWidth - vp_width) / 2;
+		vp_y = 0;
+	} else {
+		vp_width = currentFramebufferWidth;
+		vp_height = int(vp_width / targetAspectRatio);
+		vp_x = 0;
+		vp_y = (currentFramebufferHeight - vp_height) / 2;
+	}
+	glViewport(vp_x, vp_y, vp_width, vp_height);
+
+	// Setup projection and modelview
+	shader->setUniformMatrix4f("projection", glm::ortho(0.f, float(SCREEN_WIDTH), float(SCREEN_HEIGHT), 0.f));
+	shader->setUniformMatrix4f("modelview", glm::mat4(1.0f));
+	shader->setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	shader->setUniform2f("texCoordDispl", 0.f, 0.f);
+
+	// Render the credits image full screen
+	Sprite* creditsSprite = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH, SCREEN_HEIGHT), glm::vec2(1.0f, 1.0f), &creditsTexture, shader);
+	creditsSprite->setPosition(glm::vec2(0, 0));
+	creditsSprite->render(glm::mat4(1.0f));
+	delete creditsSprite;
+}
+
 void Game::keyPressed(int key)
 {
 	if (key == GLFW_KEY_ESCAPE) // Escape code
@@ -287,18 +385,31 @@ void Game::keyPressed(int key)
 	switch (currentState) {
 		case MAIN_MENU:
 		case GAME_OVER:
-		case VICTORY:
-			// Restaurar la funcionalidad para iniciar el juego con Enter o Espacio
+			// Start flow when pressing Enter or Space from MAIN_MENU or GAME_OVER
 			if (key == GLFW_KEY_ENTER || key == GLFW_KEY_SPACE) {
-				// Start game when pressing Enter or Space from menus
-				if (currentState == GAME_OVER || currentState == VICTORY) {
-					restartGame();
-				}
-				changeState(PLAYING);
+				changeState(INSTRUCTIONS_SCREEN); // Go to Instructions
+			}
+			break;
+		case INSTRUCTIONS_SCREEN:
+			// Proceed to game from Instructions
+			if (key == GLFW_KEY_ENTER || key == GLFW_KEY_SPACE) {
+				changeState(PLAYING); // Go to actual game
+			}
+			break;
+		case VICTORY:
+			// Proceed to credits from Victory
+			if (key == GLFW_KEY_ENTER || key == GLFW_KEY_SPACE) {
+				changeState(CREDITS_SCREEN);
+			}
+			break;
+		case CREDITS_SCREEN:
+			// Return to menu from Credits
+			if (key == GLFW_KEY_ENTER || key == GLFW_KEY_SPACE) {
+				changeState(MAIN_MENU);
 			}
 			break;
 		
-		default:
+		default: // Includes PLAYING state - no special Enter/Space action here
 			break;
 	}
 }
@@ -335,25 +446,53 @@ bool Game::getKey(int key) const
 
 void Game::changeState(GameState newState)
 {
-	// Handle state transitions
-	if (newState == PLAYING && (currentState == MAIN_MENU || currentState == GAME_OVER || currentState == VICTORY)) {
-		// Transition from menu to playing
-		if (currentState == GAME_OVER || currentState == VICTORY) {
-			// Reset scene if coming from game over or victory
-			restartGame();
-		}
+	GameState previousState = currentState;
+
+	// Stop sounds/music based on leaving previous state
+	if (previousState == PLAYING && newState != PLAYING) {
+		AudioManager::getInstance()->stopMusic();
 	}
-	// Play victory sound only when entering the VICTORY state
-	else if (newState == VICTORY && currentState != VICTORY) { // Add check to prevent re-playing if already in VICTORY
-		AudioManager::getInstance()->stopMusic(); // Stop the boss music
-		AudioManager::getInstance()->playSound("sounds/victory-sonic.mp3", 0.8f);
-	}
-	// Add transitions for other states if needed (e.g., GAME_OVER sound)
-	else if (newState == GAME_OVER && currentState != GAME_OVER) {
-		AudioManager::getInstance()->stopMusic(); 
-		AudioManager::getInstance()->playSound("sounds/mario-bros-die.mp3", 0.8f); // Play death sound
-	}
+
+	// Handle transitions and setup for the newState
+	switch (newState) {
+		case MAIN_MENU:
+		case INSTRUCTIONS_SCREEN:
+		case CREDITS_SCREEN:
 	
+			if (previousState == PLAYING) {
+				AudioManager::getInstance()->playSound("sounds/victory-sonic.mp3", 0.8f);
+			}
+			AudioManager::getInstance()->stopMusic(); // Ensure music is stopped
+			break;
+		case PLAYING:
+			// Start/Restart logic only when entering PLAYING state
+			if (previousState == INSTRUCTIONS_SCREEN) { // Check if coming from instructions
+				 // Need to fully initialize the scene if starting fresh
+				 restartGame(); // Calls scene->init() which loads map etc.
+				
+				 // Start appropriate music
+				 if (scene != nullptr && scene->isBossActive()) { // Should not be active yet, but check anyway
+					  AudioManager::getInstance()->playMusic("sounds/bossfight.mp3", true, 0.6f);
+				 } else {
+					  AudioManager::getInstance()->playMusic("sounds/supermario.mp3", true, 0.6f);
+				 }
+			 }
+			// else if resuming from pause, different logic might apply
+			break;
+		case GAME_OVER:
+			// Play death sound only on transition
+			AudioManager::getInstance()->stopMusic(); 
+			AudioManager::getInstance()->playSound("sounds/mario-bros-die.mp3", 0.8f); // Play death sound
+			break;
+		case VICTORY:
+			// This state is now effectively skipped, keep sound stop for safety
+			AudioManager::getInstance()->stopMusic();
+			break;
+		
+		default:
+			break;
+	}
+
 	currentState = newState;
 }
 

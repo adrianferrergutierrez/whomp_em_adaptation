@@ -15,11 +15,12 @@
 
 // Game states
 enum GameState {
-	CREDITS,       // No se usa, pero se mantiene para no cambiar los otros valores
 	MAIN_MENU,     // Menú principal
+	INSTRUCTIONS_SCREEN, // Added Instructions Screen
 	PLAYING,       // Jugando
 	GAME_OVER,     // Juego terminado (derrota)
-	VICTORY        // Juego terminado (victoria)
+	VICTORY,       // Juego terminado (victoria)
+	CREDITS_SCREEN // Added Credits Screen
 };
 
 // Game is a singleton (a class	 with a single instance) that represents our whole application
@@ -77,6 +78,8 @@ private:
 	Texture newGameTexture;
 	Texture volumeOnTexture;
 	Texture volumeOffTexture;
+	Texture instructionsTexture; // Texture for Instructions
+	Texture creditsTexture;      // Texture for Credits
 	
 	// Sound state
 	bool soundEnabled;
@@ -87,6 +90,8 @@ private:
 	
 	// Helper methods for rendering different screens
 	void renderMenu();
+	void renderInstructionsScreen(); // Declare render function
+	void renderCreditsScreen();    // Declare render function
 };
 
 
