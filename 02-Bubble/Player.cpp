@@ -454,7 +454,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     }
 
     // Gestión de ataque con la tecla X
-    if (Game::instance().getKey(GLFW_KEY_X) && !isAttacking && !bJumping && !victory_state)
+    if (Game::instance().getKey(GLFW_KEY_X) && !isAttacking && !victory_state)
     {
         isAttacking = true;
         attackTimer = 300;
