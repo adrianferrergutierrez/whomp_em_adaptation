@@ -178,7 +178,7 @@ void Scene::ini_pos_bambus() {
 	bambus_active.resize(numero_bambus, false);
 	bamboo_spawn_timers.resize(numero_bambus, 0.0f); // <-- RESTAURAR ESTA LÍNEA
 
-	// Posiciones X específicas para el spawn de bambús
+	// --- Original Positions (Indices 0-8) ---
 	posiciones_bambus[0].x = 70 * TILESIZE;
 	posiciones_bambus[1].x = 81 * TILESIZE;
 	posiciones_bambus[2].x = 83 * TILESIZE;
@@ -189,11 +189,64 @@ void Scene::ini_pos_bambus() {
 	posiciones_bambus[7].x = 209 * TILESIZE;
 	posiciones_bambus[8].x = 212 * TILESIZE;
 
-	// Altura inicial de spawn (y = 0 significa la parte superior del mapa)
-	for (int i = 0; i < numero_bambus; ++i) {
+	// Original Y position
+	for (int i = 0; i < 9; ++i) {
 		posiciones_bambus[i].y = 0;
-		// bambus[i] = nullptr; // Ya se inicializa en resize
 	}
+
+	// --- New Set 1: 131*TILESIZE to 141*TILESIZE at Y=0 (Indices 9-19) ---
+	int current_index = 9;
+	for (int x_tile = 131; x_tile <= 141; ++x_tile) {
+		if (current_index < numero_bambus) { // Safety check
+			posiciones_bambus[current_index].x = x_tile * TILESIZE;
+			posiciones_bambus[current_index].y = 0; // Height 0
+			current_index++;
+		} else {
+			std::cerr << "Error: Exceeded bamboo array bounds in ini_pos_bambus (Set 1)" << std::endl;
+			break;
+		}
+	}
+
+	// --- New Set 2: 133*TILESIZE to 139*TILESIZE at Y=40*TILESIZE (Indices 20-26) ---
+	std::vector<int> x_coords_set2; // Store X coordinates for duplication
+	for (int x_tile = 133; x_tile <= 139; ++x_tile) {
+		if (current_index < numero_bambus) { // Safety check
+			posiciones_bambus[current_index].x = x_tile * TILESIZE;
+			posiciones_bambus[current_index].y = 40 * TILESIZE; // Height 40*TILESIZE
+			x_coords_set2.push_back(x_tile * TILESIZE); // Store X for later
+			current_index++;
+		} else {
+			std::cerr << "Error: Exceeded bamboo array bounds in ini_pos_bambus (Set 2)" << std::endl;
+			break;
+		}
+	}
+
+	// --- New Single Bamboo: 130*TILESIZE at Y=40*TILESIZE (Index 27) ---
+	if (current_index < numero_bambus) { // Safety check
+		posiciones_bambus[current_index].x = 130 * TILESIZE;
+		posiciones_bambus[current_index].y = 40 * TILESIZE; // Height 40*TILESIZE
+		x_coords_set2.insert(x_coords_set2.begin(), 130 * TILESIZE); // Add to beginning for duplication
+		current_index++;
+	} else {
+		std::cerr << "Error: Exceeded bamboo array bounds in ini_pos_bambus (Single)" << std::endl;
+	}
+
+	// --- New Set 3 (Duplicates): Same X as Set 2 + Single, but at Y=80*TILESIZE (Indices 28-34) ---
+	for (int x_pos : x_coords_set2) {
+		if (current_index < numero_bambus) { // Safety check
+			posiciones_bambus[current_index].x = x_pos;
+			posiciones_bambus[current_index].y = 80 * TILESIZE; // Height 80*TILESIZE
+			current_index++;
+		} else {
+			std::cerr << "Error: Exceeded bamboo array bounds in ini_pos_bambus (Set 3)" << std::endl;
+			break;
+		}
+	}
+
+	// Ensure all remaining vectors are initialized correctly (already done by resize)
+	// for (int i = 0; i < numero_bambus; ++i) {
+	// 	bambus[i] = nullptr;
+	// }
 
 	std::cout << "Initialized " << numero_bambus << " bamboo positions" << std::endl;
 }

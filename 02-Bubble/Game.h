@@ -28,6 +28,7 @@ class Game
 
 private:
 	Game() {}
+	~Game(); // Add destructor declaration
 	GLFWwindow* windowPtr = nullptr; // Store window pointer
 	int currentFramebufferWidth = 0;
 	int currentFramebufferHeight = 0;
@@ -63,7 +64,7 @@ private:
 	bool bPlay; // Continue to play game?
 	bool keys[GLFW_KEY_LAST + 1]; // Store key states so that 
 	// we can have access at any time
-	Scene scene;
+	Scene* scene = nullptr; // Change to pointer, initialize to nullptr
 	
 	// Game state
 	GameState currentState;

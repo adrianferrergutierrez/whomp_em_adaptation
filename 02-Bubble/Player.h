@@ -67,7 +67,7 @@ private:
 	Sprite* sprite;
 	Sprite* spriteLanza;
 	bool proteccion_superior;
-	int firedamage = damage * 1.5;
+	int firedamage;
 
 
 	TileMap* map;

@@ -31,7 +31,9 @@ void Game::init(GLFWwindow* window)
 	volumeOffTexture.loadFromFile("images/volume_off.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	
 	// Initialize scene (even though we start in menu)
-	scene.init();
+	if (scene != nullptr) delete scene; // Delete old scene if exists (safety)
+	scene = new Scene(); // Create new scene
+	scene->init(); // Initialize the newly created scene
 	
 	//Inicializar audio
 	if (!AudioManager::getInstance()->init()) {
@@ -58,27 +60,29 @@ bool Game::update(int deltaTime)
 	switch (currentState) {
 		case PLAYING:
 			// Update regular gameplay
-			scene.update(deltaTime);
+			if (scene != nullptr) { // Check if scene exists
+				scene->update(deltaTime);
 			
-			// Check if player has died
-			if (!scene.getPlayer()->isAlive()) {
-				changeState(GAME_OVER);
-			}
-			if (scene.isBossActive() && flag == 1) {
-				if (!AudioManager::getInstance()->init()) {
-					std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+				// Check if player has died
+				if (!scene->getPlayer()->isAlive()) {
+					changeState(GAME_OVER);
 				}
-				else {
-					// Reproducir música de fondo principal
-					AudioManager::getInstance()->playMusic("sounds/bossfight.mp3", true, 0.6f);
+				if (scene->isBossActive() && flag == 1) {
+					if (!AudioManager::getInstance()->init()) {
+						std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+					}
+					else {
+						// Reproducir música de fondo principal
+						AudioManager::getInstance()->playMusic("sounds/bossfight.mp3", true, 0.6f);
+					}
+					flag = 0;
 				}
-				flag = 0;
-			}
-			// Check victory condition with delay
-			if (scene.bossDefeated()) {
-				victoryTimer += deltaTime;
-				if (victoryTimer >= VICTORY_DELAY) {
-					changeState(VICTORY);
+				// Check victory condition with delay
+				if (scene->bossDefeated()) {
+					victoryTimer += deltaTime;
+					if (victoryTimer >= VICTORY_DELAY) {
+						changeState(VICTORY);
+					}
 				}
 			}
 			break;
@@ -119,8 +123,8 @@ bool Game::update(int deltaTime)
 				}
 				
 				// Check if NewGame button was clicked
-				const int newGameWidth = 96;  // Mismo valor que en renderMenu
-				const int newGameHeight = 30; // Mismo valor que en renderMenu
+				const int newGameWidth = 256;  // Match renderMenu size
+				const int newGameHeight = 80; // Match renderMenu size
 				if (scaledMouseX >= centerX - newGameWidth/2 && 
 					scaledMouseX <= centerX + newGameWidth/2 && 
 					scaledMouseY >= centerY && 
@@ -134,11 +138,12 @@ bool Game::update(int deltaTime)
 				}
 				
 				// Volume button
-				const int volumeDisplaySize = 64; // Mismo valor que en renderMenu
+				const int volumeDisplaySize = 64; // Match renderMenu size
+				const float volumeButtonY = centerY + newGameHeight + 20; // Position below New Game button + padding
 				if (scaledMouseX >= centerX - volumeDisplaySize/2 && 
 					scaledMouseX <= centerX + volumeDisplaySize/2 && 
-					scaledMouseY >= centerY + 40 && 
-					scaledMouseY <= centerY + 40 + volumeDisplaySize) {
+					scaledMouseY >= volumeButtonY && 
+					scaledMouseY <= volumeButtonY + volumeDisplaySize) {
 					
 					// Toggle sound
 					soundEnabled = !soundEnabled;
@@ -174,7 +179,9 @@ void Game::render()
 	switch (currentState) {
 		case PLAYING:
 			// Render normal gameplay
-			scene.render(currentFramebufferWidth, currentFramebufferHeight);
+			if (scene != nullptr) { // Check if scene exists
+				scene->render(currentFramebufferWidth, currentFramebufferHeight);
+			}
 			break;
 			
 		case MAIN_MENU:
@@ -189,7 +196,15 @@ void Game::render()
 // Método para renderizar la pantalla de menú
 void Game::renderMenu() {
 	// Set up for rendering
-	ShaderProgram* shader = &scene.getShaderProgram();
+	ShaderProgram* shader = nullptr;
+	if(scene != nullptr) { // Ensure scene exists before getting shader
+		shader = &scene->getShaderProgram(); 
+	} else {
+		// Handle error or return if scene is unexpectedly null
+		std::cerr << "Error: Scene is null in renderMenu!" << std::endl;
+		return; 
+	}
+
 	shader->use();
 	
 	// Asegurarse de que el framebuffer es válido
@@ -235,9 +250,9 @@ void Game::renderMenu() {
 	float centerX = SCREEN_WIDTH / 2.0f;
 	float centerY = SCREEN_HEIGHT / 2.0f;
 	
-	// Aumentar el tamaño del botón New Game (2x el tamaño original)
-	const int newGameWidth = 96;  // Doble del original (48)
-	const int newGameHeight = 30; // Doble del original (15)
+	// Aumentar el tamaño del botón New Game (aún más grande)
+	const int newGameWidth = 256; // Larger width
+	const int newGameHeight = 80; // Larger height
 	
 	// Create temporary sprite for the New Game button with increased size
 	Sprite* newGameSprite = Sprite::createSprite(glm::ivec2(newGameWidth, newGameHeight), glm::vec2(1.0f, 1.0f), &newGameTexture, shader);
@@ -245,10 +260,11 @@ void Game::renderMenu() {
 	newGameSprite->render(glm::mat4(1.0f));
 	
 	// Aumentar el tamaño del botón de volumen
-	const int volumeDisplaySize = 64; // Doble del tamaño anterior (32)
+	const int volumeDisplaySize = 64; // Keep this size or adjust if needed
+	const float volumeButtonY = centerY + newGameHeight + 20; // Position below New Game button + padding
 	Texture* currentVolumeTexture = soundEnabled ? &volumeOnTexture : &volumeOffTexture;
 	Sprite* volumeSprite = Sprite::createSprite(glm::ivec2(volumeDisplaySize, volumeDisplaySize), glm::vec2(1.0f, 1.0f), currentVolumeTexture, shader);
-	volumeSprite->setPosition(glm::vec2(centerX - volumeDisplaySize/2, centerY + 40)); // Ajustar la posición vertical
+	volumeSprite->setPosition(glm::vec2(centerX - volumeDisplaySize/2, volumeButtonY)); // Use calculated Y position
 	volumeSprite->render(glm::mat4(1.0f));
 	
 	// Clean up
@@ -327,24 +343,55 @@ void Game::changeState(GameState newState)
 			restartGame();
 		}
 	}
+	// Play victory sound only when entering the VICTORY state
+	else if (newState == VICTORY && currentState != VICTORY) { // Add check to prevent re-playing if already in VICTORY
+		AudioManager::getInstance()->stopMusic(); // Stop the boss music
+		AudioManager::getInstance()->playSound("sounds/victory-sonic.mp3", 0.8f);
+	}
+	// Add transitions for other states if needed (e.g., GAME_OVER sound)
+	else if (newState == GAME_OVER && currentState != GAME_OVER) {
+		AudioManager::getInstance()->stopMusic(); 
+		AudioManager::getInstance()->playSound("sounds/mario-bros-die.mp3", 0.8f); // Play death sound
+	}
 	
 	currentState = newState;
 }
 
 void Game::restartGame()
 {
-	// Método más seguro para reiniciar la escena
-	// En lugar de destruir y recrear el objeto, solo llamamos a init() de nuevo
-	scene.init();
+	// Reset the music flag
+	flag = 1; 
+	
+	// Stop any currently playing music and play the main theme
+	AudioManager::getInstance()->stopMusic();
+	AudioManager::getInstance()->playMusic("sounds/supermario.mp3", true, 0.6f);
+
+	// Reset the scene by deleting the old one and creating a new one
+	if (scene != nullptr) {
+		delete scene;
+		scene = nullptr;
+	}
+	scene = new Scene();
+	scene->init(); 
+
 	victoryTimer = 0;
 	
-	// Asegurarse de que el estado del teclado esté limpio
+	// Ensure keyboard state is clean
 	for (int i = 0; i < GLFW_KEY_LAST + 1; ++i) {
 		keys[i] = false;
 	}
 	
-	// Reiniciar variables de mouse
+	// Reset mouse variables
 	mousePressed = false;
+}
+
+// Add Game destructor implementation
+Game::~Game() {
+	if (scene != nullptr) {
+		delete scene;
+		scene = nullptr;
+	}
+	AudioManager::getInstance()->close(); // Clean up audio
 }
 
 

@@ -113,7 +113,7 @@ private:
 	vector<bool> bambus_active;
 	vector<float> bamboo_spawn_timers;
 	float bamboo_spawn_delay = 2.0f; // Segundos entre spawn de bambús
-	int numero_bambus = 9;
+	int numero_bambus = 35;
 
 	vector <glm::vec2> posiciones_ranas;
 	vector <bool> ranas_spawned;

@@ -37,6 +37,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
     clockscount = 2;
 
     damage = 300;
+    firedamage = damage * 1.5;
 
     isBlinking = false;
     blinkTime = 0;
@@ -671,9 +672,10 @@ Player::~Player() {
 
 void Player::setVictory() {
     victory_state = true;
-    if (!AudioManager::getInstance()->init()) {
-        std::cerr << "Error al inicializar el sistema de audio" << std::endl;
+    // Remove the sound playback from here
+    // if (!AudioManager::getInstance()->init()) {
+    //     std::cerr << "Error al inicializar el sistema de audio" << std::endl;
 
-    }
-    else AudioManager::getInstance()->playSound("sounds/victory-sonic.mp3", 0.8f);
+    // }
+    // else AudioManager::getInstance()->playSound("sounds/victory-sonic.mp3", 0.8f);
 }
