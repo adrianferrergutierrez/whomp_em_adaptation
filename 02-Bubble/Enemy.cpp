@@ -8,7 +8,7 @@ Enemy::Enemy()
     falling = true;
     map = nullptr;
     sprite = nullptr;
-    hitboxSize = glm::ivec2(32, 32); // Tamaño por defecto
+    hitboxSize = glm::ivec2(32, 32); 
 }
 
 Enemy::~Enemy()

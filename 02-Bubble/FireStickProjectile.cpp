@@ -10,7 +10,7 @@ FireStickProjectile::FireStickProjectile() {
     direction = 1;
     map = nullptr;
     active = true;
-    size = glm::ivec2(16, 16); // Tamaño visual del sprite
+    size = glm::ivec2(16, 16); 
 }
 
 FireStickProjectile::~FireStickProjectile() {
@@ -25,7 +25,6 @@ void FireStickProjectile::init(const glm::ivec2& pos, ShaderProgram& shaderProgr
 
     sprite->setAnimationSpeed(FIRE_FLYING_R, 12);
     sprite->addKeyframe(FIRE_FLYING_R, glm::vec2(0.0f, 0.0f));
-    //sprite->addKeyframe(FIRE_FLYING, glm::vec2(0.5f, 0.0f));
 
     sprite->setAnimationSpeed(FIRE_FLYING_L, 12);
     sprite->addKeyframe(FIRE_FLYING_L, glm::vec2(0.5f, 0.0f));
@@ -55,7 +54,6 @@ void FireStickProjectile::update(int deltaTime) {
     }
 
     // Desactivar si sale de los límites del nivel
-    // Get map width in pixels for boundary check
     float mapWidthPixels = map ? float(map->getMapWidth() * map->getTileSize()) : 2048.f; // Fallback if map is null
 
     if (posProj.x < 0 || posProj.x > mapWidthPixels) {

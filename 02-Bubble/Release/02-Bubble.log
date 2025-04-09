@@ -1,1 +1,172 @@
-﻿
+﻿  AudioManager.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\AudioManager.h(5,10): error C1083: No se puede abrir el archivo incluir: 'irrKlang.h': No such file or directory
+  (compilando archivo de origen "AudioManager.cpp")
+  
+  Bamboo.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244: '+=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(51,19): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Bamboo.cpp(58,29): warning C4244:         ]
+  BigHeart.cpp
+  Bisonte.cpp
+  Boss.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(54,15): warning C4244: '=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(54,15): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(54,15): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(54,15): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(54,15): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(264,17): warning C4244: '=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(264,17): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(264,17): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(264,17): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(264,17): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(271,27): warning C4244: '=': conversión de 'T' a 'float'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(271,27): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(271,27): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(271,27): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(271,27): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(277,16): warning C4244: '=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(277,16): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(277,16): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(277,16): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(277,16): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(290,16): warning C4244: '=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(290,16): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(290,16): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(290,16): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(290,16): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(303,16): warning C4244: '=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(303,16): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(303,16): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(303,16): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(303,16): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(378,18): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(378,18): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(378,18): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(378,18): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(378,18): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(414,16): warning C4244: '=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(414,16): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(414,16): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(414,16): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(414,16): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(420,16): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(420,16): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(420,16): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(420,16): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(420,16): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(490,29): warning C4244: '-=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(490,29): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(490,29): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(490,29): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(490,29): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(496,16): warning C4244: '=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(496,16): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(496,16): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(496,16): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(496,16): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(508,16): warning C4244: '=': conversión de 'const float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(508,16): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(508,16): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(508,16): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(508,16): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(512,16): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(512,16): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(512,16): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(512,16): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Boss.cpp(512,16): warning C4244:         ]
+  BossLeaf.cpp
+  Calabaza.cpp
+  Enemy.cpp
+  FireStickProjectile.cpp
+  Game.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\AudioManager.h(5,10): error C1083: No se puede abrir el archivo incluir: 'irrKlang.h': No such file or directory
+  (compilando archivo de origen "Game.cpp")
+  
+  GUI.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\GUI.cpp(3,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\GUI.cpp(142,23): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\GUI.cpp(261,59): warning C4018: '<': no coinciden signed/unsigned
+  Health.cpp
+  Helmet.cpp
+  Item.cpp
+  main.cpp
+  Oso.cpp
+  Player.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\AudioManager.h(5,10): error C1083: No se puede abrir el archivo incluir: 'irrKlang.h': No such file or directory
+  (compilando archivo de origen "Player.cpp")
+  
+  Rana.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(112,43): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(121,43): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244: '=': conversión de 'T' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244:             T=float
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244:         and
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(133,46): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244: '+=': conversión de 'T' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244:             T=float
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244:         and
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Rana.cpp(147,40): warning C4244:         ]
+  Scene.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(107,12): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(129,62): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(201,48): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(201,48): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(201,48): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(201,48): warning C4244:             T=float
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(201,48): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(214,48): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(214,48): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(214,48): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(214,48): warning C4244:             T=float
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(214,48): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(237,41): warning C4244: '=': conversión de 'int' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(237,41): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(237,41): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(237,41): warning C4244:             T=float
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Scene.cpp(237,41): warning C4244:         ]
+  Shader.cpp
+  Compilando...
+  ShaderProgram.cpp
+  SmallHeart.cpp
+  Snake.cpp
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(85,23): warning C4244: '+=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(85,23): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(85,23): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(85,23): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(85,23): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(99,32): warning C4244: '+=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(99,32): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(99,32): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(99,32): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(99,32): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(108,40): warning C4244: '+=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(108,40): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(108,40): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(108,40): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(108,40): warning C4244:         ]
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(119,40): warning C4244: '-=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(119,40): warning C4244:         with
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(119,40): warning C4244:         [
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(119,40): warning C4244:             T=int
+C:\Users\franp\Documents\Q6 FIB\VJ\WhompEm\GitProyecto\vj\02-Bubble\Snake.cpp(119,40): warning C4244:         ]
+  Sprite.cpp
+  Texture.cpp
+  TileMap.cpp
+  Tronco.cpp

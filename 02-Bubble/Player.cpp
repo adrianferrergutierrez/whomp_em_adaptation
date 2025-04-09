@@ -8,7 +8,7 @@
 
 
 #define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 16*3 // 3 tiles
+#define JUMP_HEIGHT 16*3 
 #define FALL_STEP 3
 
 enum PlayerAnims
@@ -505,7 +505,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
 
             }
             else AudioManager::getInstance()->playSound("sounds/SE_LinkGuardGB.wav", 0.8f);
-            // ⚠️ Crear el proyectil y añadirlo al vector
+            // Creamos el proyectil y añadirlo al vector
             FireStickProjectile* projectile = new FireStickProjectile();
             projectile->init(projPos, *shaderProgram, projDirection);
             projectile->setTileMap(map);
@@ -513,7 +513,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
         }
     }
 
-    // Actualizar proyectiles
+    // Actualizamos proyectiles
     for (auto it = projectiles.begin(); it != projectiles.end(); )
     {
         FireStickProjectile* proj = *it;
@@ -528,7 +528,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     }
 
 
-    // Actualizar posición de la lanza si está atacando
+    // Actualizamos posición de la lanza si está atacando
     if (isAttacking)
     {
         spriteLanza->update(deltaTime);
@@ -544,10 +544,7 @@ void Player::update(int deltaTime, vector<Tronco*> troncos)
     
     sprite->setCameraPosition(cameraPos);
     sprite->setPosition(glm::vec2(float(posPlayer.x), float(posPlayer.y)));
-
-    // Debug info
-    std::cout << "Player position: " << posPlayer.x << " " << posPlayer.y << ", Health: "
-        << health.getCurrentHealth() << " Invulnerable: " << health.getIsInvulnerable() << std::endl;
+    
 }
 
 void Player::render(glm::mat4 modelview)
@@ -589,7 +586,6 @@ void Player::takeDamage(int dmg)
         }
         else {
             hasHelmet = false;
-            std::cout << "El casco se ha roto." << std::endl;
         }
     }
     if (!health.getIsInvulnerable()) {
@@ -606,7 +602,6 @@ void Player::takeDamage(int dmg)
     health.takeDamage(dmg,false);
    
 
-    // Comprobar si el jugador ha muerto
     if (!health.isAlive()) {
         if (clockscount > 0) {
             --clockscount;
@@ -624,7 +619,6 @@ void Player::calculatAndUpdateMaxHealth() {
     if (pumpinkcount == 9 || pumpinkcount == 12 || pumpinkcount == 16 || pumpinkcount == 22 || pumpinkcount == 30
         || pumpinkcount == 42 || pumpinkcount == 62 || pumpinkcount == 99) maxHealth = maxHealth + 20;
     health.setMaxHealth(maxHealth);
-    //actualizamos la vida maxima si tenemos muchas calabazas
 }
 
 void Player::addHealth(int amount) {
@@ -636,7 +630,6 @@ void Player::healToMax() {
 }
 
 void Player::equipHelmet() {
-    //aunque ya tenga el casco, le reiniciamos los usos
     hasHelmet = true;
     helmet_usages = 4;
 }
@@ -661,21 +654,14 @@ bool Player::isInFireMode() const {
 }
 
 Player::~Player() {
-    // Limpiar todos los proyectiles
     for (auto it = projectiles.begin(); it != projectiles.end(); ++it) {
         delete (*it);
     }
     projectiles.clear();
-    // Otros recursos a liberar...
 }
 
 
 void Player::setVictory() {
     victory_state = true;
-    // Remove the sound playback from here
-    // if (!AudioManager::getInstance()->init()) {
-    //     std::cerr << "Error al inicializar el sistema de audio" << std::endl;
-
-    // }
-    // else AudioManager::getInstance()->playSound("sounds/victory-sonic.mp3", 0.8f);
+  
 }

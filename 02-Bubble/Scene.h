@@ -75,9 +75,8 @@ private:
 	void mirar_condicion_muerte();
 	void checkGameEndConditions();
 
-	glm::vec2 cameraPosition;  // Nueva variable para la posición de la cámara
+	glm::vec2 cameraPosition;  
 
-	//dividiremos el mapa en sectores para que se vaya mostrando a trozos
 	int sector_horizontal = 1;
 	int sector_vertical = 1;
 
@@ -100,7 +99,6 @@ private:
 	//ENEMIGOS***********************************************************************************************************
 
 	vector <glm::vec2> posiciones_snakes;
-	//vector que marca que snakes ya han spawneado, si es true han spawneado y ya estan en pantalla o estan muertas (y el player no ha pasado por el trigger point otra vez)
 	vector <bool> snakes_spawned;
 	vector <bool> snakes_spawn_point_was_visible;
 	vector <Snake*> snakes;
@@ -139,12 +137,11 @@ private:
 
 	// Boss related members
 	Boss* boss = nullptr;
-	vector<Bamboo*> bossBamboos; // Separate vector for boss-spawned bamboos
-	bool bossActive = false; // Flag to know if boss fight has started
+	vector<Bamboo*> bossBamboos; 
+	bool bossActive = false;
 	
 
 };
 
 
-#endif // _SCENE_INCLUDE
-
+#endif

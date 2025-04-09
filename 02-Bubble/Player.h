@@ -95,13 +95,11 @@ private:
 	bool bJumping;
 	int jumpAngle, startY;
 
-	// Variables para el parpadeo cuando es invulnerable
 	bool isBlinking;
 	bool visible;
 	int blinkTime;
 
 
-	//efectos items
 	int pumpinkcount;
 	int clockscount;
 	bool hasFlint;

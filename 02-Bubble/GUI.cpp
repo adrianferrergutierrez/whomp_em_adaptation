@@ -143,41 +143,29 @@ void GUI::init(ShaderProgram* shader, glm::mat4 projectionMat, int camWidth, int
         itemPositions[i] = glm::vec2(16.f + i * 18.f, cameraHeight - 16.f - 16.f);
     }
 
-    // Boss Health positions (e.g., top right)
     bossHealthPositions.resize(MAX_BOSS_ORANGES);
 
-    // Calcular la posici�n X de inicio para la primera columna de vidas del boss
-    // Basado en la segunda columna de vidas del player + un hueco
-    // Asumimos que heartPositions[heartsPerColumn] es el inicio de la segunda columna del player
     const float bossHealthGap = 8.f; // Espacio entre vidas player y vidas boss
     float bossHealthStartX_col1 = heartPositions[heartsPerColumn].x + heartHorizontalSpacing + bossHealthGap;
 
-    // Calcular posiciones (similar a los corazones del player, pero con MAX_BOSS_ORANGES)
     // --- AJUSTE: Columna 1 de 6, Columna 2 de 4 ---
     const int bossOrangesPerColumn1 = 6; // Primera columna tiene 6
-    const float bossOrangeVerticalSpacing = 12.f; // Igual que corazones?
-    const float bossOrangeHorizontalSpacing = 12.f; // Igual que corazones?
+    const float bossOrangeVerticalSpacing = 12.f; 
+    const float bossOrangeHorizontalSpacing = 12.f; 
 
     for (int i = 0; i < MAX_BOSS_ORANGES; ++i) {
-        // Determinar columna y fila basado en 6 para la primera
         int columnIndex = (i < bossOrangesPerColumn1) ? 0 : 1;
         int rowIndex = (i < bossOrangesPerColumn1) ? i : (i - bossOrangesPerColumn1);
 
-        // Calcular X basado en la columna (relativo a bossHealthStartX_col1)
+        // Calculamos X basado en la columna (relativo a bossHealthStartX_col1)
         float posX = bossHealthStartX_col1 + (columnIndex * bossOrangeHorizontalSpacing);
-        // Calcular Y basado en la fila (igual que corazones player)
+        // Calculamos Y basado en la fila (igual que corazones player)
         float posY = spearPos.y + heartOffsetY + (rowIndex * bossOrangeVerticalSpacing);
 
         bossHealthPositions[i] = glm::vec2(posX, posY);
     }
-    // --- FIN AJUSTE ---
 
-    std::cout << "GUI Initialized" << std::endl;
 }
-
-// Modify update signature
-
-
 
 
 void GUI::update(int currentHealth, int maxHealth, int numClocks, bool hasFlint, bool hasHelmet, bool isFireModeActive, bool bossIsActive, int currentBossHealth/*, bool final*/)

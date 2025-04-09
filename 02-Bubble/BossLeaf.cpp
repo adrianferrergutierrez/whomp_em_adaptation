@@ -1,13 +1,11 @@
 #include "BossLeaf.h"
-#include <cmath> // For sin, cos
-#include <glm/gtc/constants.hpp> // For pi
+#include <cmath> 
+#include <glm/gtc/constants.hpp> 
 
-// Constants
 const int LEAF_DAMAGE = 10;
 const glm::ivec2 LEAF_SIZE = glm::ivec2(9, 8);
-// UV coordinates for the leaf in Items_boss.png (Assuming 18x8 texture with 2 leaves)
 const glm::vec2 LEAF_UV_SIZE = glm::vec2(0.5f, 1.0f);
-const glm::vec2 LEAF_UV_POS = glm::vec2(0.0f, 0.0f); // Use the first leaf
+const glm::vec2 LEAF_UV_POS = glm::vec2(0.0f, 0.0f); 
 
 
 BossLeaf::BossLeaf()
@@ -41,31 +39,22 @@ void BossLeaf::init(ShaderProgram* shader,
 	age = 0.f;
 	active = true;
 
-	// Load texture internally
 	if (!leafTexture.loadFromFile("images/Items_boss.png", TEXTURE_PIXEL_FORMAT_RGBA)) {
-		// cout << "Error loading Items_boss.png in BossLeaf::init!" << endl;
 		active = false;
 		return;
 	}
 
-	// Calculate initial radius
 	startRadius = glm::distance(position, swirlCenter);
 	currentRadius = startRadius;
-	// std::cout << "    Leaf init: startR=" << startRadius << " targetR=" << targetRadius << " lifetime=" << lifetime << " outward=" << outward << std::endl;
 
-	// Calculate speeds
-	// Angular speed: Let's make it rotate 2 full circles during its lifetime? Adjust as needed.
 	angularSpeed = (2.f * 2.f * glm::pi<float>()) / lifetime;
-	// Expansion speed: Change in radius over time
 	if (abs(lifetime) > 0.01f) {
 		expansionSpeed = (targetRadius - startRadius) / lifetime;
 	}
 	else {
 		expansionSpeed = 0.f;
 	}
-	// std::cout << "    Leaf init: angularSpeed=" << angularSpeed << " expansionSpeed=" << expansionSpeed << std::endl;
-
-	// Create Sprite using the internal texture
+	
 	sprite = Sprite::createSprite(LEAF_SIZE, LEAF_UV_SIZE, &leafTexture, shaderProgram);
 	sprite->setNumberAnimations(1);
 	sprite->addKeyframe(0, LEAF_UV_POS); // Single frame animation
@@ -86,7 +75,7 @@ void BossLeaf::update(int deltaTime)
 		return;
 	}
 
-	// Update angle and radius
+	// Update del angulo/radio
 	if (outward) {
 		currentAngle -= angularSpeed * dt;
 	}
@@ -95,16 +84,14 @@ void BossLeaf::update(int deltaTime)
 	}
 	currentRadius += expansionSpeed * dt;
 
-	// Calculate new position
+	// calculo nueva pos
 	position.x = swirlCenter.x + currentRadius * cos(currentAngle);
 	position.y = swirlCenter.y + currentRadius * sin(currentAngle);
 
 	if (sprite == nullptr) {
-		// std::cout << "  Error: sprite is null in BossLeaf::update!" << std::endl;
 		active = false;
 		return;
 	}
-	// std::cout << "    Leaf update: age="<< age <<" dt="<< dt << " angle=" << currentAngle << " radius=" << currentRadius << " pos = (" << position.x << ", " << position.y << ")" << std::endl;
 
 	sprite->setPosition(position);
 	sprite->update(deltaTime);
@@ -122,15 +109,13 @@ bool BossLeaf::checkCollision(Player* player)
 	if (!active || !player || !player->isAlive()) return false;
 
 	glm::vec2 playerPos = player->getPosition();
-	// Assuming player size is 32x32, replace with actual player hitbox if different
 	glm::ivec2 playerSize(32, 32);
 
-	// AABB Collision Check
+	// miramos colisiones
 	bool collisionX = position.x + hitboxSize.x >= playerPos.x && playerPos.x + playerSize.x >= position.x;
 	bool collisionY = position.y + hitboxSize.y >= playerPos.y && playerPos.y + playerSize.y >= position.y;
 
 	if (collisionX && collisionY) {
-		// Collision detected!
 		return true;
 	}
 

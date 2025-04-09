@@ -176,7 +176,7 @@ void Scene::ini_pos_bambus() {
 	posiciones_bambus.resize(numero_bambus);
 	bambus.resize(numero_bambus, nullptr);
 	bambus_active.resize(numero_bambus, false);
-	bamboo_spawn_timers.resize(numero_bambus, 0.0f); // <-- RESTAURAR ESTA LÍNEA
+	bamboo_spawn_timers.resize(numero_bambus, 0.0f);
 
 	// --- Original Positions (Indices 0-8) ---
 	posiciones_bambus[0].x = 70 * TILESIZE;
@@ -194,10 +194,9 @@ void Scene::ini_pos_bambus() {
 		posiciones_bambus[i].y = 0;
 	}
 
-	// --- New Set 1: 131*TILESIZE to 141*TILESIZE at Y=0 (Indices 9-19) ---
 	int current_index = 9;
 	for (int x_tile = 131; x_tile <= 141; ++x_tile) {
-		if (current_index < numero_bambus) { // Safety check
+		if (current_index < numero_bambus) { 
 			posiciones_bambus[current_index].x = x_tile * TILESIZE;
 			posiciones_bambus[current_index].y = 0; // Height 0
 			current_index++;
@@ -207,8 +206,7 @@ void Scene::ini_pos_bambus() {
 		}
 	}
 
-	// --- New Set 2: 133*TILESIZE to 139*TILESIZE at Y=40*TILESIZE (Indices 20-26) ---
-	std::vector<int> x_coords_set2; // Store X coordinates for duplication
+	std::vector<int> x_coords_set2;
 	for (int x_tile = 133; x_tile <= 139; ++x_tile) {
 		if (current_index < numero_bambus) { // Safety check
 			posiciones_bambus[current_index].x = x_tile * TILESIZE;
@@ -221,21 +219,19 @@ void Scene::ini_pos_bambus() {
 		}
 	}
 
-	// --- New Single Bamboo: 130*TILESIZE at Y=40*TILESIZE (Index 27) ---
-	if (current_index < numero_bambus) { // Safety check
+	if (current_index < numero_bambus) { 
 		posiciones_bambus[current_index].x = 130 * TILESIZE;
-		posiciones_bambus[current_index].y = 40 * TILESIZE; // Height 40*TILESIZE
-		x_coords_set2.insert(x_coords_set2.begin(), 130 * TILESIZE); // Add to beginning for duplication
+		posiciones_bambus[current_index].y = 40 * TILESIZE; 
+		x_coords_set2.insert(x_coords_set2.begin(), 130 * TILESIZE); 
 		current_index++;
 	} else {
 		std::cerr << "Error: Exceeded bamboo array bounds in ini_pos_bambus (Single)" << std::endl;
 	}
 
-	// --- New Set 3 (Duplicates): Same X as Set 2 + Single, but at Y=80*TILESIZE (Indices 28-34) ---
 	for (int x_pos : x_coords_set2) {
-		if (current_index < numero_bambus) { // Safety check
+		if (current_index < numero_bambus) { 
 			posiciones_bambus[current_index].x = x_pos;
-			posiciones_bambus[current_index].y = 80 * TILESIZE; // Height 80*TILESIZE
+			posiciones_bambus[current_index].y = 80 * TILESIZE; 
 			current_index++;
 		} else {
 			std::cerr << "Error: Exceeded bamboo array bounds in ini_pos_bambus (Set 3)" << std::endl;
@@ -243,36 +239,24 @@ void Scene::ini_pos_bambus() {
 		}
 	}
 
-	// Ensure all remaining vectors are initialized correctly (already done by resize)
-	// for (int i = 0; i < numero_bambus; ++i) {
-	// 	bambus[i] = nullptr;
-	// }
-
 	std::cout << "Initialized " << numero_bambus << " bamboo positions" << std::endl;
 }
 
 void Scene::ini_pos_troncos() {
-	// Ensure vectors are resized according to numero_troncos (should be 8)
 	posiciones_troncos.resize(numero_troncos);
 	troncos.resize(numero_troncos, nullptr);
+	posiciones_troncos[0] = glm::vec2(198 * TILESIZE, 51 * TILESIZE); 
+	posiciones_troncos[1] = glm::vec2(202 * TILESIZE, 48 * TILESIZE); 
+	posiciones_troncos[2] = glm::vec2(197 * TILESIZE, 45 * TILESIZE); 
+	posiciones_troncos[3] = glm::vec2(199 * TILESIZE, 43 * TILESIZE); 
+	posiciones_troncos[4] = glm::vec2(198 * TILESIZE, 30 * TILESIZE); 
+	posiciones_troncos[5] = glm::vec2(202 * TILESIZE, 41 * TILESIZE); 
+	posiciones_troncos[6] = glm::vec2(197 * TILESIZE, 36 * TILESIZE); 
+	posiciones_troncos[7] = glm::vec2(197 * TILESIZE, 40 * TILESIZE); 
 
-	// Define initial positions for the 8 troncos for VERTICAL ASCENT
-	// Player needs to reach the first one from around Y=53*TILESIZE
-	// Horizontal range approx X = 196*TILESIZE to 204*TILESIZE
-	posiciones_troncos[0] = glm::vec2(198 * TILESIZE, 51 * TILESIZE); // Start
-	posiciones_troncos[1] = glm::vec2(202 * TILESIZE, 48 * TILESIZE); // Up and Left
-	posiciones_troncos[2] = glm::vec2(197 * TILESIZE, 45 * TILESIZE); // Up and Right
-	posiciones_troncos[3] = glm::vec2(199 * TILESIZE, 43 * TILESIZE); // Up and Left
-	posiciones_troncos[4] = glm::vec2(198 * TILESIZE, 30 * TILESIZE); // Up and Right
-	posiciones_troncos[5] = glm::vec2(202 * TILESIZE, 41 * TILESIZE); // Up and Left
-	posiciones_troncos[6] = glm::vec2(197 * TILESIZE, 36 * TILESIZE); // Up and Right
-	posiciones_troncos[7] = glm::vec2(197 * TILESIZE, 40 * TILESIZE); // Up and Left (Highest)
-
-	// Variables para el seguimiento del jugador sobre los troncos (kept for potential future use)
 	player_on_tronco = false;
 	current_tronco_index = -1;
 
-	// Crear los troncos con las nuevas posiciones
 	for (int i = 0; i < numero_troncos; ++i) {
 		troncos[i] = new Tronco();
 		troncos[i]->init(posiciones_troncos[i], texProgram);
@@ -283,44 +267,28 @@ void Scene::updateCamera()
 {
 	glm::vec2 playerPos = player->getPosition();
 	if (playerPos.x == primer_checkpoint) {
-		//hace falta limpiar todos los enemigos !!!!!!!!!!
-
 		verticalPos = true;
-		// Mantener la posición X fija donde está el jugador
 		cameraPosition.x = primer_checkpoint;
 	}
 	if (playerPos.x == segundo_checkpoint) {
-		//hace falta limpiar todos los enemigos !!!!!!!!!!
-
-
 		verticalPos = false;
-		// Mantener la posición X fija donde está el jugador
 		cameraPosition.x = segundo_checkpoint;
 		cameraPosition.y = 90 * TILESIZE;
 	}
 	if (playerPos.x == tercer_checkpoint) {
-		//hace falta limpiar todos los enemigos !!!!!!!!!!
-
 		verticalPos = true;
-		// Mantener la posición X fija donde está el jugador
 		cameraPosition.x = tercer_checkpoint;
 
 	}
 
 	if (playerPos.x == cuarto_checkpoint) {
-		//hace falta limpiar todos los enemigos !!!!!!!!!!
-
 		verticalPos = false;
-		// Mantener la posición X fija donde está el jugador
 		cameraPosition.x = cuarto_checkpoint;
 		cameraPosition.y = 30 * TILESIZE;
 	}
 
 	if (playerPos.x == quinto_checkpoint) {
-		//hace falta limpiar todos los enemigos !!!!!!!!!!
-
 		verticalPos = false;
-		// Mantener la posición X fija donde está el jugador
 		cameraPosition.x = quinto_checkpoint;
 		final = true;
 	}
@@ -333,9 +301,7 @@ void Scene::updateCamera()
 			cameraPosition.y = playerPos.y - (CAMERA_HEIGHT * 0.5f);
 		}
 	}
-	// Comportamiento normal antes de x = 2080
 	else {
-		// Seguimiento horizontal normal
 		if (!final) {
 			if (playerPos.x > cameraPosition.x + (CAMERA_WIDTH * 0.5f)) {
 				cameraPosition.x = playerPos.x - (CAMERA_WIDTH * 0.5f);
@@ -369,7 +335,6 @@ void Scene::mirar_condicion_muerte(){
 	if (bossActive && boss != nullptr && !boss->isAlive()) {
 		player->setVictory();
 		gui->updateFinal(true);
-		// El Game se encargará de la transición a la pantalla de victoria después del delay
 	}
 }
 
@@ -378,7 +343,7 @@ void Scene::update(int deltaTime)
     currentTime += deltaTime;
 
     if (bossActive && boss != nullptr) {
-        updateBambusBoss(deltaTime); // Actualiza el jefe y sus bambús
+        updateBambusBoss(deltaTime); 
     }
 
     mirar_condicion_muerte();
@@ -417,37 +382,32 @@ void Scene::update(int deltaTime)
         }
     }
 
-    // No hay necesidad de updateOsos() y updateRanas() porque ya se han llamado arriba
 }
 
 void Scene::updateBambusBoss(int deltaTime) {
 	if (bossActive && boss != nullptr) {
 		boss->update(deltaTime);
 
-		// Update boss-spawned bamboos
 		for (Bamboo* bamboo : bossBamboos) {
-			if (bamboo != nullptr && !bamboo->shouldBeRemoved()) { // Solo actualiza si no está marcado
+			if (bamboo != nullptr && !bamboo->shouldBeRemoved()) { 
 				bamboo->update(deltaTime);
-				// Opcional: Añadir aquí lógica de despawn por visibilidad para bossBamboos
-				// if (bamboo está fuera de cámara) { bamboo->markForRemoval(); }
+				
 			}
 		}
 
-		// --- AÑADIR LIMPIEZA DE BAMBÚS DEL JEFE ---
-		// Eliminar bambús del jefe marcados para borrado usando remove-erase idiom
+		
 		bossBamboos.erase(
 			std::remove_if(bossBamboos.begin(), bossBamboos.end(),
 				[](Bamboo* bamboo) {
 					if (bamboo != nullptr && bamboo->shouldBeRemoved()) {
 						std::cout << "Limpiando bambú del jefe marcado." << std::endl;
-						delete bamboo; // Liberar memoria
-						return true;  // Indicar que debe ser eliminado del vector
+						delete bamboo;
+						return true;  
 					}
-					return false; // Mantener el bambú
+					return false; 
 				}),
 			bossBamboos.end()
 		);
-		// --- FIN LIMPIEZA ---
 
 	}
 
@@ -489,12 +449,10 @@ void Scene::updateSnakes(int deltaTime) {
 			bool shouldDespawnDueToVisibility = (snakeRight < cameraLeft || snakeLeft > cameraRight || snakeBottom < cameraTop || snakeTop > cameraBottom);
 
 			if (shouldDespawnDueToVisibility) {
-				// Serpiente viva pero fuera de pantalla
 				std::cout << "Despawning snake " << i << " (Fuera de vista)" << std::endl;
 				delete snakes[i];
 				snakes[i] = nullptr;
 				snakes_spawned[i] = false;
-				// No resetear snakes_spawn_point_was_visible[i] aquí.
 			}
 		}
 	}
@@ -502,7 +460,6 @@ void Scene::updateSnakes(int deltaTime) {
 	// --- Parte 2: Comprobar Condiciones de Spawn/Respawn --- 
 	for (int i = 0; i < numero_snakes; ++i) {
 
-		// Comprobar si el PUNTO DE SPAWN está visible actualmente
 		glm::vec2 spawnPoint = posiciones_snakes[i];
 		bool is_currently_visible = false;
 		float cameraLeft = cameraPosition.x;
@@ -529,7 +486,6 @@ void Scene::updateSnakes(int deltaTime) {
 			snakes_spawned[i] = true;
 		}
 
-		// Actualizar el estado de visibilidad del punto para el próximo frame
 		snakes_spawn_point_was_visible[i] = is_currently_visible;
 	}
 }
@@ -604,8 +560,6 @@ void Scene::updateTroncos(int deltaTime) {
 		}
 	}
 
-	// Si el jugador está sobre un tronco, hay que actualizar su posición
-	// Esto se maneja en checkTroncoCollisions
 }
 
 void Scene::updateRanas(int deltaTime) {
@@ -686,7 +640,6 @@ void Scene::spawnItem(const glm::vec2& position) {
 	int chance = rand() % 100;
 
 	if (chance < DROP_CHANCE_PERCENT) {
-		// Decidir QUÉ item dropear
 		// --- INICIO Restaurar Lógica Aleatoria con Nuevas Probabilidades ---
 
 		const int CALABAZA_CHANCE = 40;  // 40%
@@ -719,10 +672,7 @@ void Scene::spawnItem(const glm::vec2& position) {
 			newItem = new Bisonte(&texProgram);
 		}
 
-		// Eliminar el código forzado que estaba aquí antes
-		// std::cout << "FORZADO: Intentando spawnear Calabaza..." << std::endl;
-		// Item* newItem = new Calabaza(&texProgram);
-		// --- FIN Restaurar Lógica Aleatoria ---
+	
 
 		if (newItem) {
 			newItem->init(position);
@@ -765,8 +715,7 @@ void Scene::updateItems(int deltaTime) {
 		if (itemRight < cameraLeft || itemLeft > cameraRight || itemBottom < cameraTop || itemTop > cameraBottom) {
 			std::cout << "Item (Tipo: " << int(item->getType()) << ") fuera de cámara. Marcando para borrado." << std::endl;
 			item->markForRemoval();
-			// No necesitamos 'continue' aquí porque la lógica de borrado 
-			// ya comprueba shouldBeRemoved() más abajo.
+			
 		}
 		// ---> FIN: Comprobación de Despawn por Visibilidad <---
 
@@ -816,40 +765,31 @@ void Scene::render(int framebufferWidth, int framebufferHeight)
 {
 	glm::mat4 modelview;
 
-	// --- Cálculo y aplicación del Viewport para Pillarboxing --- 
-	// Use the dynamically obtained framebuffer dimensions
 
 	float targetAspectRatio = float(CAMERA_WIDTH) / float(CAMERA_HEIGHT); // 16:15
-	// Calculate aspect ratio of the current framebuffer
 	float windowAspectRatio = (framebufferHeight > 0) ? float(framebufferWidth) / float(framebufferHeight) : targetAspectRatio;
 
 	int vp_x, vp_y, vp_width, vp_height;
 
 	if (windowAspectRatio >= targetAspectRatio) {
-		// Window wider than target (Pillarboxing)
 		vp_height = framebufferHeight;
 		vp_width = int(vp_height * targetAspectRatio);
 		vp_x = (framebufferWidth - vp_width) / 2;
 		vp_y = 0;
 	}
 	else {
-		// Window taller than target (Letterboxing)
 		vp_width = framebufferWidth;
 		vp_height = int(vp_width / targetAspectRatio);
 		vp_x = 0;
 		vp_y = (framebufferHeight - vp_height) / 2;
 	}
 
-	// Check for zero dimensions to avoid issues with glViewport
 	if (vp_width <= 0 || vp_height <= 0) {
-		// Fallback or handle error, maybe use default if possible
-		// For now, just use the full framebuffer to avoid glError
 		vp_x = 0; vp_y = 0; vp_width = framebufferWidth; vp_height = framebufferHeight;
-		if (vp_width <= 0) vp_width = 1; // Ensure non-zero
-		if (vp_height <= 0) vp_height = 1; // Ensure non-zero
+		if (vp_width <= 0) vp_width = 1; 
+		if (vp_height <= 0) vp_height = 1;
 	}
 
-	// Aplicar el viewport calculado
 	glViewport(vp_x, vp_y, vp_width, vp_height);
 	// -----------------------------------------------------------
 
@@ -857,7 +797,6 @@ void Scene::render(int framebufferWidth, int framebufferHeight)
 	texProgram.setUniformMatrix4f("projection", projection);
 	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 
-	// Aplicamos la transformación de la cámara
 	modelview = glm::mat4(1.0f);
 	modelview = glm::translate(modelview, glm::vec3(-cameraPosition.x, -cameraPosition.y, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
@@ -865,7 +804,6 @@ void Scene::render(int framebufferWidth, int framebufferHeight)
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render();
 
-	// Renderizar troncos antes del jugador para que el jugador aparezca encima
 	renderTroncos(modelview);
 	renderBambus(modelview);
 	renderSnakes(modelview);
@@ -965,10 +903,8 @@ void Scene::checkCollisions()
 
 	glm::vec2 playerPos = player->getPosition();
 	glm::vec2 lanzaPos = player->getPositionLanza();
-	// Obtener los proyectiles del jugador
 	vector<FireStickProjectile*>& projectiles = player->getProjectiles();
 
-	// ¡¡IMPORTANTE!! Usar el tamaño correcto de la hitbox del jugador si es diferente a 32x32
 	glm::ivec2 playerSize(32, 32);
 
 	// Detección de colisiones con serpientes
@@ -987,22 +923,13 @@ void Scene::checkCollisions()
 			else{
 				if (checkCollisionAABB(playerPos, playerSize, snakePos, snakeSize)) {
 				player->takeDamage(snakes[i]->getDamage());
-				//if (!snakes[i]->isAlive()) {
-				  //  delete snakes[i];
-				   // snakes[i] = nullptr; // Eliminar la serpiente
-				//}
-				break; // Salimos del bucle de serpientes después de la colisión con el jugador
+				break; 
 				}
 			}
 			// Colisión ataque del jugador - serpiente
 			if (player->estaAttacking()) {
 				if (checkCollisionAABB(lanzaPos, playerSize, snakePos, snakeSize)) {
 					snakes[i]->takeDamage(player->getDamage());
-					//if (!snakes[i]->isAlive()) {
-					 //   delete snakes[i];
-					  //  snakes[i] = nullptr; // Eliminar la serpiente
-					   // break; // Salimos del bucle de serpientes después de matar a una
-					//}
 					break;
 				}
 			}
@@ -1015,12 +942,8 @@ void Scene::checkCollisions()
 					glm::ivec2 projSize = proj->getSize();
 
 					if (checkCollisionAABB(projPos, projSize, snakePos, snakeSize)) {
-						// El proyectil impactó con la serpiente
 						std::cout << "Serpiente eliminada por proyectil de fuego." << std::endl;
 						snakes[i]->takeDamage(player->getFireDamage());
-						// delete snakes[i];
-						 //snakes[i] = nullptr;
-						 //snakes_spawned[i] = false; // Marcar como no spawn
 						proj->deactivate(); // Desactivar el proyectil
 					}
 				}
@@ -1075,8 +998,7 @@ void Scene::checkCollisions()
 			return;
 		}
 
-		// Comprobar tile bajo el punto derecho interior (solo si es diferente de la columna izquierda)
-		// Es importante comparar las columnas de *comprobación* (tileX_Left_Check != tileX_Right_Check)
+		
 		if (tileX_Left_Check != tileX_Right_Check) {
 			int tileID_Right = map->getTile(tileX_Right_Check, tileY_UnderFeet);
 			if (tileID_Right == 23 || tileID_Right == 42) {
@@ -1108,12 +1030,6 @@ void Scene::checkCollisions()
 					if (checkCollisionAABB(lanzaPos, playerSize, ranaPos, ranaSize)) {
 						ranas[i]->takeDamage(player->getDamage());
 						cout << player->getDamage() << " de daño a rana" << endl;
-
-						//if (!ranas[i]->isAlive()){
-							//delete ranas[i];
-							//ranas[i] = nullptr;
-							//ranas_spawned[i] = false; // Marcar como no spawn
-						//}
 						break; // Salir del bucle de ranas
 					}
 				}
@@ -1126,14 +1042,9 @@ void Scene::checkCollisions()
 
 						if (checkCollisionAABB(projPos, projSize, ranaPos, ranaSize)) {
 							ranas[i]->takeDamage(player->getFireDamage());
-							//if (!ranas[i]->isAlive()){
-							//delete ranas[i];
-							//ranas[i] = nullptr;
-
-							//}
 							proj->deactivate();
 
-							break; // Salir del bucle de proyectiles
+							break;
 						}
 					}
 					++it;
@@ -1168,8 +1079,6 @@ void Scene::checkCollisions()
 				boss->takeDamage(player->getDamage());
 				cout << player->getDamage() << " de daño a boss!" << endl;
 
-				// Opcional: Efectos visuales o sonoros al impactar
-				// AudioManager::getInstance()->playSound("boss_hit");
 			}
 		}
 
@@ -1187,8 +1096,7 @@ void Scene::checkCollisions()
 					cout << fireDamage << " de daño a boss por proyectil!" << endl;
 					proj->deactivate();
 
-					// Opcional: Efectos visuales o sonoros al impactar
-					// AudioManager::getInstance()->playSound("fire_hit");
+					
 				}
 			}
 		}
@@ -1196,13 +1104,10 @@ void Scene::checkCollisions()
 		// 4. Comprobar si el jefe ha sido derrotado
 		if (!boss->isAlive()) {
 			std::cout << "¡Jefe derrotado!" << std::endl;
-			// Aquí puedes añadir lógica adicional para cuando el jefe es derrotado
-			// Por ejemplo, cambiar a la siguiente escena, dar recompensas, etc.
+		
 		}
 
-		// Leaf collision is handled inside Boss::update
 	}
-	// ---> FIN: Detección de colisiones con BOSS <---
 
 	if (player->isAlive() && bossActive) {
 		for (Bamboo* bamboo : bossBamboos) { // Iterar sobre los bambús del jefe
@@ -1248,11 +1153,9 @@ bool Scene::checkCollisionAABB(const glm::vec2& pos1, const glm::ivec2& size1,
 // --- Boss Helper Functions ---
 
 void Scene::spawnSingleBamboo(const glm::vec2& spawnPos) {
-	// Spawn a bamboo at the given position (e.g., boss feet)
 	if (bossActive) { // Only spawn if boss is active
 		std::cout << "Scene spawning single bamboo at (" << spawnPos.x << ", " << spawnPos.y << ")" << std::endl;
 		Bamboo* newBamboo = new Bamboo();
-		// Use the provided spawnPos directly
 		glm::vec2 correctedSpawnPos = glm::vec2(spawnPos.x - 8, spawnPos.y); // Center the 16px bamboo
 		newBamboo->init(correctedSpawnPos, texProgram);
 		newBamboo->setTileMap(map);
@@ -1264,13 +1167,13 @@ void Scene::spawnBambooRain(float leftBound, float rightBound, float spawnY) {
 	// Spawn multiple bamboos across the specified range at the given Y
 	if (bossActive) {
 		std::cout << "Scene spawning bamboo rain between " << leftBound << " and " << rightBound << " at Y=" << spawnY << std::endl;
-		const int rainCount = 5; // Number of bamboos in the rain, adjust as needed
+		const int rainCount = 5; 
 		float spacing = (rightBound - leftBound) / (rainCount + 1);
 
 		for (int i = 0; i < rainCount; ++i) {
 			Bamboo* newBamboo = new Bamboo();
-			float spawnX = leftBound + (i + 1) * spacing - 8; // Center the bamboo
-			glm::vec2 spawnPos = glm::vec2(spawnX, spawnY); // Use the provided Y
+			float spawnX = leftBound + (i + 1) * spacing - 8; 
+			glm::vec2 spawnPos = glm::vec2(spawnX, spawnY); 
 			newBamboo->init(spawnPos, texProgram);
 			newBamboo->setTileMap(map);
 			bossBamboos.push_back(newBamboo);
@@ -1278,5 +1181,4 @@ void Scene::spawnBambooRain(float leftBound, float rightBound, float spawnY) {
 	}
 }
 
-// --- End Boss Helper Functions ---
 
